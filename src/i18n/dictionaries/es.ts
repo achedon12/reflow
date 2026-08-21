@@ -125,7 +125,7 @@ export const es: Dictionary = {
         },
         theme: {
             name: 'El tema',
-            body: 'Bloques que solo existen en el tema claro, otros solo en el oscuro. El selector de tema, al pie de la página, se convierte en un mando del juego.',
+            body: 'Bloques que solo existen en el tema claro, otros solo en el oscuro. El conmutador de tema, en la barra del juego o la tecla T, se convierte en un mando como el salto.',
         },
         rewind: {
             name: 'El rebobinado',
@@ -151,7 +151,7 @@ export const es: Dictionary = {
         lucarne: { name: 'La claraboya', brief: 'Falta un puente en el centro. Existe, sin embargo, pero solo por debajo de cierto ancho.' },
         balancier: { name: 'El vaivén', brief: 'Una plataforma que sube y baja. Esperar se convierte en una acción.' },
         navette: { name: 'La lanzadera', brief: 'La misma idea en horizontal: una plataforma que va y viene de un extremo a otro de su pasillo.' },
-        clairiere: { name: 'El claro', brief: 'El camino solo existe en el tema claro. El botón del pie de página acaba de cambiar de oficio.' },
+        clairiere: { name: 'El claro', brief: 'El camino solo existe en el tema claro: en el oscuro no hay ni plataforma ni salida. La tecla T es aquí un mando del juego.' },
         nocturne: { name: 'Nocturno', brief: 'Lo contrario, y peor: en el tema claro las plataformas se vuelven pinchos.' },
         collecte: { name: 'La recogida', brief: 'Dos orbes que recoger antes de que la salida consienta en abrirse.' },
         detour: { name: 'El rodeo', brief: 'Los orbes están al final del camino, la salida en el punto de partida. Hay que volver sobre los pasos.' },

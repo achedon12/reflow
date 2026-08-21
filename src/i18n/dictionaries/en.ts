@@ -125,7 +125,7 @@ export const en: Dictionary = {
         },
         theme: {
             name: 'Theme',
-            body: 'Blocks that exist only in the light theme, others only in the dark one. The theme switch at the foot of the page becomes a game control.',
+            body: 'Blocks that exist only in the light theme, others only in the dark one. The theme toggle in the game bar, or the T key, becomes a control just like jumping.',
         },
         rewind: {
             name: 'Rewind',
@@ -151,7 +151,7 @@ export const en: Dictionary = {
         lucarne: { name: 'The Skylight', brief: 'A bridge is missing in the middle. It does exist — but only below a certain width.' },
         balancier: { name: 'The Rocker', brief: 'A platform that rises and falls. Waiting becomes an action.' },
         navette: { name: 'The Shuttle', brief: 'The same idea sideways: a platform running from one end of its corridor to the other.' },
-        clairiere: { name: 'The Clearing', brief: 'The path exists only in the light theme. The button in the footer has just changed jobs.' },
+        clairiere: { name: 'The Clearing', brief: 'The path exists only in the light theme: in the dark one there is neither platform nor exit. The T key is a game control here.' },
         nocturne: { name: 'Nocturne', brief: 'The reverse, and worse: in the light theme the platforms turn into spikes.' },
         collecte: { name: 'The Collection', brief: 'Two orbs to pick up before the exit agrees to open.' },
         detour: { name: 'The Detour', brief: 'The orbs are at the end of the path, the exit back at the start. You have to come back.' },

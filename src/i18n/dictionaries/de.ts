@@ -125,7 +125,7 @@ export const de: Dictionary = {
         },
         theme: {
             name: 'Das Thema',
-            body: 'Blöcke, die nur im hellen Thema existieren, andere nur im dunklen. Der Themenschalter am Seitenfuß wird zur Spielsteuerung.',
+            body: 'Blöcke, die nur im hellen Thema existieren, andere nur im dunklen. Der Themenschalter in der Spielleiste, oder die Taste T, wird zur Steuerung wie das Springen.',
         },
         rewind: {
             name: 'Das Zurückspulen',
@@ -151,7 +151,7 @@ export const de: Dictionary = {
         lucarne: { name: 'Die Dachluke', brief: 'In der Mitte fehlt eine Brücke. Es gibt sie dennoch — aber nur unterhalb einer bestimmten Breite.' },
         balancier: { name: 'Die Schaukel', brief: 'Eine Plattform, die steigt und sinkt. Warten wird hier zur Handlung.' },
         navette: { name: 'Die Fähre', brief: 'Dieselbe Idee waagerecht: eine Plattform, die von einem Ende ihres Gangs zum anderen fährt.' },
-        clairiere: { name: 'Die Lichtung', brief: 'Der Weg existiert nur im hellen Thema. Die Schaltfläche im Seitenfuß hat gerade den Beruf gewechselt.' },
+        clairiere: { name: 'Die Lichtung', brief: 'Der Weg existiert nur im hellen Thema: im dunklen gibt es weder Plattform noch Ausgang. Die Taste T ist hier eine Spielsteuerung.' },
         nocturne: { name: 'Nocturne', brief: 'Umgekehrt, und schlimmer: im hellen Thema werden die Plattformen zu Stacheln.' },
         collecte: { name: 'Die Sammlung', brief: 'Zwei Kugeln, die einzusammeln sind, bevor der Ausgang sich zu öffnen bequemt.' },
         detour: { name: 'Der Umweg', brief: 'Die Kugeln liegen am Ende des Wegs, der Ausgang am Start. Man muss zurück.' },

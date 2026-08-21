@@ -125,7 +125,7 @@ export const fr = {
         },
         theme: {
             name: 'Le thème',
-            body: 'Des blocs qui n’existent que dans le thème clair, d’autres que dans le sombre. Le sélecteur de thème, en bas de page, devient une commande de jeu.',
+            body: 'Des blocs qui n’existent que dans le thème clair, d’autres que dans le sombre. La bascule de thème, dans la barre du jeu ou la touche T, devient une commande au même titre que le saut.',
         },
         rewind: {
             name: 'Le rembobinage',
@@ -194,7 +194,7 @@ export const fr = {
         clairiere: {
             name: 'La clairière',
             brief:
-                'Le chemin n’existe qu’en thème clair. Le bouton du pied de page vient de changer de métier.',
+                'Le chemin n’existe qu’en thème clair : en sombre, il n’y a ni plateforme ni sortie. La touche T est ici une commande de jeu.',
         },
         nocturne: {
             name: 'Nocturne',
