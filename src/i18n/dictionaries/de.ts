@@ -219,7 +219,7 @@ export const de: Dictionary = {
         },
         gravity: {
             name: 'Die Schwerkraft',
-            body: 'Der Bildschirm dreht sich in Vierteldrehungen, und der Fall folgt. Dasselbe Level seitlich gelesen ist nicht mehr dasselbe: Plattformen werden zu Wänden, der Boden zur Decke.',
+            body: 'Der Bildschirm dreht sich in Vierteldrehungen, und der Fall folgt. Manche Rätsel sind nicht in einer einzigen Ausrichtung geschrieben: Ihr Weg zweigt an einem quadratischen Drehpunkt ab, und was danach kommt, ist erst Boden, wenn der Bildschirm gedreht ist.',
         },
         screen: {
             name: 'Der innere Bildschirm',
@@ -254,13 +254,21 @@ export const de: Dictionary = {
         alternance: { name: 'Der Wechsel', brief: 'Eine helle Plattform, eine dunkle, im Wechsel: das Thema muss mitten in der Querung umgeschaltet werden.' },
         guillotine: { name: 'Die Guillotine', brief: 'Drei Klingen fallen von der Decke, jede in ihrem eigenen Takt.' },
         serpentin: { name: 'Die Serpentine', brief: 'Der Weg macht im Aufstieg zwei Kehren. Man läuft über die eigene Spur hinweg.' },
-        bascule: { name: 'Die Wippe', brief: 'Zwei Plattformen, die gegenläufig steigen und sinken, über der Leere.' },
+        bascule: {
+            name: 'Die Wippe',
+            brief:
+                'Zwei gegenläufige Plattformen, dann ein quadratischer Drehpunkt: der Rest des Weges wird erst eine Vierteldrehung später zum Boden.',
+        },
         jachere: { name: 'Die Brache', brief: 'Ein Weg, den es nur im Hellen gibt — und eine Klinge, die es ebenfalls nur im Hellen gibt.' },
         cordee: { name: 'Die Seilschaft', brief: 'Drei Kugeln entlang eines durchgehenden Aufstiegs. Keine davon nimmt man im Vorbeigehen mit.' },
         grenier: { name: 'Der Dachboden', brief:
                 'Alles steht kopf, der Ausgang auch. Den Bildschirm zu drehen ist der einzige Weg, einen Fuß daraufzusetzen.' },
         passerelle: { name: 'Der Steg', brief: 'Das mittlere Feld erscheint erst unter 800 Pixeln Breite.' },
-        tourniquet: { name: 'Das Drehkreuz', brief: 'Die Absätze wechseln Rand und senkrechte Verankerung. Jede gezogene Seite verschiebt das halbe Level.' },
+        tourniquet: {
+            name: 'Das Drehkreuz',
+            brief:
+                'Drei Ausrichtungen nacheinander. Jeder Drehpunkt übergibt an die nächste, und man hält sich nur einen Moment darauf.',
+        },
         cascade: { name: 'Die Kaskade', brief: 'Ein langer Abstieg, bei dem ein Absatz im falschen Moment seitlich wegrutscht.' },
         sablier: { name: 'Die Sanduhr', brief: 'Oberhalb von 780 Pixeln versperrt eine Wand den Weg; der Durchgang öffnet sich nur darunter.' },
         relais: { name: 'Die Staffel', brief: 'Zwei Kugeln, getragen von bewegten Plattformen, über der Leere.' },
@@ -270,19 +278,34 @@ export const de: Dictionary = {
         funambule: { name: 'Der Seiltänzer', brief: 'Siebzig Pixel breite Absätze über der Leere und zwei Kugeln, die nicht zu verfehlen sind.' },
         contrepoids: { name: 'Das Gegengewicht', brief:
                 'Ein Weg, kopfüber gebaut. Richtig herum gelesen führt er nirgendwohin.' },
-        retour: { name: 'Die Rückkehr', brief: 'Fünf bewegte Sprünge hintereinander, ohne Boden. Zurückspulen ist hier keine Hilfe, sondern die Regel.' },
+        retour: {
+            name: 'Die Rückkehr',
+            brief:
+                'Der Drehpunkt geht in die andere Richtung. Das Zurückspulen bleibt für die Fehler — es wird welche geben.',
+        },
         metronome: { name: 'Das Metronom', brief: 'Drei Klingen im Abstand einer Drittelzeit. Der Rhythmus ist die einzige Lösung.' },
         eclipse: { name: 'Die Finsternis', brief: 'Der Weg wechselt über der Leere das Thema: zu spät umzuschalten heißt, ins Nichts zu springen.' },
         tenaille: { name: 'Die Zange', brief: 'Ein Durchgang, den es nur unter 900 Pixeln gibt, zwischen zwei sich schließenden Wänden.' },
-        verticale: { name: 'Die Senkrechte', brief:
-                'Ein liegender Schacht: der Bildschirm muss eine Vierteldrehung machen, damit seine Absätze zum Boden werden.' },
+        verticale: {
+            name: 'Die Senkrechte',
+            brief:
+                'Ein Schacht, der erst zum Schacht wird, wenn der Bildschirm kippt: aufrecht sind seine Stufen bloße Säulen.',
+        },
         gouffre: { name: 'Der Abgrund', brief: 'Vier Abstände von neunzig Pixeln, alle von atmenden Plattformen getragen.' },
-        spirale: { name: 'Die Spirale', brief: 'Der Weg rollt sich auf: linker Rand, rechter Rand, oben, unten und zurück.' },
+        spirale: {
+            name: 'Die Spirale',
+            brief:
+                'Der Weg windet sich eine volle Umdrehung und wechselt an jeder Ecke den Boden.',
+        },
         veilleuse: { name: 'Das Nachtlicht', brief: 'Ein Weg, den es nur im Dunkeln gibt und dessen mittleres Feld nur im schmalen Fenster existiert.' },
         horloge: { name: 'Die Uhr', brief: 'Drei Plattformen gleicher Periode, um ein Drittel versetzt. Man muss in den Takt einsteigen.' },
         cordon: { name: 'Die Schnur', brief: 'Drei Kugeln in den vier Ecken des Fensters, und der Ausgang zurück am Start.' },
         abime: { name: 'Der Schlund', brief: 'Zwei bedingte Felder über der Leere: das Fenster verkleinern oder fallen.' },
-        charniere: { name: 'Das Scharnier', brief: 'Über 760 Pixeln schließen zwei Wände alles. Darunter erscheint der Weg.' },
+        charniere: {
+            name: 'Das Scharnier',
+            brief:
+                'Der Weg knickt im rechten Winkel ab. Seine zweite Hälfte besteht nur aus Säulen — erst gekippt tragen sie.',
+        },
         souffle: { name: 'Der letzte Atemzug', brief: 'Fünf bewegte Absätze, zwei Kugeln, kein Boden und der Ausgang am rechten Rand.' },
         epilogue: { name: 'Der Epilog', brief: 'Alles auf einmal — die Ränder, das Thema, die Bewegung, die Kugeln und die Leere.' },
         verglas: {
@@ -438,12 +461,12 @@ export const de: Dictionary = {
         engrenage: {
             name: 'Das Getriebe',
             brief:
-                'Ein rückwärts laufendes Band, dann ein brüchiger Absatz. Den Anlauf, den man nicht hat, bekommt man nicht.',
+                'Drei Ausrichtungen, drei Förderbänder und zwei Drehpunkte, auf denen man eine Sekunde steht.',
         },
         moulin: {
             name: 'Die Mühle',
             brief:
-                'Zwei gegenläufige Bänder, und eine Plattform, die dazwischen hin und her fährt.',
+                'Sie dreht verkehrt herum: die Vierteldrehungen gehen gegen den Uhrzeigersinn.',
         },
         pilon: {
             name: 'Der Stößel',
@@ -468,7 +491,7 @@ export const de: Dictionary = {
         dislocation: {
             name: 'Die Verrenkung',
             brief:
-                'Ein brüchiger Absatz, ein blinkender, ein brüchiger. Zwei Arten zu verschwinden, im Wechsel.',
+                'Alles bröckelt oder blinkt, der Drehpunkt eingeschlossen. Nichts, worauf man landet, hält.',
         },
         erosion: {
             name: 'Die Erosion',
@@ -493,7 +516,7 @@ export const de: Dictionary = {
         verrou: {
             name: 'Der Riegel',
             brief:
-                'Eis zwischen zwei Wänden, die sich treffen. Man bremst schlecht darauf, und der Durchgang schließt sich.',
+                'Zwei Mauern verriegeln den Aufstieg. Der Durchgang öffnet sich nur, wenn der Bildschirm eine Vierteldrehung kippt.',
         },
         garrot: {
             name: 'Die Aderpresse',
@@ -508,12 +531,12 @@ export const de: Dictionary = {
         apnee: {
             name: 'Die Apnoe',
             brief:
-                'Fünf Absätze am Stück ohne eine Stelle zum Atmen: Eis, brüchig, blinkend, brüchig, und zwei Kugeln.',
+                'Zwei Kugeln, drei Ausrichtungen und kein fester Tritt dazwischen.',
         },
         terminus: {
             name: 'Die Endstation',
             brief:
-                'Alles auf einmal, und kopfüber: Absprung, brüchiger Absatz, Bö, folgende Klinge — nachdem der Bildschirm gedreht wurde.',
+                'Die letzte: Sprungfeder, Wind, eine Klinge, die dich verfolgt, und eine Vierteldrehung zum Schluss.',
         },
     },
     puzzlesPage: {

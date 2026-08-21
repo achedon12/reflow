@@ -52,7 +52,9 @@ docker compose -p reflow -f docker-compose.dev.yml up -d --build
 Avant de pousser :
 
 ```bash
-npm run check        # typecheck + lint + build + vérification des énigmes
+npm run check              # typecheck + lint + build + les deux vérifications
+npm run pivot charniere    # une énigme à tronçons à la fois, pendant qu’on l’écrit
+npm run draw charniere:1   # et la même, en image, dans l’orientation demandée
 ```
 
 ---
@@ -110,6 +112,51 @@ la portée n'est que de 102
 ```
 
 Une énigme impossible ne compile pas.
+
+## Douze énigmes changent de sol en cours de route
+
+Une énigme ordinaire se parcourt dans une seule orientation ; pivoter l'écran
+n'y sert qu'à la relire. Douze d'entre elles s'écrivent en **tronçons**, chacun
+dans son quart de tour :
+
+```ts
+segments: [
+    { designedFor: 0, steps: [ …, { rise: 44, gap: 60, pivot: true } ] },
+    { designedFor: 1, steps: [ { catch: true, w: 130 }, … ] },
+]
+```
+
+Ce qui suit le pivot est fait de **piliers** : couché, un palier de 150 × 14
+devient 14 × 150, et l'on n'y tient plus. Ces piliers ne redeviennent un sol
+qu'une fois l'écran tourné — le chemin n'existe donc dans aucune orientation
+prise seule.
+
+Deux règles, tenues par le constructeur :
+
+- le raccord se fait sur un **pivot carré** (`pivot: true`), sinon le joueur
+  bascule dans le vide à l'instant même où il tourne ;
+- le tronçon suivant s'ouvre sur un **rattrapage** (`catch: true`), qu'on ne
+  positionne pas : la gravité vient de changer de côté, le joueur longe la
+  paroi du pivot et tombe. Le constructeur place la plateforme sous lui.
+
+Et surtout, `npm run pivot` prouve que le quart de tour est **obligatoire** :
+il reconstruit chaque énigme sans la mécanique `gravity`, ce qui interdit au
+vérificateur de tourner, et exige qu'il échoue — à la taille de conception
+comme aux tailles qu'un joueur essaierait pour s'en dispenser. Le contrôle
+couvre les **quinze** énigmes qui déclarent la gravité : les douze à tronçons,
+et les trois qui se contentent d'un quart de tour au départ. Une preuve
+d'impossibilité ne s'arrête pas sur un succès, elle épuise le faisceau — le
+contrôle lance donc une énigme par cœur disponible.
+
+```
+Le quart de tour est-il obligatoire ? (15 énigmes)
+  ✓ charniere     hard        0.9 s, insoluble sans quart de tour
+  ✓ spirale       hard        0.7 s, insoluble sans quart de tour
+  …
+```
+
+C'est le contrôle qui avait manqué aux cinq premières énigmes tournées : elles
+se pivotaient une fois au départ, puis se jouaient comme les autres.
 
 ## Et elles sont **prouvées** finissables
 

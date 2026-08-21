@@ -36,6 +36,13 @@ jobs:
       - name: Vérifier que les énigmes sont finissables
         run: npm run levels
 
+      # L'autre moitié de la preuve : les énigmes à tronçons se terminent-elles
+      # SANS pivoter ? Si oui, la rotation n'y est qu'un décor et le niveau ment
+      # sur ce qu'il demande. Le contrôle rejoue chacune sans la mécanique
+      # `gravity` et exige un échec, à plusieurs tailles de fenêtre.
+      - name: Vérifier que le quart de tour est obligatoire
+        run: npm run pivot
+
       # Garde-fous sur ce que le référencement ne pardonne pas.
       - name: Vérifier les balises de référencement
         run: |

@@ -151,9 +151,9 @@ export const fr = {
             crumble:
                 'Ne vous arrêtez pas sur un palier friable : traversez-le.',
             gravity:
-                'Fais pivoter l’écran. Ce qui était un mur devient un sol.',
+                'Faites pivoter l’écran. Ce qui était un mur devient un sol.',
             screen:
-                'L’écran de jeu se règle : tire ses poignées, tourne-le.',
+                'L’écran de jeu se règle : tirez ses poignées, tournez-le.',
         },
     },
     mechanics: {
@@ -219,7 +219,7 @@ export const fr = {
         },
         gravity: {
             name: 'La gravité',
-            body: 'L’écran pivote par quarts de tour, et la chute suit. Un même niveau lu de côté n’est plus le même : les plateformes deviennent des murs, et le sol un plafond.',
+            body: 'L’écran pivote par quarts de tour, et la chute suit. Certaines énigmes ne s’écrivent pas dans une seule orientation : leur chemin bifurque sur un pivot carré, et sa suite n’est un sol qu’une fois l’écran tourné.',
         },
         screen: {
             name: 'L’écran intérieur',
@@ -360,7 +360,7 @@ export const fr = {
         bascule: {
             name: 'La bascule',
             brief:
-                'Deux plateformes qui montent et descendent en opposition, au-dessus du vide.',
+                'Deux plateformes en opposition, puis un pivot carré : la suite du chemin ne devient un sol qu’un quart de tour plus loin.',
         },
         jachere: {
             name: 'La jachère',
@@ -385,7 +385,7 @@ export const fr = {
         tourniquet: {
             name: 'Le tourniquet',
             brief:
-                'Les paliers alternent de bord et d’accroche verticale. Chaque côté tiré déplace la moitié du niveau.',
+                'Trois orientations à la file. Chaque pivot passe le relais à la suivante, et l’on n’y tient qu’un instant.',
         },
         cascade: {
             name: 'La cascade',
@@ -430,7 +430,7 @@ export const fr = {
         retour: {
             name: 'Le retour',
             brief:
-                'Cinq sauts mobiles d’affilée, sans sol. Le rembobinage n’y est pas une aide : c’est la règle.',
+                'Le pivot se prend dans l’autre sens. Le rembobinage reste là pour les erreurs — il y en aura.',
         },
         metronome: {
             name: 'Le métronome',
@@ -450,7 +450,7 @@ export const fr = {
         verticale: {
             name: 'La verticale',
             brief:
-                'Un puits couché : il faut faire pivoter l’écran d’un quart de tour pour que ses paliers deviennent un sol.',
+                'Un puits qui n’en est un qu’une fois l’écran couché : debout, ses paliers ne sont que des piliers.',
         },
         gouffre: {
             name: 'Le gouffre',
@@ -460,7 +460,7 @@ export const fr = {
         spirale: {
             name: 'La spirale',
             brief:
-                'Le chemin s’enroule : bord gauche, bord droit, haut, bas, et retour.',
+                'Le chemin s’enroule sur un tour complet, et change de sol à chaque coude.',
         },
         veilleuse: {
             name: 'La veilleuse',
@@ -485,7 +485,7 @@ export const fr = {
         charniere: {
             name: 'La charnière',
             brief:
-                'Au-dessus de 760 pixels, deux murs ferment tout. En dessous, le chemin apparaît.',
+                'Le chemin plie à angle droit. Sa seconde moitié n’est faite que de piliers — il faut coucher l’écran pour qu’ils portent.',
         },
         souffle: {
             name: 'Le dernier souffle',
@@ -650,12 +650,12 @@ export const fr = {
         engrenage: {
             name: 'L’engrenage',
             brief:
-                'Un tapis à contresens suivi d’un palier friable. L’élan qu’on n’a pas, on ne l’aura pas.',
+                'Trois orientations, trois tapis roulants, et deux pivots où l’on ne tient qu’une seconde.',
         },
         moulin: {
             name: 'Le moulin',
             brief:
-                'Deux tapis contraires, et une plateforme qui va et vient entre les deux.',
+                'Il tourne à l’envers : les quarts de tour se prennent dans le sens inverse des aiguilles.',
         },
         pilon: {
             name: 'Le pilon',
@@ -680,7 +680,7 @@ export const fr = {
         dislocation: {
             name: 'La dislocation',
             brief:
-                'Un palier friable, un clignotant, un friable. Deux façons de disparaître, alternées.',
+                'Tout se dérobe ou clignote, pivot compris. Rien de ce sur quoi on se pose ne dure.',
         },
         erosion: {
             name: 'L’érosion',
@@ -705,7 +705,7 @@ export const fr = {
         verrou: {
             name: 'Le verrou',
             brief:
-                'De la glace entre deux murs qui se rejoignent. On y freine mal, et le passage se ferme.',
+                'Deux murs verrouillent la montée. Le passage ne s’ouvre qu’en couchant l’écran d’un quart de tour.',
         },
         garrot: {
             name: 'Le garrot',
@@ -720,12 +720,12 @@ export const fr = {
         apnee: {
             name: 'L’apnée',
             brief:
-                'Cinq paliers d’affilée sans un endroit où souffler : glace, friable, clignotant, friable, et deux orbes.',
+                'Deux orbes, trois orientations, et pas un palier qui tienne entre les deux.',
         },
         terminus: {
             name: 'Le terminus',
             brief:
-                'Tout à la fois, et à l’envers : rebond, palier friable, rafale, lame qui suit — une fois l’écran retourné.',
+                'La dernière : rebond, vent, lame qui traque, et un quart de tour pour en finir.',
         },
     },
     puzzlesPage: {

@@ -12,7 +12,9 @@
         "og": "tsx scripts/export-og.mts",
         "fonts": "cp node_modules/@fontsource-variable/space-grotesk/files/space-grotesk-latin-wght-normal.woff2 node_modules/@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2 src/fonts/",
         "levels": "tsx scripts/check-levels.mts",
-        "check": "npm run typecheck && npm run lint && npm run build && npm run levels"
+        "pivot": "tsx scripts/check-pivots.mts",
+        "draw": "tsx scripts/render-level.mts",
+        "check": "npm run typecheck && npm run lint && npm run build && npm run levels && npm run pivot"
     },
     "dependencies": {
         "lucide-react": "^1.33.0",

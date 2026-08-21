@@ -478,14 +478,26 @@ export const SPECS: readonly LevelSpec[] = [
     {
         id: 'bascule',
         tier: 'medium',
-        mechanics: ['motion', 'edge', 'ice', 'conveyor'],
+        mechanics: ['motion', 'edge', 'gravity', 'ice', 'conveyor'],
         reference: REF,
         floor: 'deadly',
         start: { x: 36, up: 60, w: 160 },
-        steps: [
-            { rise: 42, gap: 60, w: 110, motion: { dx: 0, dy: 28, period: 3.0 }, vedge: 'top', surface: 'ice' },
-            { rise: 42, gap: 60, w: 110, motion: { dx: 0, dy: 28, period: 3.0, phase: 0.5 }, edge: 'right', when: { minW: 960 }, surface: 'conveyor', speed: 110 },
-            { rise: 42, gap: 74, w: 160, edge: 'right' },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 42, gap: 60, w: 110, motion: { dx: 0, dy: 28, period: 3.0 }, vedge: 'top', surface: 'ice' },
+                    { rise: 42, gap: 60, w: 120, surface: 'conveyor', speed: 110 },
+                    { rise: 42, gap: 60, pivot: true },
+                ],
+            },
+            {
+                designedFor: 1,
+                steps: [
+                    { catch: true, w: 130, surface: 'ice' },
+                    { rise: 50, gap: 58, w: 120, surface: 'conveyor', speed: 110 },
+                ],
+            },
         ],
     },
     {
@@ -547,14 +559,32 @@ export const SPECS: readonly LevelSpec[] = [
     {
         id: 'tourniquet',
         tier: 'medium',
-        mechanics: ['edge', 'ice', 'conveyor'],
+        mechanics: ['edge', 'gravity', 'ice', 'conveyor'],
         reference: { w: 940, h: 540 },
         start: { x: 60, up: 0 },
-        steps: [
-            { rise: 60, gap: 60, w: 130, surface: 'ice' },
-            { rise: 44, gap: 60, w: 120, edge: 'right', vedge: 'top', surface: 'conveyor', speed: 110 },
-            { rise: 44, gap: 60, w: 120, vedge: 'top', edge: 'right', when: { minW: 900 } },
-            { rise: 44, gap: 60, w: 130, edge: 'right' },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 60, gap: 60, w: 130, surface: 'ice' },
+                    { rise: 44, gap: 60, w: 120, surface: 'conveyor', speed: 110 },
+                    { rise: 44, gap: 60, pivot: true },
+                ],
+            },
+            {
+                designedFor: 1,
+                steps: [
+                    { catch: true, w: 130, surface: 'conveyor', speed: -110 },
+                    { rise: 52, gap: 56, pivot: true, surface: 'ice' },
+                ],
+            },
+            {
+                designedFor: 2,
+                steps: [
+                    { catch: true, w: 130, surface: 'ice' },
+                    { turn: true, rise: 50, gap: 32, w: 100 },
+                ],
+            },
         ],
         extras: [floorSpikes(240, 480)],
     },
@@ -683,16 +713,26 @@ export const SPECS: readonly LevelSpec[] = [
     {
         id: 'retour',
         tier: 'hard',
-        mechanics: ['rewind', 'motion', 'ice', 'conveyor', 'crumble'],
+        mechanics: ['rewind', 'motion', 'gravity', 'ice', 'conveyor', 'crumble'],
         reference: REF,
         floor: 'deadly',
         start: { x: 24, up: 56, w: 140 },
-        steps: [
-            { rise: 40, gap: 52, w: 84, motion: { dx: 0, dy: 24, period: 2.4 }, surface: 'ice' },
-            { rise: 40, gap: 50, w: 84, motion: { dx: 22, dy: 0, period: 2.8, phase: 0.33 }, vedge: 'top', surface: 'conveyor', speed: 110 },
-            { rise: 40, gap: 52, w: 84, motion: { dx: 0, dy: 26, period: 2.6, phase: 0.66 }, edge: 'right', when: { minW: 960 }, crumble: true },
-            { rise: 40, gap: 56, w: 96, edge: 'right' },
-            { rise: 40, gap: 62, w: 140, edge: 'right' },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 40, gap: 52, w: 84, motion: { dx: 0, dy: 24, period: 2.4 }, surface: 'ice' },
+                    { rise: 40, gap: 50, w: 90, surface: 'conveyor', speed: 110 },
+                    { rise: 40, gap: 52, pivot: true },
+                ],
+            },
+            {
+                designedFor: 3,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 50, gap: 56, w: 110, crumble: true },
+                ],
+            },
         ],
     },
     {
@@ -750,14 +790,23 @@ export const SPECS: readonly LevelSpec[] = [
         tier: 'hard',
         mechanics: ['resize', 'gravity', 'ice', 'conveyor', 'crumble'],
         reference: { w: 620, h: 640 },
-        designedFor: 1,
         start: { x: 40, up: 0 },
-        steps: [
-            { rise: 62, gap: 60, w: 110, surface: 'ice' },
-            { rise: 62, gap: 60, w: 110, turn: true, vedge: 'top', surface: 'conveyor', speed: 110 },
-            { rise: 62, gap: 60, w: 110, turn: true, edge: 'right', when: { maxW: 660 }, crumble: true },
-            { rise: 62, gap: 60, w: 110, turn: true, edge: 'right' },
-            { rise: 62, gap: 60, w: 130, turn: true, edge: 'right' },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 62, gap: 50, w: 100, surface: 'ice' },
+                    { rise: 62, gap: 50, w: 100, surface: 'conveyor', speed: 110 },
+                    { rise: 62, gap: 50, pivot: true },
+                ],
+            },
+            {
+                designedFor: 1,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 56, gap: 58, w: 130, when: { maxW: 680 }, crumble: true },
+                ],
+            },
         ],
         extras: [floorSpikes(180, 300)],
     },
@@ -778,17 +827,45 @@ export const SPECS: readonly LevelSpec[] = [
     {
         id: 'spirale',
         tier: 'hard',
-        mechanics: ['edge', 'ice', 'conveyor', 'crumble'],
+        mechanics: ['edge', 'gravity', 'ice', 'conveyor', 'crumble'],
         reference: { w: 900, h: 600 },
-        start: { x: 50, up: 0 },
-        steps: [
-            { rise: 60, gap: 74, w: 130, surface: 'ice' },
-            { rise: 46, gap: 74, w: 120, edge: 'right', vedge: 'top', surface: 'conveyor', speed: 110 },
-            { rise: 46, gap: 66, w: 120, edge: 'right', turn: true, vedge: 'top', when: { minH: 570 }, crumble: true },
-            { rise: 46, gap: 70, w: 120, vedge: 'top', edge: 'right' },
-            { rise: 46, gap: 70, w: 140, turn: true, edge: 'right' },
+        floor: 'deadly',
+        start: { x: 50, up: 56, w: 150 },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 60, gap: 70, w: 130, surface: 'ice' },
+                    { rise: 46, gap: 66, w: 120, surface: 'conveyor', speed: 110 },
+                    { rise: 46, gap: 60, pivot: true },
+                ],
+            },
+            {
+                designedFor: 1,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 54, gap: 58, pivot: true, crumble: true },
+                ],
+            },
+            {
+                designedFor: 2,
+                steps: [
+                    { catch: true, w: 120, surface: 'conveyor', speed: 110 },
+                    { turn: true, rise: 52, gap: 58, pivot: true },
+                ],
+            },
+            {
+                designedFor: 3,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    // `turn` remonte dans le MONDE : dans un repère au
+                    // troisième quart, c'est le sens croissant qui s'éloigne du
+                    // sol d'origine, et la sortie doit finir hors de portée du
+                    // chemin de départ.
+                    { turn: true, rise: 50, gap: 32, w: 100 },
+                ],
+            },
         ],
-        extras: [floorSpikes(220, 460)],
     },
     {
         id: 'veilleuse',
@@ -852,17 +929,29 @@ export const SPECS: readonly LevelSpec[] = [
     {
         id: 'charniere',
         tier: 'hard',
-        mechanics: ['appear', 'edge', 'crush', 'ice', 'conveyor'],
+        mechanics: ['appear', 'edge', 'crush', 'gravity', 'ice', 'conveyor'],
         reference: { w: 720, h: 560 },
         start: { x: 40, up: 0 },
-        steps: [
-            { rise: 60, gap: 58, w: 110, vedge: 'top', surface: 'ice' },
-            { rise: 44, gap: 60, w: 110, edge: 'right', when: { maxW: 760 }, surface: 'conveyor', speed: 110 },
-            { rise: 44, gap: 56, w: 120, edge: 'right', when: { maxW: 760 } },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 60, gap: 58, w: 110, vedge: 'top', surface: 'ice' },
+                    { rise: 44, gap: 60, w: 110, surface: 'conveyor', speed: 110 },
+                    { rise: 44, gap: 56, pivot: true },
+                ],
+            },
+            {
+                designedFor: 1,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 48, gap: 56, w: 110, when: { maxW: 780 }, surface: 'conveyor', speed: 110 },
+                ],
+            },
         ],
         extras: [
-            wall('left', 240, 150, { when: { minW: 760 } }),
-            wall('right', 260, 150, { when: { minW: 760 } }),
+            wall('left', 240, 150, { when: { minW: 780 } }),
+            wall('right', 260, 150, { when: { minW: 780 } }),
             floorSpikes(280, 260),
         ],
     },
@@ -1326,28 +1415,65 @@ export const SPECS: readonly LevelSpec[] = [
     {
         id: 'engrenage',
         tier: 'impossible',
-        mechanics: ['conveyor', 'crumble'],
+        mechanics: ['conveyor', 'gravity', 'crumble', 'ice'],
         reference: { w: 1000, h: 560 },
         floor: 'deadly',
         start: { x: 30, up: 60, w: 150 },
-        steps: [
-            { rise: 32, gap: 54, w: 150, surface: 'conveyor', speed: -140, vedge: 'top' },
-            { rise: 32, gap: 54, w: 110, crumble: true, edge: 'right', when: { minW: 960 } },
-            { rise: 32, gap: 58, w: 150, edge: 'right' },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 32, gap: 54, w: 150, surface: 'conveyor', speed: -140, vedge: 'top' },
+                    { rise: 32, gap: 54, w: 110, crumble: true },
+                    { rise: 32, gap: 58, pivot: true },
+                ],
+            },
+            {
+                designedFor: 1,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 46, gap: 56, pivot: true, surface: 'conveyor', speed: 140 },
+                ],
+            },
+            {
+                designedFor: 2,
+                steps: [
+                    { catch: true, w: 120, crumble: true },
+                    { rise: 44, gap: 58, w: 150 },
+                ],
+            },
         ],
     },
     {
         id: 'moulin',
         tier: 'impossible',
-        mechanics: ['conveyor', 'motion'],
+        mechanics: ['conveyor', 'motion', 'gravity', 'ice'],
         reference: { w: 1000, h: 560 },
         floor: 'deadly',
         start: { x: 30, up: 60, w: 150 },
-        steps: [
-            { rise: 32, gap: 54, w: 140, surface: 'conveyor', speed: 150 },
-            { rise: 32, gap: 52, w: 100, motion: { dx: 22, dy: 0, period: 3.0 }, vedge: 'top' },
-            { rise: 32, gap: 54, w: 140, surface: 'conveyor', speed: -150, edge: 'right', when: { minW: 960 } },
-            { rise: 32, gap: 58, w: 150, edge: 'right' },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 32, gap: 54, w: 140, surface: 'conveyor', speed: 150 },
+                    { rise: 32, gap: 52, w: 100, motion: { dx: 22, dy: 0, period: 3.0 }, vedge: 'top' },
+                    { rise: 32, gap: 54, pivot: true },
+                ],
+            },
+            {
+                designedFor: 3,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 46, gap: 56, pivot: true, surface: 'conveyor', speed: -150 },
+                ],
+            },
+            {
+                designedFor: 2,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 44, gap: 58, w: 150 },
+                ],
+            },
         ],
     },
     {
@@ -1406,15 +1532,26 @@ export const SPECS: readonly LevelSpec[] = [
     {
         id: 'dislocation',
         tier: 'impossible',
-        mechanics: ['crumble', 'blink'],
+        mechanics: ['crumble', 'blink', 'gravity', 'ice'],
         reference: { w: 1000, h: 560 },
         floor: 'deadly',
         start: { x: 30, up: 60, w: 150 },
-        steps: [
-            { rise: 30, gap: 54, w: 110, crumble: true },
-            { rise: 30, gap: 54, w: 110, blink: { period: 2.4, duty: 0.6 }, vedge: 'top' },
-            { rise: 30, gap: 54, w: 110, crumble: true, edge: 'right', when: { minW: 960 } },
-            { rise: 30, gap: 58, w: 150, edge: 'right' },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 30, gap: 54, w: 110, crumble: true },
+                    { rise: 30, gap: 54, w: 110, blink: { period: 2.4, duty: 0.6 }, vedge: 'top' },
+                    { rise: 30, gap: 54, pivot: true },
+                ],
+            },
+            {
+                designedFor: 1,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 46, gap: 56, w: 110, crumble: true },
+                ],
+            },
         ],
     },
     {
@@ -1474,13 +1611,25 @@ export const SPECS: readonly LevelSpec[] = [
     {
         id: 'verrou',
         tier: 'impossible',
-        mechanics: ['crush', 'ice'],
+        mechanics: ['crush', 'gravity', 'ice', 'conveyor'],
         reference: { w: 920, h: 560 },
         start: { x: 40, up: 0 },
-        steps: [
-            { rise: 56, gap: 60, w: 150, surface: 'ice', vedge: 'top' },
-            { rise: 40, gap: 62, w: 140, surface: 'ice', edge: 'right', when: { minH: 530 } },
-            { rise: 40, gap: 60, w: 150, edge: 'right' },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 56, gap: 60, w: 150, surface: 'ice', vedge: 'top' },
+                    { rise: 40, gap: 62, w: 140, surface: 'conveyor', speed: 110 },
+                    { rise: 40, gap: 60, pivot: true },
+                ],
+            },
+            {
+                designedFor: 1,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 50, gap: 58, w: 110, when: { minH: 530 } },
+                ],
+            },
         ],
         extras: [wall('left', 290, 80), wall('right', 300, 80), floorSpikes(360, 200)],
     },
@@ -1513,16 +1662,33 @@ export const SPECS: readonly LevelSpec[] = [
     {
         id: 'apnee',
         tier: 'impossible',
-        mechanics: ['ice', 'crumble', 'blink', 'orbs'],
+        mechanics: ['ice', 'crumble', 'blink', 'orbs', 'gravity'],
         reference: { w: 1120, h: 600 },
         floor: 'deadly',
         start: { x: 30, up: 60, w: 150 },
-        steps: [
-            { rise: 30, gap: 54, w: 120, surface: 'ice', orb: true },
-            { rise: 30, gap: 54, w: 110, crumble: true, vedge: 'top' },
-            { rise: 30, gap: 54, w: 110, blink: { period: 2.4, duty: 0.6 }, edge: 'right', when: { minW: 1080 } },
-            { rise: 30, gap: 54, w: 110, crumble: true, orb: true, edge: 'right' },
-            { rise: 30, gap: 58, w: 150, edge: 'right' },
+        segments: [
+            {
+                designedFor: 0,
+                steps: [
+                    { rise: 30, gap: 54, w: 120, surface: 'ice', orb: true },
+                    { rise: 30, gap: 54, w: 110, crumble: true, vedge: 'top' },
+                    { rise: 30, gap: 54, pivot: true },
+                ],
+            },
+            {
+                designedFor: 1,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 46, gap: 56, pivot: true, blink: { period: 2.4, duty: 0.6 } },
+                ],
+            },
+            {
+                designedFor: 2,
+                steps: [
+                    { catch: true, w: 120, crumble: true, orb: true },
+                    { rise: 44, gap: 58, w: 150 },
+                ],
+            },
         ],
     },
     {
@@ -1530,13 +1696,24 @@ export const SPECS: readonly LevelSpec[] = [
         tier: 'impossible',
         mechanics: ['bounce', 'wind', 'chase', 'crumble', 'edge', 'gravity'],
         reference: { w: 1000, h: 640 },
-        designedFor: 2,
         floor: 'deadly',
         start: { x: 30, up: 60, w: 150 },
-        steps: [
-            { rise: 28, gap: 56, w: 120, surface: 'bouncy', vedge: 'top' },
-            { rise: 175, gap: 60, w: 110, assisted: true, crumble: true, edge: 'right', when: { minW: 960 } },
-            { rise: 30, gap: 110, w: 150, assisted: true, edge: 'right' },
+        segments: [
+            {
+                designedFor: 2,
+                steps: [
+                    { rise: 28, gap: 56, w: 120, surface: 'bouncy', vedge: 'top' },
+                    { rise: 175, gap: 60, w: 110, assisted: true, crumble: true },
+                    { rise: 30, gap: 60, pivot: true, assisted: true },
+                ],
+            },
+            {
+                designedFor: 3,
+                steps: [
+                    { catch: true, w: 120, surface: 'ice' },
+                    { rise: 46, gap: 58, w: 110, surface: 'conveyor', speed: 130 },
+                ],
+            },
         ],
         extras: [windZone(420, 340, 260, 240, 700), stalker(60, 3.0)],
     },

@@ -615,7 +615,14 @@ export function Playfield({
                     title={`${dictionary.mechanics.gravity.name} (G)`}
                     className="btn btn-slim"
                 >
-                    <RotateCw aria-hidden="true" className="size-3.5" />
+                    {/* L'icône porte l'orientation courante : sur une énigme
+                        qui se joue en plusieurs quarts de tour, savoir où l'on
+                        en est vaut mieux que de le déduire du décor. */}
+                    <RotateCw
+                        aria-hidden="true"
+                        className="size-3.5 transition-transform duration-200 motion-reduce:transition-none"
+                        style={{ transform: `rotate(${screen.quarter * 90}deg)` }}
+                    />
                     <span className="sr-only">{dictionary.mechanics.gravity.name}</span>
                     <kbd className="numeric text-[0.65rem]">G</kbd>
                 </button>

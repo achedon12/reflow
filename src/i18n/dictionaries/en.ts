@@ -219,7 +219,7 @@ export const en: Dictionary = {
         },
         gravity: {
             name: 'Gravity',
-            body: 'The screen turns by quarter turns, and falling follows. The same level read sideways is not the same one: platforms become walls, and the floor a ceiling.',
+            body: 'The screen turns by quarter turns, and the fall follows. Some puzzles are not written in a single orientation: their path branches on a square pivot, and what comes after is only ground once the screen has turned.',
         },
         screen: {
             name: 'The inner screen',
@@ -254,13 +254,21 @@ export const en: Dictionary = {
         alternance: { name: 'The Alternation', brief: 'One light platform, one dark, alternating: you have to switch theme mid-crossing.' },
         guillotine: { name: 'The Guillotine', brief: 'Three blades drop from the ceiling, each on its own tempo.' },
         serpentin: { name: 'The Serpentine', brief: 'The path doubles back twice as it climbs. You pass over where you have already been.' },
-        bascule: { name: 'The Seesaw', brief: 'Two platforms rising and falling in opposition, over the void.' },
+        bascule: {
+            name: 'The Seesaw',
+            brief:
+                'Two platforms in opposition, then a square pivot: the rest of the path only becomes ground a quarter turn later.',
+        },
         jachere: { name: 'The Fallow', brief: 'A path that exists only in light — and a blade that exists only in light too.' },
         cordee: { name: 'The Rope Team', brief: 'Three orbs along one continuous climb. Not one of them is picked up in passing.' },
         grenier: { name: 'The Attic', brief:
                 'Everything is upside down, the exit included. Flipping the screen is the only way to set foot on it.' },
         passerelle: { name: 'The Footbridge', brief: 'The middle span only appears below 800 pixels wide.' },
-        tourniquet: { name: 'The Turnstile', brief: 'Platforms alternate edge and vertical anchor. Each side you pull moves half the level.' },
+        tourniquet: {
+            name: 'The Turnstile',
+            brief:
+                'Three orientations in a row. Each pivot hands over to the next, and you hold it for barely a moment.',
+        },
         cascade: { name: 'The Cascade', brief: 'A long descent, one step of which slides sideways at the wrong moment.' },
         sablier: { name: 'The Hourglass', brief: 'A wall blocks the way above 780 pixels; the passage only opens below.' },
         relais: { name: 'The Relay', brief: 'Two orbs carried by moving platforms, over the void.' },
@@ -270,19 +278,34 @@ export const en: Dictionary = {
         funambule: { name: 'The Tightrope', brief: 'Seventy-pixel platforms over the void, and two orbs you cannot miss.' },
         contrepoids: { name: 'The Counterweight', brief:
                 'A path built head down. Reading it the right way up leads nowhere.' },
-        retour: { name: 'The Return', brief: 'Five moving jumps in a row, with no floor. Rewinding is not a help here: it is the rule.' },
+        retour: {
+            name: 'The Return',
+            brief:
+                'The pivot turns the other way. Rewinding is still there for the mistakes — there will be some.',
+        },
         metronome: { name: 'The Metronome', brief: 'Three blades a third of a beat apart. Rhythm is the only solution.' },
         eclipse: { name: 'The Eclipse', brief: 'The path alternates themes over the void: switching too late means jumping into nothing.' },
         tenaille: { name: 'The Pincer', brief: 'A passage that exists only below 900 pixels, between two walls closing in.' },
-        verticale: { name: 'The Vertical', brief:
-                'A shaft lying on its side: the screen has to make a quarter turn for its ledges to become a floor.' },
+        verticale: {
+            name: 'The Vertical',
+            brief:
+                'A well that is only a well once the screen is laid on its side: upright, its steps are mere pillars.',
+        },
         gouffre: { name: 'The Chasm', brief: 'Four gaps of ninety pixels, every one of them carried by a breathing platform.' },
-        spirale: { name: 'The Spiral', brief: 'The path coils: left edge, right edge, top, bottom, and back again.' },
+        spirale: {
+            name: 'The Spiral',
+            brief:
+                'The path coils through a full turn, changing floor at every corner.',
+        },
         veilleuse: { name: 'The Night Light', brief: 'A path that exists only in the dark, one span of which exists only in a narrow window.' },
         horloge: { name: 'The Clock', brief: 'Three platforms on the same period, a third of a beat apart. You have to step into the bar.' },
         cordon: { name: 'The Cord', brief: 'Three orbs in the four corners of the window, and the exit back where you started.' },
         abime: { name: 'The Abyss', brief: 'Two conditional spans over the void: shrink the window, or fall.' },
-        charniere: { name: 'The Hinge', brief: 'Above 760 pixels, two walls close everything. Below, the path appears.' },
+        charniere: {
+            name: 'The Hinge',
+            brief:
+                'The path bends at a right angle. Its second half is nothing but pillars — lay the screen down and they carry you.',
+        },
         souffle: { name: 'Last Breath', brief: 'Five moving steps, two orbs, no floor, and the exit against the right edge.' },
         epilogue: { name: 'The Epilogue', brief: 'Everything at once — the edges, the theme, the motion, the orbs and the void.' },
         verglas: {
@@ -438,12 +461,12 @@ export const en: Dictionary = {
         engrenage: {
             name: 'The Gearing',
             brief:
-                'A backwards belt followed by a crumbling ledge. The run-up you do not have, you will not get.',
+                'Three orientations, three conveyor belts, and two pivots you hold for a second.',
         },
         moulin: {
             name: 'The Mill',
             brief:
-                'Two opposing belts, and a platform going back and forth between them.',
+                'It turns the wrong way: the quarter turns go counter-clockwise.',
         },
         pilon: {
             name: 'The Pestle',
@@ -468,7 +491,7 @@ export const en: Dictionary = {
         dislocation: {
             name: 'The Dislocation',
             brief:
-                'One crumbling ledge, one blinking, one crumbling. Two ways of vanishing, alternating.',
+                'Everything crumbles or blinks, the pivot included. Nothing you land on lasts.',
         },
         erosion: {
             name: 'The Erosion',
@@ -493,7 +516,7 @@ export const en: Dictionary = {
         verrou: {
             name: 'The Bolt',
             brief:
-                'Ice between two walls that meet. You brake badly on it, and the passage closes.',
+                'Two walls lock the climb. The way through opens only when the screen is laid on its side.',
         },
         garrot: {
             name: 'The Tourniquet',
@@ -508,12 +531,12 @@ export const en: Dictionary = {
         apnee: {
             name: 'Apnea',
             brief:
-                'Five ledges in a row with nowhere to breathe: ice, crumble, blink, crumble, and two orbs.',
+                'Two orbs, three orientations, and not one steady step between them.',
         },
         terminus: {
             name: 'The Terminus',
             brief:
-                'Everything at once, and upside down: bounce, crumbling ledge, gust, tracking blade — once the screen is flipped.',
+                'The last one: bounce, wind, a blade that tracks you, and a quarter turn to end it.',
         },
     },
     puzzlesPage: {

@@ -219,7 +219,7 @@ export const es: Dictionary = {
         },
         gravity: {
             name: 'La gravedad',
-            body: 'La pantalla gira por cuartos de vuelta, y la caída la sigue. El mismo nivel leído de lado ya no es el mismo: las plataformas se vuelven muros, y el suelo un techo.',
+            body: 'La pantalla gira por cuartos de vuelta, y la caída la sigue. Algunos enigmas no se escriben en una sola orientación: su camino se bifurca en un pivote cuadrado, y lo que sigue solo es suelo una vez girada la pantalla.',
         },
         screen: {
             name: 'La pantalla interior',
@@ -254,13 +254,21 @@ export const es: Dictionary = {
         alternance: { name: 'La alternancia', brief: 'Una plataforma clara, una oscura, alternando: hay que cambiar de tema en plena travesía.' },
         guillotine: { name: 'La guillotina', brief: 'Tres cuchillas caen del techo, cada una con su propio tempo.' },
         serpentin: { name: 'El serpentín', brief: 'El camino da dos medias vueltas mientras sube. Se vuelve a pasar por encima de donde se estaba.' },
-        bascule: { name: 'El balancín', brief: 'Dos plataformas que suben y bajan en oposición, sobre el vacío.' },
+        bascule: {
+            name: 'El balancín',
+            brief:
+                'Dos plataformas en oposición y luego un pivote cuadrado: el resto del camino solo es suelo un cuarto de vuelta más allá.',
+        },
         jachere: { name: 'El barbecho', brief: 'Un camino que solo existe en claro, y una cuchilla que solo existe en claro también.' },
         cordee: { name: 'La cordada', brief: 'Tres orbes a lo largo de una subida continua. Ninguno se recoge de paso.' },
         grenier: { name: 'El desván', brief:
                 'Todo está del revés, la salida incluida. Dar la vuelta a la pantalla es la única forma de pisarlo.' },
         passerelle: { name: 'La pasarela', brief: 'El tramo central solo aparece por debajo de 800 píxeles de ancho.' },
-        tourniquet: { name: 'El torniquete', brief: 'Los rellanos alternan de borde y de anclaje vertical. Cada lado del que tiras mueve medio nivel.' },
+        tourniquet: {
+            name: 'El torniquete',
+            brief:
+                'Tres orientaciones seguidas. Cada pivote cede el relevo a la siguiente, y apenas se aguanta un instante.',
+        },
         cascade: { name: 'La cascada', brief: 'Un largo descenso, del que un rellano se escurre de lado en el peor momento.' },
         sablier: { name: 'El reloj de arena', brief: 'Un muro corta el paso por encima de 780 píxeles; el pasaje solo se abre por debajo.' },
         relais: { name: 'El relevo', brief: 'Dos orbes llevados por plataformas móviles, sobre el vacío.' },
@@ -270,19 +278,34 @@ export const es: Dictionary = {
         funambule: { name: 'El funámbulo', brief: 'Rellanos de setenta píxeles sobre el vacío y dos orbes que no se pueden fallar.' },
         contrepoids: { name: 'El contrapeso', brief:
                 'Un camino construido cabeza abajo. Leerlo del derecho no lleva a ninguna parte.' },
-        retour: { name: 'El retorno', brief: 'Cinco saltos móviles seguidos, sin suelo. Rebobinar no es una ayuda aquí: es la regla.' },
+        retour: {
+            name: 'El retorno',
+            brief:
+                'El pivote gira al revés. El rebobinado sigue ahí para los errores: los habrá.',
+        },
         metronome: { name: 'El metrónomo', brief: 'Tres cuchillas a un tercio de tiempo de distancia. El ritmo es la única solución.' },
         eclipse: { name: 'El eclipse', brief: 'El camino alterna los temas sobre el vacío: cambiar demasiado tarde es saltar a la nada.' },
         tenaille: { name: 'La tenaza', brief: 'Un paso que solo existe por debajo de 900 píxeles, entre dos muros que se cierran.' },
-        verticale: { name: 'La vertical', brief:
-                'Un pozo tumbado: hay que girar la pantalla un cuarto de vuelta para que sus rellanos sean suelo.' },
+        verticale: {
+            name: 'La vertical',
+            brief:
+                'Un pozo que solo lo es cuando la pantalla se tumba: de pie, sus escalones no son más que pilares.',
+        },
         gouffre: { name: 'El abismo', brief: 'Cuatro distancias de noventa píxeles, todas sostenidas por plataformas que respiran.' },
-        spirale: { name: 'La espiral', brief: 'El camino se enrolla: borde izquierdo, borde derecho, arriba, abajo y vuelta.' },
+        spirale: {
+            name: 'La espiral',
+            brief:
+                'El camino se enrolla una vuelta completa y cambia de suelo en cada codo.',
+        },
         veilleuse: { name: 'La luz de noche', brief: 'Un camino que solo existe en oscuro, y cuyo tramo central solo existe con la ventana estrecha.' },
         horloge: { name: 'El reloj', brief: 'Tres plataformas del mismo período, desfasadas un tercio. Hay que entrar en el compás.' },
         cordon: { name: 'El cordón', brief: 'Tres orbes en las cuatro esquinas de la ventana, y la salida de vuelta en el punto de partida.' },
         abime: { name: 'La sima', brief: 'Dos tramos condicionales sobre el vacío: reducir la ventana, o caer.' },
-        charniere: { name: 'La bisagra', brief: 'Por encima de 760 píxeles, dos muros lo cierran todo. Por debajo, aparece el camino.' },
+        charniere: {
+            name: 'La bisagra',
+            brief:
+                'El camino se dobla en ángulo recto. Su segunda mitad son solo pilares: hay que tumbar la pantalla para que sostengan.',
+        },
         souffle: { name: 'El último aliento', brief: 'Cinco rellanos móviles, dos orbes, ningún suelo y la salida contra el borde derecho.' },
         epilogue: { name: 'El epílogo', brief: 'Todo a la vez: los bordes, el tema, el movimiento, los orbes y el vacío.' },
         verglas: {
@@ -438,12 +461,12 @@ export const es: Dictionary = {
         engrenage: {
             name: 'El engranaje',
             brief:
-                'Una cinta en contra seguida de un rellano frágil. El impulso que no tienes, no lo tendrás.',
+                'Tres orientaciones, tres cintas transportadoras y dos pivotes donde solo se aguanta un segundo.',
         },
         moulin: {
             name: 'El molino',
             brief:
-                'Dos cintas opuestas, y una plataforma que va y viene entre ambas.',
+                'Gira al revés: los cuartos de vuelta se toman en sentido antihorario.',
         },
         pilon: {
             name: 'El pilón',
@@ -468,7 +491,7 @@ export const es: Dictionary = {
         dislocation: {
             name: 'La dislocación',
             brief:
-                'Un rellano frágil, uno que parpadea, otro frágil. Dos formas de desaparecer, alternadas.',
+                'Todo se desmorona o parpadea, el pivote incluido. Nada de lo que pisas dura.',
         },
         erosion: {
             name: 'La erosión',
@@ -493,7 +516,7 @@ export const es: Dictionary = {
         verrou: {
             name: 'El cerrojo',
             brief:
-                'Hielo entre dos muros que se juntan. Se frena mal, y el paso se cierra.',
+                'Dos muros cierran la subida. El paso solo se abre tumbando la pantalla un cuarto de vuelta.',
         },
         garrot: {
             name: 'El torniquete',
@@ -508,12 +531,12 @@ export const es: Dictionary = {
         apnee: {
             name: 'La apnea',
             brief:
-                'Cinco rellanos seguidos sin un sitio donde respirar: hielo, frágil, parpadeo, frágil, y dos orbes.',
+                'Dos orbes, tres orientaciones y ni un escalón firme entre ellas.',
         },
         terminus: {
             name: 'El término',
             brief:
-                'Todo a la vez, y del revés: rebote, rellano frágil, ráfaga, cuchilla que sigue — tras dar la vuelta a la pantalla.',
+                'La última: rebote, viento, una cuchilla que persigue y un cuarto de vuelta para acabar.',
         },
     },
     puzzlesPage: {
