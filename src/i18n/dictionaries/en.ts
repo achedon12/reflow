@@ -44,7 +44,7 @@ export const en: Dictionary = {
                 body: 'In Reflow no platform has an absolute position. Each one is pinned to an edge of the window: the width and height of your browser go into the calculation of where it sits, frame after frame. Dragging a corner does not resize a view of the game — it moves the scenery, opens passages, closes others, and can crush you against a wall.',
             },
             {
-                title: 'Six mechanics, all borrowed from the browser',
+                title: 'Mechanics borrowed from the browser',
                 body: 'Resizing is only the first. Some blocks exist only below a certain width. Others exist only in the light theme, or only in the dark one — the theme switch becomes a game control. Browser zoom changes the size of the playfield, the Back button rewinds time, and a window that is too narrow kills.',
             },
             {
@@ -233,7 +233,8 @@ export const en: Dictionary = {
         corniche: { name: 'The Ledge', brief: 'Four platforms climbing to the right. The first time you gain height.' },
         descente: { name: 'The Descent', brief: 'The path goes down instead of up: falling becomes a way of moving forward.' },
         bordure: { name: 'The Border', brief: 'The landing is pinned right, the start left: the gap between them is the width of your window.' },
-        suspendu: { name: 'The Hanging', brief: 'The whole path hangs from the top of the window. The taller it is, the further the path drifts from the floor.' },
+        suspendu: { name: 'The Hanging', brief:
+                'The path hangs from the ceiling: it only becomes walkable once the screen is flipped.' },
         lucarne: { name: 'The Skylight', brief: 'A bridge is missing in the middle. It does exist — but only below a certain width.' },
         balancier: { name: 'The Rocker', brief: 'A platform that rises and falls. Waiting becomes an action.' },
         navette: { name: 'The Shuttle', brief: 'The same idea sideways: a platform running from one end of its corridor to the other.' },
@@ -256,7 +257,8 @@ export const en: Dictionary = {
         bascule: { name: 'The Seesaw', brief: 'Two platforms rising and falling in opposition, over the void.' },
         jachere: { name: 'The Fallow', brief: 'A path that exists only in light — and a blade that exists only in light too.' },
         cordee: { name: 'The Rope Team', brief: 'Three orbs along one continuous climb. Not one of them is picked up in passing.' },
-        grenier: { name: 'The Attic', brief: 'Everything hangs from the top and the exit is on the right: the window must be short and narrow at once.' },
+        grenier: { name: 'The Attic', brief:
+                'Everything is upside down, the exit included. Flipping the screen is the only way to set foot on it.' },
         passerelle: { name: 'The Footbridge', brief: 'The middle span only appears below 800 pixels wide.' },
         tourniquet: { name: 'The Turnstile', brief: 'Platforms alternate edge and vertical anchor. Each side you pull moves half the level.' },
         cascade: { name: 'The Cascade', brief: 'A long descent, one step of which slides sideways at the wrong moment.' },
@@ -266,12 +268,14 @@ export const en: Dictionary = {
         vertige: { name: 'Vertigo', brief: 'No floor, four moving platforms, and a final step glued to the right edge.' },
         dedale: { name: 'The Maze', brief: 'The level has two faces depending on the width, and the exit is not in the same place in each.' },
         funambule: { name: 'The Tightrope', brief: 'Seventy-pixel platforms over the void, and two orbs you cannot miss.' },
-        contrepoids: { name: 'The Counterweight', brief: 'A platform pinned to the top between two pinned to the bottom: only one range of heights lets you through.' },
+        contrepoids: { name: 'The Counterweight', brief:
+                'A path built head down. Reading it the right way up leads nowhere.' },
         retour: { name: 'The Return', brief: 'Five moving jumps in a row, with no floor. Rewinding is not a help here: it is the rule.' },
         metronome: { name: 'The Metronome', brief: 'Three blades a third of a beat apart. Rhythm is the only solution.' },
         eclipse: { name: 'The Eclipse', brief: 'The path alternates themes over the void: switching too late means jumping into nothing.' },
         tenaille: { name: 'The Pincer', brief: 'A passage that exists only below 900 pixels, between two walls closing in.' },
-        verticale: { name: 'The Vertical', brief: 'A narrow, tall window, and five turnbacks to reach its ceiling.' },
+        verticale: { name: 'The Vertical', brief:
+                'A shaft lying on its side: the screen has to make a quarter turn for its ledges to become a floor.' },
         gouffre: { name: 'The Chasm', brief: 'Four gaps of ninety pixels, every one of them carried by a breathing platform.' },
         spirale: { name: 'The Spiral', brief: 'The path coils: left edge, right edge, top, bottom, and back again.' },
         veilleuse: { name: 'The Night Light', brief: 'A path that exists only in the dark, one span of which exists only in a narrow window.' },
@@ -509,7 +513,7 @@ export const en: Dictionary = {
         terminus: {
             name: 'The Terminus',
             brief:
-                'A bounce, a crumbling ledge in mid-air, a gust, a blade that follows, and the right edge. The last of the catalogue.',
+                'Everything at once, and upside down: bounce, crumbling ledge, gust, tracking blade — once the screen is flipped.',
         },
     },
     puzzlesPage: {
@@ -614,13 +618,13 @@ export const en: Dictionary = {
         back: 'Play',
     },
     mechanicsPage: {
-        browserHeading: 'The six borrowed from the browser',
+        browserHeading: 'What comes from the browser',
         rulesHeading: 'And the game’s own rules',
         title: 'Mechanics',
         heading: 'What Reflow borrows from the browser',
-        lede: 'Six mechanics, all taken from interfaces the browser already exposes — and that no game uses.',
+        lede: 'All taken from interfaces the browser already exposes — and that no game uses.',
         metaDescription:
-            'The six mechanics of Reflow and what they borrow from the browser: window size, edges, light or dark theme, zoom, navigation history.',
+            'The mechanics of Reflow and what they borrow from the browser: window size, edges, light or dark theme, zoom, navigation history.',
         intro: 'A regular platformer draws its scenery in a canvas and ignores the window around it. Reflow does the opposite: it has no scenery of its own. Its geometry is a function of the size of your window, and anything the browser lets you measure becomes a control.',
         outro: 'A seventh mechanic exists on paper — one character crossing two side-by-side windows, kept in sync without a server. It is waiting for a later version: it depends on a pop-up blocker, and a mechanic that only works for half the players is not a mechanic.',
         back: 'Play',

@@ -44,7 +44,7 @@ export const de: Dictionary = {
                 body: 'In Reflow hat keine Plattform eine absolute Position. Jede hängt an einem Fensterrand: Breite und Höhe deines Browsers gehen Bild für Bild in ihre Lage ein. Eine Ecke zu ziehen skaliert keine Ansicht des Spiels — es verschiebt die Kulisse, öffnet Durchgänge, schließt andere und kann dich an eine Wand quetschen.',
             },
             {
-                title: 'Sechs Mechaniken, alle dem Browser abgeschaut',
+                title: 'Mechaniken, dem Browser abgeschaut',
                 body: 'Die Größenänderung ist nur die erste. Manche Blöcke existieren nur unterhalb einer bestimmten Breite. Andere nur im hellen Thema, oder nur im dunklen — der Themenschalter wird zur Spielsteuerung. Der Browser-Zoom ändert die Größe des Spielfelds, die Zurück-Schaltfläche spult die Zeit zurück, und ein zu schmales Fenster tötet.',
             },
             {
@@ -233,7 +233,8 @@ export const de: Dictionary = {
         corniche: { name: 'Das Sims', brief: 'Vier Absätze, die nach rechts ansteigen. Das erste Mal, dass man Höhe gewinnt.' },
         descente: { name: 'Der Abstieg', brief: 'Der Weg führt hinab statt hinauf: Fallen wird zu einer Art des Vorankommens.' },
         bordure: { name: 'Der Rand', brief: 'Das Ziel hängt rechts, der Start links: der Abstand dazwischen ist die Breite deines Fensters.' },
-        suspendu: { name: 'Das Hängende', brief: 'Der ganze Weg hängt am oberen Fensterrand. Je höher das Fenster, desto weiter entfernt er sich vom Boden.' },
+        suspendu: { name: 'Das Hängende', brief:
+                'Der Weg hängt an der Decke: begehbar wird er erst, wenn der Bildschirm gedreht ist.' },
         lucarne: { name: 'Die Dachluke', brief: 'In der Mitte fehlt eine Brücke. Es gibt sie dennoch — aber nur unterhalb einer bestimmten Breite.' },
         balancier: { name: 'Die Schaukel', brief: 'Eine Plattform, die steigt und sinkt. Warten wird hier zur Handlung.' },
         navette: { name: 'Die Fähre', brief: 'Dieselbe Idee waagerecht: eine Plattform, die von einem Ende ihres Gangs zum anderen fährt.' },
@@ -256,7 +257,8 @@ export const de: Dictionary = {
         bascule: { name: 'Die Wippe', brief: 'Zwei Plattformen, die gegenläufig steigen und sinken, über der Leere.' },
         jachere: { name: 'Die Brache', brief: 'Ein Weg, den es nur im Hellen gibt — und eine Klinge, die es ebenfalls nur im Hellen gibt.' },
         cordee: { name: 'Die Seilschaft', brief: 'Drei Kugeln entlang eines durchgehenden Aufstiegs. Keine davon nimmt man im Vorbeigehen mit.' },
-        grenier: { name: 'Der Dachboden', brief: 'Alles hängt oben und der Ausgang liegt rechts: das Fenster muss zugleich niedrig und schmal sein.' },
+        grenier: { name: 'Der Dachboden', brief:
+                'Alles steht kopf, der Ausgang auch. Den Bildschirm zu drehen ist der einzige Weg, einen Fuß daraufzusetzen.' },
         passerelle: { name: 'Der Steg', brief: 'Das mittlere Feld erscheint erst unter 800 Pixeln Breite.' },
         tourniquet: { name: 'Das Drehkreuz', brief: 'Die Absätze wechseln Rand und senkrechte Verankerung. Jede gezogene Seite verschiebt das halbe Level.' },
         cascade: { name: 'Die Kaskade', brief: 'Ein langer Abstieg, bei dem ein Absatz im falschen Moment seitlich wegrutscht.' },
@@ -266,12 +268,14 @@ export const de: Dictionary = {
         vertige: { name: 'Der Schwindel', brief: 'Kein Boden, vier bewegte Plattformen und ein letzter Absatz, der am rechten Rand klebt.' },
         dedale: { name: 'Das Labyrinth', brief: 'Das Level hat je nach Breite zwei Gesichter, und der Ausgang liegt nicht am selben Ort.' },
         funambule: { name: 'Der Seiltänzer', brief: 'Siebzig Pixel breite Absätze über der Leere und zwei Kugeln, die nicht zu verfehlen sind.' },
-        contrepoids: { name: 'Das Gegengewicht', brief: 'Ein oben verankerter Absatz zwischen zwei unten verankerten: nur ein Höhenbereich lässt durch.' },
+        contrepoids: { name: 'Das Gegengewicht', brief:
+                'Ein Weg, kopfüber gebaut. Richtig herum gelesen führt er nirgendwohin.' },
         retour: { name: 'Die Rückkehr', brief: 'Fünf bewegte Sprünge hintereinander, ohne Boden. Zurückspulen ist hier keine Hilfe, sondern die Regel.' },
         metronome: { name: 'Das Metronom', brief: 'Drei Klingen im Abstand einer Drittelzeit. Der Rhythmus ist die einzige Lösung.' },
         eclipse: { name: 'Die Finsternis', brief: 'Der Weg wechselt über der Leere das Thema: zu spät umzuschalten heißt, ins Nichts zu springen.' },
         tenaille: { name: 'Die Zange', brief: 'Ein Durchgang, den es nur unter 900 Pixeln gibt, zwischen zwei sich schließenden Wänden.' },
-        verticale: { name: 'Die Senkrechte', brief: 'Ein schmales, hohes Fenster und fünf Kehren bis zu seiner Decke.' },
+        verticale: { name: 'Die Senkrechte', brief:
+                'Ein liegender Schacht: der Bildschirm muss eine Vierteldrehung machen, damit seine Absätze zum Boden werden.' },
         gouffre: { name: 'Der Abgrund', brief: 'Vier Abstände von neunzig Pixeln, alle von atmenden Plattformen getragen.' },
         spirale: { name: 'Die Spirale', brief: 'Der Weg rollt sich auf: linker Rand, rechter Rand, oben, unten und zurück.' },
         veilleuse: { name: 'Das Nachtlicht', brief: 'Ein Weg, den es nur im Dunkeln gibt und dessen mittleres Feld nur im schmalen Fenster existiert.' },
@@ -509,7 +513,7 @@ export const de: Dictionary = {
         terminus: {
             name: 'Die Endstation',
             brief:
-                'Ein Absprung, ein brüchiger Absatz in der Luft, eine Bö, eine folgende Klinge, und der rechte Rand. Der letzte des Katalogs.',
+                'Alles auf einmal, und kopfüber: Absprung, brüchiger Absatz, Bö, folgende Klinge — nachdem der Bildschirm gedreht wurde.',
         },
     },
     puzzlesPage: {
@@ -614,13 +618,13 @@ export const de: Dictionary = {
         back: 'Spielen',
     },
     mechanicsPage: {
-        browserHeading: 'Die sechs dem Browser abgeschauten',
+        browserHeading: 'Was vom Browser kommt',
         rulesHeading: 'Und die Regeln des Spiels selbst',
         title: 'Mechaniken',
         heading: 'Was Reflow dem Browser abschaut',
-        lede: 'Sechs Mechaniken, alle aus Schnittstellen, die der Browser längst bereitstellt — und die kein Spiel benutzt.',
+        lede: 'Alle aus Schnittstellen, die der Browser längst bereitstellt — und die kein Spiel benutzt.',
         metaDescription:
-            'Die sechs Mechaniken von Reflow und was sie dem Browser entnehmen: die Fenstergröße, die Ränder, das helle oder dunkle Thema, den Zoom, den Verlauf.',
+            'Die Mechaniken von Reflow und was sie dem Browser entnehmen: die Fenstergröße, die Ränder, das helle oder dunkle Thema, den Zoom, den Verlauf.',
         intro: 'Ein gewöhnliches Jump-and-Run zeichnet seine Kulisse in eine Leinwand und kümmert sich nicht um das Fenster darum herum. Reflow macht das Gegenteil: es hat keine eigene Kulisse. Seine Geometrie ist eine Funktion der Größe deines Fensters, und alles, was der Browser messen lässt, wird zur Steuerung.',
         outro: 'Eine siebte Mechanik gibt es auf dem Papier — eine Figur, die zwei nebeneinander stehende Fenster durchquert, ohne Server synchron gehalten. Sie wartet auf eine spätere Fassung: sie hängt von einem Pop-up-Blocker ab, und eine Mechanik, die nur bei der Hälfte der Spieler funktioniert, ist keine.',
         back: 'Spielen',

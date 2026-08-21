@@ -44,7 +44,7 @@ export const es: Dictionary = {
                 body: 'En Reflow ninguna plataforma tiene posición absoluta. Cada una está anclada a un borde de la ventana: el ancho y el alto de tu navegador entran en el cálculo de su sitio, fotograma tras fotograma. Arrastrar una esquina no redimensiona una vista del juego: mueve el escenario, abre pasos, cierra otros, y puede aplastarte contra un muro.',
             },
             {
-                title: 'Seis mecánicas, todas tomadas del navegador',
+                title: 'Mecánicas tomadas del navegador',
                 body: 'Redimensionar es solo la primera. Hay bloques que solo existen por debajo de cierto ancho. Otros solo existen en el tema claro, o solo en el oscuro: el selector de tema se convierte en un mando del juego. El zoom del navegador cambia el tamaño del área de juego, el botón Atrás rebobina el tiempo, y una ventana demasiado estrecha mata.',
             },
             {
@@ -233,7 +233,8 @@ export const es: Dictionary = {
         corniche: { name: 'La cornisa', brief: 'Cuatro rellanos que suben hacia la derecha. La primera vez que se gana altura.' },
         descente: { name: 'El descenso', brief: 'El camino baja en lugar de subir: caer se convierte en una forma de avanzar.' },
         bordure: { name: 'El borde', brief: 'La llegada está anclada a la derecha y la salida a la izquierda: la distancia entre ambas es el ancho de tu ventana.' },
-        suspendu: { name: 'El colgante', brief: 'Todo el camino cuelga de la parte alta de la ventana. Cuanto más alta es, más se aleja del suelo.' },
+        suspendu: { name: 'El colgante', brief:
+                'El camino cuelga del techo: solo es transitable una vez dada la vuelta a la pantalla.' },
         lucarne: { name: 'La claraboya', brief: 'Falta un puente en el centro. Existe, sin embargo, pero solo por debajo de cierto ancho.' },
         balancier: { name: 'El vaivén', brief: 'Una plataforma que sube y baja. Esperar se convierte en una acción.' },
         navette: { name: 'La lanzadera', brief: 'La misma idea en horizontal: una plataforma que va y viene de un extremo a otro de su pasillo.' },
@@ -256,7 +257,8 @@ export const es: Dictionary = {
         bascule: { name: 'El balancín', brief: 'Dos plataformas que suben y bajan en oposición, sobre el vacío.' },
         jachere: { name: 'El barbecho', brief: 'Un camino que solo existe en claro, y una cuchilla que solo existe en claro también.' },
         cordee: { name: 'La cordada', brief: 'Tres orbes a lo largo de una subida continua. Ninguno se recoge de paso.' },
-        grenier: { name: 'El desván', brief: 'Todo cuelga de arriba y la salida está a la derecha: la ventana debe ser baja y estrecha a la vez.' },
+        grenier: { name: 'El desván', brief:
+                'Todo está del revés, la salida incluida. Dar la vuelta a la pantalla es la única forma de pisarlo.' },
         passerelle: { name: 'La pasarela', brief: 'El tramo central solo aparece por debajo de 800 píxeles de ancho.' },
         tourniquet: { name: 'El torniquete', brief: 'Los rellanos alternan de borde y de anclaje vertical. Cada lado del que tiras mueve medio nivel.' },
         cascade: { name: 'La cascada', brief: 'Un largo descenso, del que un rellano se escurre de lado en el peor momento.' },
@@ -266,12 +268,14 @@ export const es: Dictionary = {
         vertige: { name: 'El vértigo', brief: 'Ningún suelo, cuatro plataformas móviles y un último rellano pegado al borde derecho.' },
         dedale: { name: 'El dédalo', brief: 'El nivel tiene dos caras según el ancho, y la salida no está en el mismo sitio en cada una.' },
         funambule: { name: 'El funámbulo', brief: 'Rellanos de setenta píxeles sobre el vacío y dos orbes que no se pueden fallar.' },
-        contrepoids: { name: 'El contrapeso', brief: 'Un rellano anclado arriba entre dos anclados abajo: solo un rango de alturas deja pasar.' },
+        contrepoids: { name: 'El contrapeso', brief:
+                'Un camino construido cabeza abajo. Leerlo del derecho no lleva a ninguna parte.' },
         retour: { name: 'El retorno', brief: 'Cinco saltos móviles seguidos, sin suelo. Rebobinar no es una ayuda aquí: es la regla.' },
         metronome: { name: 'El metrónomo', brief: 'Tres cuchillas a un tercio de tiempo de distancia. El ritmo es la única solución.' },
         eclipse: { name: 'El eclipse', brief: 'El camino alterna los temas sobre el vacío: cambiar demasiado tarde es saltar a la nada.' },
         tenaille: { name: 'La tenaza', brief: 'Un paso que solo existe por debajo de 900 píxeles, entre dos muros que se cierran.' },
-        verticale: { name: 'La vertical', brief: 'Una ventana estrecha y alta, y cinco medias vueltas para alcanzar su techo.' },
+        verticale: { name: 'La vertical', brief:
+                'Un pozo tumbado: hay que girar la pantalla un cuarto de vuelta para que sus rellanos sean suelo.' },
         gouffre: { name: 'El abismo', brief: 'Cuatro distancias de noventa píxeles, todas sostenidas por plataformas que respiran.' },
         spirale: { name: 'La espiral', brief: 'El camino se enrolla: borde izquierdo, borde derecho, arriba, abajo y vuelta.' },
         veilleuse: { name: 'La luz de noche', brief: 'Un camino que solo existe en oscuro, y cuyo tramo central solo existe con la ventana estrecha.' },
@@ -509,7 +513,7 @@ export const es: Dictionary = {
         terminus: {
             name: 'El término',
             brief:
-                'Un rebote, un rellano frágil en el aire, una ráfaga, una cuchilla que sigue, y el borde derecho. El último del catálogo.',
+                'Todo a la vez, y del revés: rebote, rellano frágil, ráfaga, cuchilla que sigue — tras dar la vuelta a la pantalla.',
         },
     },
     puzzlesPage: {
@@ -614,13 +618,13 @@ export const es: Dictionary = {
         back: 'Jugar',
     },
     mechanicsPage: {
-        browserHeading: 'Las seis tomadas del navegador',
+        browserHeading: 'Lo que viene del navegador',
         rulesHeading: 'Y las reglas del propio juego',
         title: 'Mecánicas',
         heading: 'Lo que Reflow toma prestado del navegador',
-        lede: 'Seis mecánicas, todas tomadas de interfaces que el navegador ya expone, y que ningún juego usa.',
+        lede: 'Todas tomadas de interfaces que el navegador ya expone, y que ningún juego usa.',
         metaDescription:
-            'Las seis mecánicas de Reflow y lo que toman del navegador: el tamaño de la ventana, los bordes, el tema claro u oscuro, el zoom, el historial de navegación.',
+            'Las mecánicas de Reflow y lo que toman del navegador: el tamaño de la ventana, los bordes, el tema claro u oscuro, el zoom, el historial de navegación.',
         intro: 'Un juego de plataformas clásico dibuja su escenario en un lienzo y se desentiende de la ventana que lo rodea. Reflow hace lo contrario: no tiene escenario propio. Su geometría es una función del tamaño de tu ventana, y todo lo que el navegador deja medir se convierte en un mando.',
         outro: 'Existe una séptima mecánica sobre el papel: un mismo personaje atravesando dos ventanas contiguas, sincronizadas sin servidor. Espera a una versión posterior: depende de un bloqueador de ventanas emergentes, y una mecánica que solo funciona para la mitad de los jugadores no es una mecánica.',
         back: 'Jugar',

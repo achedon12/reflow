@@ -1,4 +1,5 @@
 import { MAX_JUMP_RISE, maxRunForRise, PLAYER_H, PLAYER_W } from './constants';
+import { playViewport, unrotateRect } from './geometry';
 import type {
     Anchor,
     Blink,
@@ -7,6 +8,7 @@ import type {
     Level,
     Mechanic,
     Motion,
+    Quarter,
     Rect,
     Surface,
     Theme,
@@ -94,11 +96,54 @@ export type LevelSpec = {
     goal?: Anchor;
     /** Tout ce qui n'est pas sur le chemin : murs, pointes, ponts conditionnels. */
     extras?: readonly Block[];
+    /**
+     * L'ORIENTATION POUR LAQUELLE LE CHEMIN EST ÉCRIT.
+     *
+     * Par défaut 0 : la gravité tombe, et l'énigme se lit comme n'importe
+     * quelle autre. Avec 1, 2 ou 3, le chemin est bâti dans le repère
+     * correspondant puis reporté dans le monde — il ne devient donc praticable
+     * qu'une fois l'écran pivoté d'autant.
+     *
+     * ⚠️ Ce n'est PAS un habillage : à l'orientation de départ, un chemin écrit
+     * pour un quart de tour pend du plafond ou colle à un mur. C'est ce qui
+     * permet d'écrire une énigme qu'aucun réglage de taille ne résout.
+     */
+    designedFor?: Quarter;
+};
+
+/**
+ * Le bord du MONDE qui correspond à un bord du repère de conception.
+ *
+ * Écrit en toutes lettres plutôt que dérivé : une erreur de correspondance ne
+ * se verrait qu'en jouant, et seulement à une orientation sur quatre.
+ */
+const WORLD_EDGE: Record<Quarter, { left: Edge | VEdge; right: Edge | VEdge; top: Edge | VEdge; bottom: Edge | VEdge }> = {
+    0: { left: 'left', right: 'right', top: 'top', bottom: 'bottom' },
+    1: { left: 'top', right: 'bottom', top: 'right', bottom: 'left' },
+    2: { left: 'right', right: 'left', top: 'bottom', bottom: 'top' },
+    3: { left: 'bottom', right: 'top', top: 'left', bottom: 'right' },
 };
 
 type Placed = Rect & { spec: StepSpec | null };
 
-function anchorOf(rect: Rect, reference: Viewport, edge: Edge, vedge: VEdge): Anchor {
+function anchorOf(
+    rect: Rect,
+    reference: Viewport,
+    edge: Edge,
+    vedge: VEdge,
+    design: Quarter = 0,
+): Anchor {
+    if (design !== 0) {
+        // Du repère de conception vers le monde : le rectangle ET les bords
+        // auxquels il s'accroche pivotent ensemble.
+        const world = unrotateRect(rect, reference, design);
+        const table = WORLD_EDGE[design];
+        const mappedX = table[edge] as Edge | VEdge;
+        const mappedY = table[vedge] as Edge | VEdge;
+        const horizontal = (mappedX === 'left' || mappedX === 'right' ? mappedX : mappedY) as Edge;
+        const vertical = (mappedX === 'top' || mappedX === 'bottom' ? mappedX : mappedY) as VEdge;
+        return anchorOf(world, reference, horizontal, vertical, 0);
+    }
     return {
         ax: edge === 'right' ? 1 : 0,
         ox: edge === 'right' ? rect.x - reference.w : rect.x,
@@ -120,13 +165,17 @@ function amplitude(motion: Motion | undefined): { x: number; y: number } {
 export function buildLevel(spec: LevelSpec): Level {
     const { reference } = spec;
     const floor = spec.floor ?? 'solid';
+    const design = spec.designedFor ?? 0;
+    // Le chemin s'écrit dans le repère où la gravité tombe — donc dans la vue
+    // TOURNÉE quand l'énigme est conçue pour une autre orientation.
+    const frame = playViewport(reference, design);
 
     const blocks: Block[] = [];
     const placed: Placed[] = [];
 
     // Le palier de départ. `up: 0` signifie « à même le sol de la fenêtre » :
     // il n'y a alors aucun bloc à poser, le sol suffit.
-    const startTop = reference.h - spec.start.up;
+    const startTop = frame.h - spec.start.up;
     const startWidth = spec.start.w ?? 150;
     const startRect: Rect = { x: spec.start.x, y: startTop, w: startWidth, h: PLATFORM_H };
 
@@ -137,12 +186,12 @@ export function buildLevel(spec: LevelSpec): Level {
         // Palier virtuel : la portion de sol le long de laquelle le joueur
         // prend son élan. Volontairement bornée — la mesurer à toute la
         // largeur ferait démarrer le premier écart au bord droit de l'écran.
-        placed.push({ x: spec.start.x, y: reference.h, w: 120, h: 0, spec: null });
+        placed.push({ x: spec.start.x, y: frame.h, w: 120, h: 0, spec: null });
     } else {
         placed.push({ ...startRect, spec: null });
         blocks.push({
             kind: 'solid',
-            rect: anchorOf(startRect, reference, spec.start.edge ?? 'left', spec.start.vedge ?? 'bottom'),
+            rect: anchorOf(startRect, reference, spec.start.edge ?? 'left', spec.start.vedge ?? 'bottom', design),
         });
     }
 
@@ -187,12 +236,12 @@ export function buildLevel(spec: LevelSpec): Level {
         const y = previous.y - rise;
         const x = direction === 1 ? previous.x + previous.w + gap : previous.x - gap - width;
 
-        if (x < 8 || x + width > reference.w - 8) {
+        if (x < 8 || x + width > frame.w - 8) {
             throw new Error(
-                `${spec.id}, palier ${index + 1} : sort de la fenêtre de référence (x = ${Math.round(x)}, largeur ${reference.w})`,
+                `${spec.id}, palier ${index + 1} : sort de la fenêtre de référence (x = ${Math.round(x)}, largeur ${frame.w})`,
             );
         }
-        if (y < 30 || y > reference.h - 8) {
+        if (y < 30 || y > frame.h - 8) {
             throw new Error(`${spec.id}, palier ${index + 1} : sort de la fenêtre en hauteur (y = ${Math.round(y)})`);
         }
 
@@ -201,7 +250,7 @@ export function buildLevel(spec: LevelSpec): Level {
 
         const block: Block = {
             kind: 'solid',
-            rect: anchorOf(rect, reference, step.edge ?? 'left', step.vedge ?? 'bottom'),
+            rect: anchorOf(rect, reference, step.edge ?? 'left', step.vedge ?? 'bottom', design),
         };
         if (step.motion) block.motion = step.motion;
         if (step.theme) block.theme = step.theme;
@@ -220,6 +269,7 @@ export function buildLevel(spec: LevelSpec): Level {
                     reference,
                     step.edge ?? 'left',
                     step.vedge ?? 'bottom',
+                    design,
                 ),
             });
         }
@@ -239,6 +289,7 @@ export function buildLevel(spec: LevelSpec): Level {
                 reference,
                 hostSpec?.edge ?? spec.start.edge ?? 'left',
                 hostSpec?.vedge ?? spec.start.vedge ?? 'bottom',
+                design,
             ),
             ...(hostSpec?.theme ? { theme: hostSpec.theme } : {}),
             ...(hostSpec?.when ? { when: hostSpec.when } : {}),
@@ -249,14 +300,14 @@ export function buildLevel(spec: LevelSpec): Level {
     const first = placed[0]!;
     const spawnRect: Rect =
         spec.start.up === 0
-            ? { x: spec.start.x, y: reference.h - PLAYER_H, w: PLAYER_W, h: PLAYER_H }
+            ? { x: spec.start.x, y: frame.h - PLAYER_H, w: PLAYER_W, h: PLAYER_H }
             : { x: first.x + 14, y: first.y - PLAYER_H, w: PLAYER_W, h: PLAYER_H };
 
     return {
         id: spec.id,
         tier: spec.tier,
         mechanics: spec.mechanics,
-        spawn: anchorOf(spawnRect, reference, spec.start.edge ?? 'left', spec.start.vedge ?? 'bottom'),
+        spawn: anchorOf(spawnRect, reference, spec.start.edge ?? 'left', spec.start.vedge ?? 'bottom', design),
         floor,
         blocks: [...blocks, ...(spec.extras ?? [])],
         reference,

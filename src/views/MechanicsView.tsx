@@ -7,14 +7,27 @@ import type { Mechanic } from '@/game/types';
  * mécaniques » et en listait huit, dans les quatre langues et jusque dans sa
  * description pour les moteurs.
  *
- * Six sont réellement PRISES AU NAVIGATEUR — la taille de la fenêtre, ses
- * bords, les seuils d'apparition, le thème, l'historique, l'écrasement entre
- * deux bords. Les autres — mouvement, orbes, glace, rebond, tapis,
+ * Les premières sont PRISES AU NAVIGATEUR — l'écran et son orientation, sa
+ * taille, ses bords, les seuils d'apparition, le thème, l'historique,
+ * l'écrasement entre deux bords.
+ *
+ * ⚠️ Les intitulés ne portent plus de nombre. Ils en portaient un, et il a
+ * menti deux fois de suite : la page s'appelait « les six mécaniques » en en
+ * listant huit, puis quinze. Les autres — mouvement, orbes, glace, rebond, tapis,
  * clignotement, lame qui suit, vent, paliers friables — se trouveraient dans
  * n'importe quel jeu de plateforme : les compter avec les premières
  * affaiblirait la seule promesse qui distingue celui-ci.
  */
-const FROM_BROWSER: Mechanic[] = ['resize', 'edge', 'appear', 'theme', 'rewind', 'crush'];
+const FROM_BROWSER: Mechanic[] = [
+    'screen',
+    'gravity',
+    'resize',
+    'edge',
+    'appear',
+    'theme',
+    'rewind',
+    'crush',
+];
 const FROM_THE_GAME: Mechanic[] = [
     'motion',
     'orbs',

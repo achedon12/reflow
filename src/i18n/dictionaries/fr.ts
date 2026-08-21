@@ -44,7 +44,7 @@ export const fr = {
                 body: 'Dans Reflow, aucune plateforme n’a de position absolue. Chacune est ancrée à un bord de la fenêtre : la largeur et la hauteur de votre navigateur entrent dans le calcul de sa place, image après image. Tirer sur un coin ne redimensionne pas une vue du jeu — ça déplace le décor, ouvre des passages, en referme d’autres, et peut vous écraser contre un mur.',
             },
             {
-                title: 'Six mécaniques, toutes prises au navigateur',
+                title: 'Des mécaniques prises au navigateur',
                 body: 'Le redimensionnement n’est que la première. Des blocs n’existent qu’en dessous d’une certaine largeur. D’autres n’existent que dans le thème clair, ou seulement dans le sombre — le bouton de thème devient une commande de jeu. Le zoom du navigateur change la taille de l’aire de jeu, le bouton Précédent rembobine le temps, et une fenêtre trop étroite tue.',
             },
             {
@@ -260,7 +260,7 @@ export const fr = {
         suspendu: {
             name: 'Le suspendu',
             brief:
-                'Tout le chemin pend du haut de la fenêtre. Plus elle est haute, plus il s’éloigne du sol.',
+                'Le chemin pend du plafond : il ne devient praticable qu’une fois l’écran retourné.',
         },
         lucarne: {
             name: 'La lucarne',
@@ -375,7 +375,7 @@ export const fr = {
         grenier: {
             name: 'Le grenier',
             brief:
-                'Tout pend du haut et la sortie est à droite : la fenêtre doit être basse et étroite à la fois.',
+                'Tout est à l’envers, la sortie comprise. Retourner l’écran est la seule façon d’y poser un pied.',
         },
         passerelle: {
             name: 'La passerelle',
@@ -425,7 +425,7 @@ export const fr = {
         contrepoids: {
             name: 'Le contrepoids',
             brief:
-                'Un palier accroché en haut entre deux accrochés en bas : une seule plage de hauteurs laisse passer.',
+                'Un chemin bâti tête en bas. Le lire à l’endroit ne mène nulle part.',
         },
         retour: {
             name: 'Le retour',
@@ -450,7 +450,7 @@ export const fr = {
         verticale: {
             name: 'La verticale',
             brief:
-                'Une fenêtre étroite et haute, et cinq demi-tours pour en atteindre le plafond.',
+                'Un puits couché : il faut faire pivoter l’écran d’un quart de tour pour que ses paliers deviennent un sol.',
         },
         gouffre: {
             name: 'Le gouffre',
@@ -725,7 +725,7 @@ export const fr = {
         terminus: {
             name: 'Le terminus',
             brief:
-                'Un rebond, un palier friable en l’air, une rafale, une lame qui suit, et le bord droit. La dernière du catalogue.',
+                'Tout à la fois, et à l’envers : rebond, palier friable, rafale, lame qui suit — une fois l’écran retourné.',
         },
     },
     puzzlesPage: {
@@ -830,13 +830,13 @@ export const fr = {
         back: 'Jouer',
     },
     mechanicsPage: {
-        browserHeading: 'Les six prises au navigateur',
+        browserHeading: 'Ce qui vient du navigateur',
         rulesHeading: 'Et les règles du jeu lui-même',
         title: 'Mécaniques',
         heading: 'Ce que Reflow détourne du navigateur',
-        lede: 'Six mécaniques, toutes prises à des interfaces que le navigateur expose déjà — et qu’aucun jeu n’utilise.',
+        lede: 'Toutes prises à des interfaces que le navigateur expose déjà — et qu’aucun jeu n’utilise.',
         metaDescription:
-            'Les six mécaniques de Reflow, et ce qu’elles empruntent au navigateur : la taille de la fenêtre, les bords, le thème clair ou sombre, le zoom, l’historique de navigation.',
+            'Les mécaniques de Reflow, et ce qu’elles empruntent au navigateur : la taille de la fenêtre, les bords, le thème clair ou sombre, le zoom, l’historique de navigation.',
         intro: 'Un jeu de plateforme classique dessine son décor dans un canevas et se moque de la fenêtre qui l’entoure. Reflow fait le contraire : il n’a pas de décor à lui. Sa géométrie est une fonction de la taille de votre fenêtre, et tout ce que le navigateur laisse mesurer devient une commande.',
         outro: 'Une septième mécanique existe sur le papier — un même personnage traversant deux fenêtres côte à côte, synchronisées sans serveur. Elle attend une version suivante : elle dépend d’un bloqueur de fenêtres surgissantes, et une mécanique qui ne marche que chez la moitié des joueurs n’en est pas une.',
         back: 'Jouer',
