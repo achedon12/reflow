@@ -14,6 +14,7 @@ const TIER_LABEL = (d: Dictionary) => ({
     easy: d.tiers.easyPlural,
     medium: d.tiers.mediumPlural,
     hard: d.tiers.hardPlural,
+    impossible: d.tiers.impossiblePlural,
 });
 
 export function PuzzleGrid({ locale, dictionary }: { locale: Locale; dictionary: Dictionary }) {

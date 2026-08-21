@@ -1,7 +1,13 @@
 import {
     ACCEL_AIR,
     ACCEL_GROUND,
+    ACCEL_ICE,
+    BOUNCE_THRESHOLD,
+    BOUNCE_VELOCITY,
+    CONVEYOR_SPEED,
     COYOTE_TIME,
+    CRUMBLE_DELAY,
+    FRICTION_ICE,
     FRICTION_GROUND,
     GRAVITY,
     JUMP_BUFFER,
@@ -12,7 +18,7 @@ import {
     PLAYER_H,
     PLAYER_W,
 } from './constants';
-import { overlaps, resolve, solveBlocks, type SolvedBlock } from './geometry';
+import { crumbleBit, overlaps, resolve, solveBlocks, type SolvedBlock } from './geometry';
 import type { Input, Level, Outcome, PlayerState, Rect, Theme, Viewport } from './types';
 
 export function spawnState(level: Level, view: Viewport): PlayerState {
@@ -26,6 +32,9 @@ export function spawnState(level: Level, view: Viewport): PlayerState {
         coyote: 0,
         buffer: 0,
         orbs: 0,
+        broken: 0,
+        crumbling: -1,
+        crumbleAt: 0,
         ground: -2,
         time: 0,
     };
@@ -160,33 +169,62 @@ export function step(
     const previousTime = player.time;
     player.time += dt;
 
-    const blocks = solveBlocks(level.blocks, view, theme, player.time, previousTime);
+    // Le palier friable cède AVANT que la géométrie ne soit résolue : sinon il
+    // porterait encore le joueur pendant l'image de sa disparition.
+    if (player.crumbling >= 0 && player.time - player.crumbleAt >= CRUMBLE_DELAY) {
+        player.broken |= 1 << crumbleBit(level.blocks, player.crumbling);
+        player.crumbling = -1;
+    }
+
+    const blocks = solveBlocks(level.blocks, view, theme, player.time, previousTime, player);
     const solids = blocks.filter((block) => block.kind === 'solid');
 
     // Une plateforme mobile emporte ce qui repose dessus. Appliqué AVANT tout
     // le reste : sinon le joueur passe l'image à côté de son support, retombe,
     // et le niveau devient injouable au rythme de l'oscillation.
-    if (player.grounded && player.ground >= 0) {
-        const carrier = solids.find((solid) => solid.index === player.ground);
-        if (carrier) {
-            player.x += carrier.dx;
-            player.y += carrier.dy;
+    const carrier = player.grounded && player.ground >= 0
+        ? solids.find((solid) => solid.index === player.ground)
+        : undefined;
+    if (carrier) {
+        player.x += carrier.dx;
+        player.y += carrier.dy;
+        // Le tapis roulant, lui, déplace sans bouger lui-même.
+        if (carrier.surface === 'conveyor') {
+            player.x += (carrier.speed ?? CONVEYOR_SPEED) * dt;
         }
     }
+
+    /** La matière sous les pieds. C'est elle qui décide du frottement. */
+    const footing = carrier?.surface;
 
     if (!separate(player, solids, view, level.floor === 'solid')) {
         return { player, outcome: 'dead-crush' };
     }
 
     // ── Déplacement horizontal ───────────────────────────────────────────────
+    //
+    // La glace ne change que DEUX nombres : on accélère moins vite, et on ne
+    // freine presque plus. Tout le reste de la physique est commun — c'est ce
+    // qui permet d'ajouter une matière sans toucher au calcul de portée du
+    // constructeur d'énigmes.
     const direction = (input.right ? 1 : 0) - (input.left ? 1 : 0);
-    const accel = player.grounded ? ACCEL_GROUND : ACCEL_AIR;
+    const onIce = footing === 'ice';
+    const accel = player.grounded ? (onIce ? ACCEL_ICE : ACCEL_GROUND) : ACCEL_AIR;
     if (direction !== 0) {
         player.vx += direction * accel * dt;
         player.vx = Math.max(-MOVE_SPEED, Math.min(MOVE_SPEED, player.vx));
     } else if (player.grounded) {
-        const drop = FRICTION_GROUND * dt;
+        const drop = (onIce ? FRICTION_ICE : FRICTION_GROUND) * dt;
         player.vx = Math.abs(player.vx) <= drop ? 0 : player.vx - Math.sign(player.vx) * drop;
+    }
+
+    // Le vent pousse tant qu'on est dans la zone, au sol comme en l'air. Il
+    // n'est pas plafonné par la vitesse de pointe : c'est ce qui lui permet
+    // d'allonger un saut au-delà de ce qu'aucune touche ne permet.
+    const me0 = playerRect(player);
+    for (const block of blocks) {
+        if (block.kind !== 'wind') continue;
+        if (overlaps(me0, block.rect)) player.vx += (block.force ?? 0) * dt;
     }
 
     // ── Saut ─────────────────────────────────────────────────────────────────
@@ -214,7 +252,28 @@ export function step(
     collideAxis(player, solids, 'x', player.vx * dt);
     player.x = Math.max(0, Math.min(view.w - PLAYER_W, player.x));
 
+    const fallSpeed = player.vy;
     collideAxis(player, solids, 'y', player.vy * dt);
+
+    // ── Ce qui se passe à l'atterrissage ─────────────────────────────────────
+    if (player.grounded && player.ground >= 0) {
+        const landed = solids.find((solid) => solid.index === player.ground);
+        if (landed?.surface === 'bouncy' && fallSpeed > BOUNCE_THRESHOLD) {
+            // Le seuil n'est pas décoratif : sans lui, on tressaute
+            // indéfiniment en se posant, et le palier devient impraticable.
+            player.vy = -BOUNCE_VELOCITY;
+            player.grounded = false;
+            player.ground = -2;
+        } else if (landed?.crumble && player.crumbling !== landed.index) {
+            // Un seul palier cède à la fois — on n'est jamais posé sur deux.
+            // Celui qu'on quitte en cours de chute tombe tout de suite.
+            if (player.crumbling >= 0) {
+                player.broken |= 1 << crumbleBit(level.blocks, player.crumbling);
+            }
+            player.crumbling = landed.index;
+            player.crumbleAt = player.time;
+        }
+    }
 
     if (player.y < 0) {
         player.y = 0;

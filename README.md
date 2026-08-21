@@ -10,7 +10,7 @@ contre un mur.
 
 **→ [reflow.leoderoin.fr](https://reflow.leoderoin.fr)**
 
-54 énigmes écrites à la main, puis des parties engendrées à l'infini. Sans
+100 énigmes écrites à la main, puis des parties engendrées à l'infini. Sans
 compte, sans publicité, sans serveur de jeu.
 
 ---
@@ -30,8 +30,9 @@ La progression vit dans le `localStorage` et n'en sort jamais.
 | Cadre | Next.js 16, App Router, `output: 'export'` |
 | Styles | Tailwind CSS v4, thème clair / sombre / système |
 | Rendu du jeu | des **éléments du document**, pas un canevas |
+| Énigmes | 100 — 18 faciles, 18 moyennes, 18 difficiles, 46 impossibles |
 | Langues | `fr` sur `/`, puis `/en/`, `/es/`, `/de/` — **slugs traduits** |
-| Pages produites | 240, dont 216 pages d'énigme (54 × 4 langues) |
+| Pages produites | 432, dont 400 pages d'énigme (100 × 4 langues) |
 | Typographie | Space Grotesk et JetBrains Mono, variables et auto-hébergées |
 | Production | une image nginx sans privilèges, en lecture seule |
 
@@ -138,6 +139,39 @@ solution trouvée », jamais « aucune solution n'existe ». Le compromis est le
 bon sens — un faux échec se corrige en élargissant le faisceau, un faux succès
 passerait inaperçu jusqu'au premier joueur bloqué.
 
+## Le palier « impossible »
+
+Quarante-six des cent énigmes appartiennent à un quatrième palier, qui ajoute
+sept matières au moteur. Aucune n'est une variation des précédentes : chacune
+change une règle de la physique.
+
+| | Ce que ça change |
+|---|---|
+| **Glace** | Le frottement tombe à presque rien. On garde son élan, et freiner demande autant de place que démarrer. |
+| **Rebond** | Le palier renvoie plus haut qu'un saut. C'est la seule façon d'atteindre certains étages. |
+| **Tapis** | Le palier vous déplace tant que vous êtes dessus. Y rester immobile demande de marcher. |
+| **Clignotement** | Le bloc n'existe qu'une fraction du cycle. Le sol disparaît à intervalle fixe. |
+| **Lame qui suit** | Une lame du plafond se cale sur votre position horizontale et retombe périodiquement. |
+| **Vent** | Une zone impose une accélération horizontale. Elle change la portée de chaque saut qui la traverse. |
+| **Paliers friables** | Ils cèdent moins d'une demi-seconde après l'atterrissage. |
+
+⚠️ **Toutes sont de PURES FONCTIONS** de l'état du joueur et du temps — y
+compris la lame qui suit, qui se cale sur `player.x` plutôt que de poursuivre
+une cible avec sa propre inertie. C'est la condition non négociable pour que le
+rembobinage et le vérificateur continuent de fonctionner : un piège qui
+retiendrait quoi que ce soit hors de `PlayerState` casserait les deux.
+
+Le seul état ajouté est celui des paliers friables — un champ de bits, plus
+l'instant où le palier courant a commencé à céder. Trois nombres, rembobinables
+comme le reste.
+
+Le constructeur ne sait pas calculer la portée d'un rebond ni d'une rafale : les
+paliers qu'on atteint ainsi se déclarent `assisted`, et c'est alors le
+vérificateur — qui rejoue la partie — qui en répond. Il tourne pour eux avec un
+faisceau plus large : glace, rebond et paliers friables multiplient les états
+atteignables, et un faisceau trop étroit rapporterait « aucune solution
+trouvée » sur un niveau parfaitement jouable.
+
 ## L'aide, sans jamais la réponse
 
 Certaines énigmes se ratent **sans mourir une seule fois** : sur « Le suspendu »
@@ -164,7 +198,7 @@ Deux décisions comptent plus que les seuils :
 
 - **Le bouton s'allume, il ne s'ouvre pas.** Un panneau qui surgit sans qu'on
   l'ait demandé prend le joueur pour un incapable.
-- **Aucun indice n'est écrit énigme par énigme.** Cinquante-quatre indices en
+- **Aucun indice n'est écrit énigme par énigme.** Cent indices en
   quatre langues seraient une dette de contenu qui vieillirait mal, et le
   premier niveau retouché rendrait le sien faux sans que rien ne le signale.
   Tout est dérivé des mécaniques déclarées par le niveau — et le troisième
@@ -204,16 +238,16 @@ src/
     solver.ts           le vérificateur : il joue les niveaux au lieu de les lire
     rng.ts              mulberry32, pour que deux joueurs aient le même niveau
   data/
-    level-specs.ts      LES 54 ÉNIGMES, en sauts
+    level-specs.ts      LES 100 ÉNIGMES, en sauts
     levels.ts           leur construction
   app/(default)/        les pages françaises : /, /enigmes/, /infini/…
   app/(prefixed)/       les autres langues, sur /xx/ et /xx/<slug traduit>/
-  app/sitemap.ts        240 entrées : une par page ET par langue
+  app/sitemap.ts        432 entrées : une par page ET par langue
   i18n/routes.ts        LA table des chemins — toute URL interne passe par path()
   i18n/dictionaries/    fr.ts fait référence, les autres en sont typées
   components/Playfield  l'aire de jeu : la boucle, le rendu, le rembobinage
   lib/seo.ts            métadonnées et JSON-LD
-scripts/check-levels    la preuve que les 54 énigmes se terminent
+scripts/check-levels    la preuve que les 100 énigmes se terminent
 nginx/                  configuration de production, figée à la construction
                         (redirects.conf est GÉNÉRÉ, ne pas l'éditer)
 ```
@@ -250,7 +284,7 @@ Les redirections nginx, elles, se régénèrent seules : `npm run nginx` dérive
 
 1. Le code dans `LOCALES` (`src/i18n/config.ts`), plus son endonyme et son
    abréviation.
-2. Un dictionnaire dans `src/i18n/dictionaries/`, typé `Dictionary` — 54 fiches
+2. Un dictionnaire dans `src/i18n/dictionaries/`, typé `Dictionary` — 100 fiches
    d'énigme comprises.
 3. Son `og:locale` dans `OG_LOCALES` (`src/lib/seo.ts`).
 4. Son slug pour **chaque** page dans `SLUGS` (`src/i18n/routes.ts`).
@@ -263,18 +297,18 @@ Ce qui est en place, et qu'il ne faut pas casser :
 
 - une balise `canonical` par langue, barre finale comprise ;
 - `hreflang` réciproques entre les quatre langues, plus `x-default`, sur les
-  240 pages ;
+  432 pages ;
 - `sitemap.xml` avec `lastmod`, `changefreq` et `priority` — et **sans**
   `xhtml:link` : ces éléments désactivent le visualiseur XML du navigateur, et
   les `hreflang` sont déjà dans le `<head>` de chaque page ;
 - JSON-LD : `WebSite` + `VideoGame` + `Person` sur l'accueil, `CollectionPage` +
-  `ItemList` de 54 entrées sur le catalogue, `Game` + `BreadcrumbList` sur
+  `ItemList` de 100 entrées sur le catalogue, `Game` + `BreadcrumbList` sur
   chaque énigme, `FAQPage` sur les règles et sur les mécaniques ;
 - Open Graph et Twitter Card avec une image 1200×630 **par langue** ;
 - `/fr/` redirigé en 301 vers `/`, pour ne jamais avoir deux fois la même page.
 
 **Le jeu est une surcouche, jamais une page.** Cliquer « Jouer » ouvre l'aire
-de jeu par-dessus la page courante sans changer d'URL : les 240 pages restent
+de jeu par-dessus la page courante sans changer d'URL : les 432 pages restent
 du HTML lisible par un moteur, au lieu d'un canevas vide.
 
 Vérifier après un changement :
@@ -282,7 +316,7 @@ Vérifier après un changement :
 ```bash
 npm run build
 grep -o '<link rel="alternate"[^>]*>' out/index.html
-grep -c '<url>' out/sitemap.xml    # 240
+grep -c '<url>' out/sitemap.xml    # 432
 ```
 
 ## Images et polices

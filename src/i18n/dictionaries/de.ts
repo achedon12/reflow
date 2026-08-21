@@ -5,7 +5,7 @@ export const de: Dictionary = {
         title: 'Reflow',
         titleTag: 'Reflow — das Jump-and-Run, dessen Level dein Fenster ist',
         description:
-            'Ein Jump-and-Run, dessen Kulisse das Browserfenster ist. Ändere seine Größe, um die Plattformen zu verschieben, wechsle das Thema, um weitere erscheinen zu lassen. 54 Rätsel und endlose Partien, ohne Konto.',
+            'Ein Jump-and-Run, dessen Kulisse das Browserfenster ist. Ändere seine Größe, um die Plattformen zu verschieben, wechsle das Thema, um weitere erscheinen zu lassen. 100 Rätsel und endlose Partien, ohne Konto.',
         ogAlt: 'Reflow — ein Jump-and-Run, das mit dem Browserfenster gespielt wird',
         keywords:
             'Browser Jump and Run, Fenstergröße Spiel, originelles Webspiel, Browser Rätsel, kostenloses Spiel ohne Konto, Puzzle-Platformer',
@@ -35,7 +35,7 @@ export const de: Dictionary = {
         play: 'Spielen',
         playFirst: 'Mit dem ersten Rätsel beginnen',
         resume: 'Fortsetzen',
-        browse: 'Alle 54 Rätsel ansehen',
+        browse: 'Alle 100 Rätsel ansehen',
         endless: 'Endlose Partien',
         progress: '{done} von {total} Rätseln gelöst',
         sections: [
@@ -48,8 +48,8 @@ export const de: Dictionary = {
                 body: 'Die Größenänderung ist nur die erste. Manche Blöcke existieren nur unterhalb einer bestimmten Breite. Andere nur im hellen Thema, oder nur im dunklen — der Themenschalter wird zur Spielsteuerung. Der Browser-Zoom ändert die Größe des Spielfelds, die Zurück-Schaltfläche spult die Zeit zurück, und ein zu schmales Fenster tötet.',
             },
             {
-                title: 'Vierundfünfzig Rätsel, dann das Endlose',
-                body: 'Die vierundfünfzig handgebauten Rätsel reichen vom ersten Sprung bis zu Abfolgen, die verlangen, mitten im Flug die Fenstergröße zu ändern. Sind sie gelöst, übernimmt der Endlosmodus: jede Partie entsteht aus einem Startwert, keine wiederholt sich, und die Schwierigkeit steigt mit der Serie. Ein Startwert passt in einen Link — die eben gespielte Partie lässt sich unverändert weitergeben.',
+                title: 'Hundert Rätsel, dann das Endlose',
+                body: 'Die hundert handgebauten Rätsel reichen vom ersten Sprung bis zu Abfolgen, die verlangen, mitten im Flug die Fenstergröße zu ändern. Sind sie gelöst, übernimmt der Endlosmodus: jede Partie entsteht aus einem Startwert, keine wiederholt sich, und die Schwierigkeit steigt mit der Serie. Ein Startwert passt in einen Link — die eben gespielte Partie lässt sich unverändert weitergeben.',
             },
             {
                 title: 'Kein Konto, keine Werbung',
@@ -104,6 +104,8 @@ export const de: Dictionary = {
         hard: 'Schwer',
         easyPlural: 'Leichte',
         mediumPlural: 'Mittlere',
+        impossible: 'Unmöglich',
+        impossiblePlural: 'Unmögliche',
         hardPlural: 'Schwere',
     },
     hints: {
@@ -134,6 +136,20 @@ export const de: Dictionary = {
                 'Der Ausgang bleibt zu, solange eine Kugel fehlt. Sieh auf den Zähler oben rechts.',
             crush:
                 'Verkleinern kann töten. Schau, wo du stehst, bevor du an einem Rand ziehst.',
+            ice:
+                'Auf dem Eis bremse vor der Kante. Der Schwung trägt, die Leere auch.',
+            bounce:
+                'Ein federnder Absatz wirft höher als ein Sprung. Lass dich darauf fallen.',
+            conveyor:
+                'Das Band trägt dich: geh dagegen an, um stehen zu bleiben.',
+            blink:
+                'Zähl den Takt. Der Boden kommt immer im selben Abstand zurück.',
+            chase:
+                'Die Klinge richtet sich auf dich aus. Beweg dich und komm zurück: sie braucht Zeit zum Fallen.',
+            wind:
+                'Der Wind ändert die Reichweite deiner Sprünge. Spring früher oder später.',
+            crumble:
+                'Bleib nicht auf einem brüchigen Absatz stehen: quere ihn.',
         },
     },
     mechanics: {
@@ -168,6 +184,34 @@ export const de: Dictionary = {
         crush: {
             name: 'Das Zerquetschen',
             body: 'Zwei Wände treffen sich, und für dich bleibt kein Platz. Das Fenster zu verkleinern kann töten.',
+        },
+        ice: {
+            name: 'Das Eis',
+            body: 'Ein Absatz ohne Reibung: der Schwung bleibt, und Bremsen braucht so viel Platz wie Anfahren.',
+        },
+        bounce: {
+            name: 'Der Absprung',
+            body: 'Ein federnder Absatz wirft höher als ein Sprung. Nur so erreicht man manche Absätze — und landet auf Stacheln.',
+        },
+        conveyor: {
+            name: 'Das Band',
+            body: 'Ein Absatz, der dich trägt, solange du darauf stehst. Stehenbleiben heißt dort gehen.',
+        },
+        blink: {
+            name: 'Das Blinken',
+            body: 'Blöcke, die nur einen Teil der Zeit existieren. Der Boden unter den Füßen verschwindet im festen Takt.',
+        },
+        chase: {
+            name: 'Die folgende Klinge',
+            body: 'Eine Klinge an der Decke, die sich auf deine waagerechte Position ausrichtet. Man hängt sie nicht ab: man geht im richtigen Moment darunter durch.',
+        },
+        wind: {
+            name: 'Der Wind',
+            body: 'Eine Zone, die ständig drückt. Sie verändert die Reichweite jedes Sprungs, der sie kreuzt, in die eine oder andere Richtung.',
+        },
+        crumble: {
+            name: 'Die brüchigen Absätze',
+            body: 'Sie geben keine halbe Sekunde nach dem Aufsetzen nach. Man quert sie, man ruht nicht darauf.',
         },
     },
     puzzles: {
@@ -225,13 +269,243 @@ export const de: Dictionary = {
         charniere: { name: 'Das Scharnier', brief: 'Über 760 Pixeln schließen zwei Wände alles. Darunter erscheint der Weg.' },
         souffle: { name: 'Der letzte Atemzug', brief: 'Fünf bewegte Absätze, zwei Kugeln, kein Boden und der Ausgang am rechten Rand.' },
         epilogue: { name: 'Der Epilog', brief: 'Alles auf einmal — die Ränder, das Thema, die Bewegung, die Kugeln und die Leere.' },
+        verglas: {
+            name: 'Das Glatteis',
+            brief:
+                'Vier Eisabsätze über der Leere. Bremsen braucht so viel Platz wie Anlaufen, und den gibt es nicht.',
+        },
+        patinoire: {
+            name: 'Die Eisbahn',
+            brief:
+                'Breite Eisflächen, und Stacheln, die unten warten. Der Schwung hält lange an, nachdem man die Taste losgelassen hat.',
+        },
+        banquise: {
+            name: 'Das Packeis',
+            brief:
+                'Eine durchgehend vereiste Serpentine mit einer Kehre auf halber Höhe. Die Kehre ist das Problem.',
+        },
+        derapage: {
+            name: 'Das Schleudern',
+            brief:
+                'Ein Band, das rückwärts drückt, eine Eisfläche, dann ein Band in die andere Richtung. Nichts bleibt an seinem Platz, du auch nicht.',
+        },
+        tremplin: {
+            name: 'Das Sprungbrett',
+            brief:
+                'Ein federnder Absatz wirft doppelt so hoch wie ein Sprung. Nur so erreicht man den nächsten.',
+        },
+        catapulte: {
+            name: 'Die Katapulte',
+            brief:
+                'Derselbe Absprung, aber die Landung schwingt. Man muss im richtigen Moment los, nicht wenn man bereit ist.',
+        },
+        ressac: {
+            name: 'Die Rückströmung',
+            brief:
+                'Ein Absprung, dann eine Bö im Flug. Die Reichweite deines Sprungs ist nicht mehr die, die du kennst.',
+        },
+        soufflerie: {
+            name: 'Der Windkanal',
+            brief:
+                'Drei Abstände, die kein Sprung überwindet. Nur der Wind kreuzt sie, und er weht nicht überall.',
+        },
+        bourrasque: {
+            name: 'Die Bö',
+            brief:
+                'Zwei Böen um eine bewegte Plattform. Der Wind trägt dich, das Schwingen holt dich zurück.',
+        },
+        alize: {
+            name: 'Der Passat',
+            brief:
+                'Der Wind weht gegen dich, über dem Eis. Das genügt, um dich in die eben überwundene Leere zurückzuschicken.',
+        },
+        tapis: {
+            name: 'Das Band',
+            brief:
+                'Zwei Förderbänder in Gegenrichtung. Stehenbleiben heißt dort gehen.',
+        },
+        contresens: {
+            name: 'Gegen den Strom',
+            brief:
+                'Zwei Bänder, beide rückwärts, über der Leere. Man kommt voran, indem man langsamer zurückweicht.',
+        },
+        laminoir: {
+            name: 'Das Walzwerk',
+            brief:
+                'Zwei Bänder, zwei Wände, die sich beim Verkleinern treffen, und Stacheln dazwischen.',
+        },
+        stroboscope: {
+            name: 'Das Stroboskop',
+            brief:
+                'Zwei Absätze, die gegenläufig blinken. Nie sind beide zugleich da.',
+        },
+        intermittence: {
+            name: 'Das Flackern',
+            brief:
+                'Der Boden kommt im festen Takt zurück — aber nicht im selben Takt auf beiden Seiten.',
+        },
+        battement: {
+            name: 'Der Herzschlag',
+            brief:
+                'Ein Absatz blinkt, einer schwingt, einer blinkt gegen den Takt. Drei Uhren, keine gestimmt.',
+        },
+        cendres: {
+            name: 'Die Asche',
+            brief:
+                'Drei Absätze, die keine halbe Sekunde nach dem Aufsetzen nachgeben. Es gibt kein Anhalten mehr.',
+        },
+        effondrement: {
+            name: 'Der Einsturz',
+            brief:
+                'Brüchige Absätze, getrennt von einer bewegten Plattform. Warten ist tödlich, nicht warten auch.',
+        },
+        poussiere: {
+            name: 'Der Staub',
+            brief:
+                'Zwei Kugeln auf dem, was gleich fällt. Man muss zurück, und es wird nichts mehr da sein.',
+        },
+        damocles: {
+            name: 'Damokles',
+            brief:
+                'Eine Klinge an der Decke richtet sich auf dich aus und fällt alle zweieinhalb Sekunden.',
+        },
+        traque: {
+            name: 'Die Hetzjagd',
+            brief:
+                'Die Klinge folgt dir, und der Boden gibt hinter dir nach. Man kann weder halten noch umkehren.',
+        },
+        ombre: {
+            name: 'Der Schatten',
+            brief:
+                'Der Weg existiert nur im dunklen Thema, und die Klinge folgt dir hindurch.',
+        },
+        frimas: {
+            name: 'Der Raureif',
+            brief:
+                'Eis, darunter ein bewegter Absatz. Man kommt schnell an und noch schneller wieder weg.',
+        },
+        avalanche: {
+            name: 'Die Lawine',
+            brief:
+                'Eisabsätze, die nachgeben. Bremsen dauert länger, als sie erlauben.',
+        },
+        congere: {
+            name: 'Die Schneewehe',
+            brief:
+                'Ein Eisabsatz erscheint nur im schmalen Fenster. Ohne ihn ist die Lücke achtzig Pixel zu breit.',
+        },
+        trebuchet: {
+            name: 'Das Trebuchet',
+            brief:
+                'Ein Absprung schickt dich direkt in eine Decke aus Stacheln. Man muss im Flug ausweichen.',
+        },
+        mortier: {
+            name: 'Der Mörser',
+            brief:
+                'Zwei Kugeln, eine davon ganz oben. Nur der Absprung reicht hin, und der Ausgang liegt unten.',
+        },
+        rafale: {
+            name: 'Der Windstoß',
+            brief:
+                'Der Wind trägt über zwei Lücken — aber eine der beiden Landungen blinkt.',
+        },
+        tourmente: {
+            name: 'Der Sturm',
+            brief:
+                'Eine Bö, eine Klinge, die dir folgt, und eine Lücke, die kein Sprung überwindet.',
+        },
+        sirocco: {
+            name: 'Der Schirokko',
+            brief:
+                'Der Wind trägt, die Absätze geben nach. Der zweite hält nicht lange genug für neuen Anlauf.',
+        },
+        engrenage: {
+            name: 'Das Getriebe',
+            brief:
+                'Ein rückwärts laufendes Band, dann ein brüchiger Absatz. Den Anlauf, den man nicht hat, bekommt man nicht.',
+        },
+        moulin: {
+            name: 'Die Mühle',
+            brief:
+                'Zwei gegenläufige Bänder, und eine Plattform, die dazwischen hin und her fährt.',
+        },
+        pilon: {
+            name: 'Der Stößel',
+            brief:
+                'Zwei Bänder, zwei Klingen im Gegentakt. Das Band entscheidet, wo du stehst, wenn sie fallen.',
+        },
+        eclair: {
+            name: 'Der Blitz',
+            brief:
+                'Ein Blinken doppelt so schnell wie sonst, und nur jeder zweite Absatz.',
+        },
+        syncope: {
+            name: 'Die Synkope',
+            brief:
+                'Ein Band, das dich rückwärts trägt, auf einen Absatz zu, der nicht immer da ist.',
+        },
+        arythmie: {
+            name: 'Die Arrhythmie',
+            brief:
+                'Drei Absätze, drei verschiedene Perioden, keine trifft auf die andere.',
+        },
+        dislocation: {
+            name: 'Die Verrenkung',
+            brief:
+                'Ein brüchiger Absatz, ein blinkender, ein brüchiger. Zwei Arten zu verschwinden, im Wechsel.',
+        },
+        erosion: {
+            name: 'Die Erosion',
+            brief:
+                'Eis, dann brüchig, dann Eis. Man kommt zu schnell auf dem an, was nicht halten wird.',
+        },
+        guet: {
+            name: 'Die Wache',
+            brief:
+                'Die Klinge folgt dir über zwei blinkende Absätze. Auf den Boden warten heißt auf die Klinge warten.',
+        },
+        embuscade: {
+            name: 'Der Hinterhalt',
+            brief:
+                'Ein Absatz existiert nur im schmalen Fenster, und die Klinge lässt nicht locker, während du ihn suchst.',
+        },
+        curee: {
+            name: 'Die Hatz',
+            brief:
+                'Zwei Kugeln einzusammeln, mit einer Klinge über dem Kopf. Der Umweg wird bezahlt.',
+        },
+        verrou: {
+            name: 'Der Riegel',
+            brief:
+                'Eis zwischen zwei Wänden, die sich treffen. Man bremst schlecht darauf, und der Durchgang schließt sich.',
+        },
+        garrot: {
+            name: 'Die Aderpresse',
+            brief:
+                'Ein Band, das dich zur sich schließenden Wand drückt. Verkleinern tötet hier schneller als sonst wo.',
+        },
+        'chausse-trappe': {
+            name: 'Die Fallgrube',
+            brief:
+                'Der mittlere Absatz erscheint nur im schmalen Fenster — und er gibt nach wie die anderen.',
+        },
+        apnee: {
+            name: 'Die Apnoe',
+            brief:
+                'Fünf Absätze am Stück ohne eine Stelle zum Atmen: Eis, brüchig, blinkend, brüchig, und zwei Kugeln.',
+        },
+        terminus: {
+            name: 'Die Endstation',
+            brief:
+                'Ein Absprung, ein brüchiger Absatz in der Luft, eine Bö, eine folgende Klinge, und der rechte Rand. Der letzte des Katalogs.',
+        },
     },
     puzzlesPage: {
         title: 'Die Rätsel',
-        heading: 'Vierundfünfzig handgebaute Rätsel',
+        heading: 'Hundert handgebaute Rätsel',
         lede: 'Von der ersten Stufe bis zu Abfolgen, die verlangen, mitten im Flug die Fenstergröße zu ändern.',
         metaDescription:
-            'Die 54 Rätsel von Reflow, nach Schwierigkeit geordnet. Jedes spielt mit einer Browser-Mechanik: den Fensterrändern, den Erscheinungen, dem Thema, der Bewegung, dem Zurückspulen.',
+            'Die 100 Rätsel von Reflow, nach Schwierigkeit geordnet. Jedes spielt mit einer Browser-Mechanik: den Fensterrändern, den Erscheinungen, dem Thema, der Bewegung, dem Zurückspulen.',
         done: '{done} von {total} gelöst',
         play: 'Spielen',
         statusDone: 'Gelöst',
@@ -240,7 +514,7 @@ export const de: Dictionary = {
         mechanicsLabel: 'Mechaniken',
         endlessTitle: 'Und danach?',
         endlessBody:
-            'Wenn alle vierundfünfzig gefallen sind, übernehmen die endlosen Partien: aus einem Startwert erzeugt, nie zweimal dieselbe.',
+            'Wenn alle hundert gefallen sind, übernehmen die endlosen Partien: aus einem Startwert erzeugt, nie zweimal dieselbe.',
         endlessCta: 'Zu den endlosen Partien',
     },
     puzzlePage: {
@@ -248,7 +522,7 @@ export const de: Dictionary = {
         previewHeading: 'Vorschau',
         previewAlt: 'Vorschau des Levels {name}',
         previewNote:
-            'Von der Engine des Spiels selbst gezeichnet, in der Größe, für die das Rätsel entworfen wurde. Gestrichelt: was nur im anderen Thema oder nur bei einer anderen Fenstergröße existiert.',
+            'Von der Engine des Spiels selbst gezeichnet, in der Größe, für die das Rätsel entworfen wurde. Gestrichelt: die brüchigen Absätze, und was nur im anderen Thema oder bei einer anderen Fenstergröße existiert.',
         briefHeading: 'Was zu begreifen ist',
         mechanicsHeading: 'Beteiligte Mechaniken',
         tierHeading: 'Schwierigkeit',
@@ -329,7 +603,7 @@ export const de: Dictionary = {
     },
     mechanicsPage: {
         browserHeading: 'Die sechs dem Browser abgeschauten',
-        rulesHeading: 'Und zwei Regeln, die ihm nichts schulden',
+        rulesHeading: 'Und die Regeln des Spiels selbst',
         title: 'Mechaniken',
         heading: 'Was Reflow dem Browser abschaut',
         lede: 'Sechs Mechaniken, alle aus Schnittstellen, die der Browser längst bereitstellt — und die kein Spiel benutzt.',

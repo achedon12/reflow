@@ -27,6 +27,7 @@ export const LEVELS_BY_TIER = {
     easy: LEVELS.filter((level) => level.tier === 'easy'),
     medium: LEVELS.filter((level) => level.tier === 'medium'),
     hard: LEVELS.filter((level) => level.tier === 'hard'),
+    impossible: LEVELS.filter((level) => level.tier === 'impossible'),
 } as const;
 
-export const TIER_ORDER = ['easy', 'medium', 'hard'] as const;
+export const TIER_ORDER = ['easy', 'medium', 'hard', 'impossible'] as const;

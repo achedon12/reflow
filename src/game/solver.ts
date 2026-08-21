@@ -27,8 +27,14 @@ const MACRO = 10;
 /** Paliers explorés. MACRO × MAX_LAYERS × STEP donne le temps maximal accordé. */
 const MAX_LAYERS = 280;
 
-/** Largeur du faisceau. Au-delà, le coût grimpe sans rien débloquer. */
+/** Largeur du faisceau. Au-delà, le coût grimpe sans rien débloquer.
+ *
+ *  ⚠️ Le palier « impossible » en demande davantage : glace, rebond et paliers
+ *  friables multiplient les états atteignables, et un faisceau trop étroit
+ *  rapporte « aucune solution trouvée » sur un niveau parfaitement jouable. */
 const BEAM = 1600;
+const BEAM_HARSH = 4200;
+const LAYERS_HARSH = 420;
 
 /** Côté d'une case de diversité, en pixels. Trier le faisceau uniquement par
  *  distance à l'objectif le fait s'effondrer sur un seul point de l'écran :
@@ -97,7 +103,7 @@ function usesTheme(level: Level): boolean {
  * avec les meilleurs restants : le faisceau couvre alors tout le niveau au
  * lieu de se masser devant le premier obstacle.
  */
-function narrow(level: Level, view: Viewport, nodes: Node[]): Node[] {
+function narrow(level: Level, view: Viewport, nodes: Node[], beam: number): Node[] {
     const scored = nodes
         .map((node) => ({ node, score: heuristic(level, view, node) }))
         .sort((a, b) => a.score - b.score);
@@ -109,7 +115,7 @@ function narrow(level: Level, view: Viewport, nodes: Node[]): Node[] {
     for (const { node } of scored) {
         const cell = `${Math.floor(node.player.x / CELL)}:${Math.floor(node.player.y / CELL)}:${node.player.orbs}:${node.theme}`;
         const used = perCell.get(cell) ?? 0;
-        if (used < PER_CELL && kept.length < BEAM) {
+        if (used < PER_CELL && kept.length < beam) {
             perCell.set(cell, used + 1);
             kept.push(node);
         } else {
@@ -118,7 +124,7 @@ function narrow(level: Level, view: Viewport, nodes: Node[]): Node[] {
     }
 
     for (const node of rest) {
-        if (kept.length >= BEAM) break;
+        if (kept.length >= beam) break;
         kept.push(node);
     }
     return kept;
@@ -127,6 +133,11 @@ function narrow(level: Level, view: Viewport, nodes: Node[]): Node[] {
 export type Attempt = { solved: boolean; seconds: number; explored: number };
 
 export function solve(level: Level, view: Viewport, startTheme: Theme = 'dark'): Attempt {
+    // Les niveaux les plus durs reçoivent un faisceau plus large et plus de
+    // temps : ce sont eux qui en ont besoin, et eux seuls.
+    const harsh = level.tier === 'impossible';
+    const beam = harsh ? BEAM_HARSH : BEAM;
+    const layers = harsh ? LAYERS_HARSH : MAX_LAYERS;
     const themeMatters = usesTheme(level);
     const actions: { dir: -1 | 0 | 1; jump: boolean; toggle: boolean }[] = [];
     for (const dir of [-1, 0, 1] as const) {
@@ -139,7 +150,7 @@ export function solve(level: Level, view: Viewport, startTheme: Theme = 'dark'):
     let layer: Node[] = [{ player: spawnState(level, view), theme: startTheme, holding: false }];
     let explored = 0;
 
-    for (let depth = 0; depth < MAX_LAYERS; depth += 1) {
+    for (let depth = 0; depth < layers; depth += 1) {
         const seen = new Set<string>();
         const next: Node[] = [];
 
@@ -197,10 +208,10 @@ export function solve(level: Level, view: Viewport, startTheme: Theme = 'dark'):
 
         if (next.length === 0) break;
 
-        layer = next.length > BEAM ? narrow(level, view, next) : next;
+        layer = next.length > beam ? narrow(level, view, next, beam) : next;
     }
 
-    return { solved: false, seconds: MAX_LAYERS * MACRO * STEP, explored };
+    return { solved: false, seconds: layers * MACRO * STEP, explored };
 }
 
 /** Les tailles de fenêtre essayées quand la taille de référence ne suffit pas.

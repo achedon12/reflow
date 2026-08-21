@@ -5,7 +5,7 @@ export const fr = {
         title: 'Reflow',
         titleTag: 'Reflow — le jeu de plateforme dont le niveau est votre fenêtre',
         description:
-            'Un jeu de plateforme où le décor est la fenêtre du navigateur. Redimensionnez-la pour déplacer les plateformes, changez de thème pour en faire apparaître. 54 énigmes et des parties infinies, sans compte.',
+            'Un jeu de plateforme où le décor est la fenêtre du navigateur. Redimensionnez-la pour déplacer les plateformes, changez de thème pour en faire apparaître. 100 énigmes et des parties infinies, sans compte.',
         ogAlt: 'Reflow — un jeu de plateforme joué avec la fenêtre du navigateur',
         keywords:
             'jeu de plateforme navigateur, jeu redimensionner fenêtre, jeu web original, énigmes navigateur, jeu gratuit sans compte, puzzle platformer',
@@ -35,7 +35,7 @@ export const fr = {
         play: 'Jouer',
         playFirst: 'Commencer par la première énigme',
         resume: 'Reprendre',
-        browse: 'Voir les 54 énigmes',
+        browse: 'Voir les 100 énigmes',
         endless: 'Parties infinies',
         progress: '{done} énigmes terminées sur {total}',
         sections: [
@@ -48,8 +48,8 @@ export const fr = {
                 body: 'Le redimensionnement n’est que la première. Des blocs n’existent qu’en dessous d’une certaine largeur. D’autres n’existent que dans le thème clair, ou seulement dans le sombre — le bouton de thème devient une commande de jeu. Le zoom du navigateur change la taille de l’aire de jeu, le bouton Précédent rembobine le temps, et une fenêtre trop étroite tue.',
             },
             {
-                title: 'Cinquante-quatre énigmes, puis l’infini',
-                body: 'Les cinquante-quatre énigmes écrites à la main vont du premier saut à des enchaînements qui demandent de redimensionner en plein vol. Une fois terminées, le mode infini prend le relais : chaque partie est engendrée à partir d’une graine, aucune ne se répète, et la difficulté monte avec la série. Une graine tient dans un lien — la partie que vous venez de jouer se transmet telle quelle.',
+                title: 'Cent énigmes, puis l’infini',
+                body: 'Les cent énigmes écrites à la main vont du premier saut à des enchaînements qui demandent de redimensionner en plein vol. Une fois terminées, le mode infini prend le relais : chaque partie est engendrée à partir d’une graine, aucune ne se répète, et la difficulté monte avec la série. Une graine tient dans un lien — la partie que vous venez de jouer se transmet telle quelle.',
             },
             {
                 title: 'Aucun compte, aucune publicité',
@@ -104,6 +104,8 @@ export const fr = {
         hard: 'Difficile',
         easyPlural: 'Faciles',
         mediumPlural: 'Moyennes',
+        impossible: 'Impossible',
+        impossiblePlural: 'Impossibles',
         hardPlural: 'Difficiles',
     },
     hints: {
@@ -134,6 +136,20 @@ export const fr = {
                 'La sortie reste fermée tant qu’il reste une orbe. Regarde le compteur, en haut à droite.',
             crush:
                 'Rétrécir peut tuer. Regarde où tu te trouves avant de tirer sur un bord.',
+            ice:
+                'Sur la glace, freinez avant le bord. L\'élan se garde, et le vide aussi.',
+            bounce:
+                'Un palier élastique renvoie plus haut qu\'un saut. Laissez-vous tomber dessus.',
+            conveyor:
+                'Le tapis vous déplace : marchez à contresens pour tenir en place.',
+            blink:
+                'Comptez le rythme. Le sol revient toujours au même intervalle.',
+            chase:
+                'La lame se cale sur vous. Bougez, puis revenez : elle met un temps à redescendre.',
+            wind:
+                'Le vent change la portée de vos sauts. Décollez plus tôt, ou plus tard.',
+            crumble:
+                'Ne vous arrêtez pas sur un palier friable : traversez-le.',
         },
     },
     mechanics: {
@@ -168,6 +184,34 @@ export const fr = {
         crush: {
             name: 'L’écrasement',
             body: 'Deux murs qui se rejoignent, et il n’y a plus de place pour vous. Rétrécir la fenêtre peut tuer.',
+        },
+        ice: {
+            name: 'La glace',
+            body: 'Un palier sans frottement : on y garde son élan, et freiner demande autant de place que démarrer.',
+        },
+        bounce: {
+            name: 'Le rebond',
+            body: 'Un palier élastique renvoie plus haut qu\'un saut. C\'est la seule façon d\'atteindre certains paliers — et de retomber sur des pointes.',
+        },
+        conveyor: {
+            name: 'Le tapis',
+            body: 'Un palier qui vous déplace tant que vous êtes dessus. Y rester immobile demande de marcher.',
+        },
+        blink: {
+            name: 'Le clignotement',
+            body: 'Des blocs qui n\'existent qu\'une partie du temps. Le sol sous vos pieds disparaît à intervalle fixe.',
+        },
+        chase: {
+            name: 'La lame qui suit',
+            body: 'Une lame accrochée au plafond qui se cale sur votre position horizontale. On ne la sème pas : on passe dessous au bon moment.',
+        },
+        wind: {
+            name: 'Le vent',
+            body: 'Une zone qui pousse en permanence. Elle change la portée de chaque saut qui la traverse, dans un sens ou dans l\'autre.',
+        },
+        crumble: {
+            name: 'Les paliers friables',
+            body: 'Ils cèdent moins d\'une demi-seconde après qu\'on s\'y est posé. Ils se traversent, ils ne se reposent pas.',
         },
     },
     puzzles: {
@@ -441,13 +485,243 @@ export const fr = {
             brief:
                 'Tout à la fois — les bords, le thème, le mouvement, les orbes et le vide.',
         },
+        verglas: {
+            name: 'Le verglas',
+            brief:
+                'Quatre paliers de glace au-dessus du vide. Freiner y demande autant de place que s’élancer, et il n’y en a pas.',
+        },
+        patinoire: {
+            name: 'La patinoire',
+            brief:
+                'De larges paliers de glace, et des pointes qui attendent en bas. L’élan se garde bien après qu’on a lâché la touche.',
+        },
+        banquise: {
+            name: 'La banquise',
+            brief:
+                'Un serpentin entièrement gelé, avec un demi-tour à mi-hauteur. C’est le demi-tour, le problème.',
+        },
+        derapage: {
+            name: 'Le dérapage',
+            brief:
+                'Un tapis qui pousse à contresens, un palier de glace, puis un tapis qui pousse dans l’autre sens. Rien ne tient en place, vous compris.',
+        },
+        tremplin: {
+            name: 'Le tremplin',
+            brief:
+                'Un palier élastique renvoie deux fois plus haut qu’un saut. C’est la seule façon d’atteindre le suivant.',
+        },
+        catapulte: {
+            name: 'La catapulte',
+            brief:
+                'Le même rebond, mais l’arrivée oscille. Il faut partir au bon moment, pas au moment où l’on est prêt.',
+        },
+        ressac: {
+            name: 'Le ressac',
+            brief:
+                'Un rebond, puis une rafale en plein vol. La portée de votre saut n’est plus celle que vous connaissez.',
+        },
+        soufflerie: {
+            name: 'La soufflerie',
+            brief:
+                'Trois écarts qu’aucun saut ne franchit. Seul le vent les traverse, et il ne souffle pas partout.',
+        },
+        bourrasque: {
+            name: 'La bourrasque',
+            brief:
+                'Deux rafales encadrant une plateforme mobile. Le vent vous porte, l’oscillation vous reprend.',
+        },
+        alize: {
+            name: 'L’alizé',
+            brief:
+                'Le vent souffle à contresens, au-dessus de la glace. Il suffit à vous renvoyer dans le vide que vous venez de franchir.',
+        },
+        tapis: {
+            name: 'Le tapis',
+            brief:
+                'Deux tapis roulants en sens contraires. Y rester immobile demande de marcher.',
+        },
+        contresens: {
+            name: 'Le contresens',
+            brief:
+                'Deux tapis qui poussent tous les deux vers l’arrière, au-dessus du vide. On avance en reculant moins vite.',
+        },
+        laminoir: {
+            name: 'Le laminoir',
+            brief:
+                'Deux tapis, deux murs qui se rejoignent quand la fenêtre rétrécit, et des pointes entre les deux.',
+        },
+        stroboscope: {
+            name: 'Le stroboscope',
+            brief:
+                'Deux paliers qui clignotent en opposition. Il n’y a jamais les deux à la fois.',
+        },
+        intermittence: {
+            name: 'L’intermittence',
+            brief:
+                'Le sol revient à intervalle fixe — mais pas au même intervalle des deux côtés.',
+        },
+        battement: {
+            name: 'Le battement',
+            brief:
+                'Un palier qui clignote, un qui oscille, un qui clignote à contretemps. Trois horloges, aucune accordée.',
+        },
+        cendres: {
+            name: 'Les cendres',
+            brief:
+                'Trois paliers qui cèdent moins d’une demi-seconde après qu’on s’y pose. On ne s’arrête plus.',
+        },
+        effondrement: {
+            name: 'L’effondrement',
+            brief:
+                'Des paliers friables séparés par une plateforme mobile. Attendre est fatal, ne pas attendre aussi.',
+        },
+        poussiere: {
+            name: 'La poussière',
+            brief:
+                'Deux orbes posées sur ce qui va tomber. Il faut y revenir, et il n’y aura plus rien.',
+        },
+        damocles: {
+            name: 'Damoclès',
+            brief:
+                'Une lame accrochée au plafond se cale sur votre position, et retombe toutes les deux secondes et demie.',
+        },
+        traque: {
+            name: 'La traque',
+            brief:
+                'La lame vous suit, et le sol cède derrière vous. On ne peut ni s’arrêter ni revenir.',
+        },
+        ombre: {
+            name: 'L’ombre',
+            brief:
+                'Le chemin n’existe qu’en thème sombre, et la lame vous suit dans le noir.',
+        },
+        frimas: {
+            name: 'Les frimas',
+            brief:
+                'De la glace, dont un palier mobile. On y arrive vite, on en repart trop vite.',
+        },
+        avalanche: {
+            name: 'L’avalanche',
+            brief:
+                'Des paliers de glace qui cèdent. Freiner prend plus de temps qu’ils n’en accordent.',
+        },
+        congere: {
+            name: 'La congère',
+            brief:
+                'Un palier de glace n’apparaît qu’en fenêtre étroite. Sans lui, le vide fait quatre-vingts pixels de trop.',
+        },
+        trebuchet: {
+            name: 'Le trébuchet',
+            brief:
+                'Un rebond envoie droit dans un plafond de pointes. Il faut s’écarter en plein vol.',
+        },
+        mortier: {
+            name: 'Le mortier',
+            brief:
+                'Deux orbes, dont une tout en haut. Seul le rebond y mène, et la sortie est en bas.',
+        },
+        rafale: {
+            name: 'La rafale',
+            brief:
+                'Le vent porte au-dessus de deux écarts — mais l’un des deux paliers d’arrivée clignote.',
+        },
+        tourmente: {
+            name: 'La tourmente',
+            brief:
+                'Une rafale, une lame qui vous suit, et un écart qu’aucun saut ne franchit.',
+        },
+        sirocco: {
+            name: 'Le sirocco',
+            brief:
+                'Le vent porte, les paliers cèdent. Le second ne tient pas le temps de reprendre son élan.',
+        },
+        engrenage: {
+            name: 'L’engrenage',
+            brief:
+                'Un tapis à contresens suivi d’un palier friable. L’élan qu’on n’a pas, on ne l’aura pas.',
+        },
+        moulin: {
+            name: 'Le moulin',
+            brief:
+                'Deux tapis contraires, et une plateforme qui va et vient entre les deux.',
+        },
+        pilon: {
+            name: 'Le pilon',
+            brief:
+                'Deux tapis, deux lames tombant à contretemps. C’est le tapis qui décide où vous êtes quand elles tombent.',
+        },
+        eclair: {
+            name: 'L’éclair',
+            brief:
+                'Un clignotement deux fois plus rapide que d’ordinaire, et un palier sur deux seulement.',
+        },
+        syncope: {
+            name: 'La syncope',
+            brief:
+                'Un tapis qui vous ramène en arrière, vers un palier qui n’est pas toujours là.',
+        },
+        arythmie: {
+            name: 'L’arythmie',
+            brief:
+                'Trois paliers, trois périodes différentes, aucune qui retombe sur les autres.',
+        },
+        dislocation: {
+            name: 'La dislocation',
+            brief:
+                'Un palier friable, un clignotant, un friable. Deux façons de disparaître, alternées.',
+        },
+        erosion: {
+            name: 'L’érosion',
+            brief:
+                'De la glace, puis du friable, puis de la glace. On arrive trop vite sur ce qui ne tiendra pas.',
+        },
+        guet: {
+            name: 'Le guet',
+            brief:
+                'La lame vous suit au-dessus de deux paliers clignotants. Attendre le sol, c’est attendre la lame.',
+        },
+        embuscade: {
+            name: 'L’embuscade',
+            brief:
+                'Un palier n’existe qu’en fenêtre étroite, et la lame ne vous lâche pas pendant que vous cherchez.',
+        },
+        curee: {
+            name: 'La curée',
+            brief:
+                'Deux orbes à ramasser avec une lame au-dessus de la tête. Le détour se paie.',
+        },
+        verrou: {
+            name: 'Le verrou',
+            brief:
+                'De la glace entre deux murs qui se rejoignent. On y freine mal, et le passage se ferme.',
+        },
+        garrot: {
+            name: 'Le garrot',
+            brief:
+                'Un tapis qui pousse vers le mur qui se referme. Rétrécir tue plus vite qu’ailleurs.',
+        },
+        'chausse-trappe': {
+            name: 'La chausse-trappe',
+            brief:
+                'Le palier du milieu n’apparaît qu’en fenêtre étroite — et il cède comme les autres.',
+        },
+        apnee: {
+            name: 'L’apnée',
+            brief:
+                'Cinq paliers d’affilée sans un endroit où souffler : glace, friable, clignotant, friable, et deux orbes.',
+        },
+        terminus: {
+            name: 'Le terminus',
+            brief:
+                'Un rebond, un palier friable en l’air, une rafale, une lame qui suit, et le bord droit. La dernière du catalogue.',
+        },
     },
     puzzlesPage: {
         title: 'Les énigmes',
-        heading: 'Cinquante-quatre énigmes écrites à la main',
+        heading: 'Cent énigmes écrites à la main',
         lede: 'De la première marche aux enchaînements qui demandent de redimensionner en plein vol.',
         metaDescription:
-            'Les 54 énigmes de Reflow, classées par difficulté. Chacune met en jeu une mécanique du navigateur : les bords de la fenêtre, les apparitions, le thème, le mouvement, le rembobinage.',
+            'Les 100 énigmes de Reflow, classées par difficulté. Chacune met en jeu une mécanique du navigateur : les bords de la fenêtre, les apparitions, le thème, le mouvement, le rembobinage.',
         done: '{done} sur {total} terminées',
         play: 'Jouer',
         statusDone: 'Terminée',
@@ -456,7 +730,7 @@ export const fr = {
         mechanicsLabel: 'Mécaniques',
         endlessTitle: 'Et après ?',
         endlessBody:
-            'Quand les cinquante-quatre sont tombées, les parties infinies prennent le relais : engendrées à partir d’une graine, jamais deux fois les mêmes.',
+            'Quand les cent sont tombées, les parties infinies prennent le relais : engendrées à partir d’une graine, jamais deux fois les mêmes.',
         endlessCta: 'Passer aux parties infinies',
     },
     puzzlePage: {
@@ -464,7 +738,7 @@ export const fr = {
         previewHeading: 'Aperçu',
         previewAlt: 'Aperçu du niveau {name}',
         previewNote:
-            'Dessiné par le moteur du jeu, à la taille pour laquelle l’énigme a été conçue. En pointillés : ce qui n’existe que dans l’autre thème, ou qu’à une autre taille de fenêtre.',
+            'Dessiné par le moteur du jeu, à la taille pour laquelle l’énigme a été conçue. En pointillés : les paliers friables, et ce qui n’existe que dans l’autre thème ou qu’à une autre taille de fenêtre.',
         briefHeading: 'Ce qu’il y a à comprendre',
         mechanicsHeading: 'Mécaniques mises en jeu',
         tierHeading: 'Difficulté',
@@ -545,7 +819,7 @@ export const fr = {
     },
     mechanicsPage: {
         browserHeading: 'Les six prises au navigateur',
-        rulesHeading: 'Et deux règles qui ne lui doivent rien',
+        rulesHeading: 'Et les règles du jeu lui-même',
         title: 'Mécaniques',
         heading: 'Ce que Reflow détourne du navigateur',
         lede: 'Six mécaniques, toutes prises à des interfaces que le navigateur expose déjà — et qu’aucun jeu n’utilise.',

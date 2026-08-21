@@ -1,3 +1,5 @@
+import type { Tier } from './types';
+
 /**
  * Les constantes physiques, en pixels CSS et en secondes.
  *
@@ -114,7 +116,7 @@ export function maxRunForRise(rise: number): number {
  * victoire, et il s'arrête tout seul quand l'onglet passe en arrière-plan —
  * la boucle d'animation y est gelée par le navigateur.
  */
-export const HINT_STEPS: Record<'easy' | 'medium' | 'hard', { seconds: number; deaths: number }[]> = {
+export const HINT_STEPS: Record<Tier, { seconds: number; deaths: number }[]> = {
     easy: [
         { seconds: 45, deaths: 5 },
         { seconds: 100, deaths: 12 },
@@ -130,4 +132,40 @@ export const HINT_STEPS: Record<'easy' | 'medium' | 'hard', { seconds: number; d
         { seconds: 250, deaths: 26 },
         { seconds: 420, deaths: 45 },
     ],
+    // Le palier « impossible » est fait pour résister : y proposer un indice au
+    // bout de deux minutes serait insultant. On laisse le joueur s'entêter.
+    impossible: [
+        { seconds: 240, deaths: 25 },
+        { seconds: 480, deaths: 50 },
+        { seconds: 900, deaths: 90 },
+    ],
 };
+
+/* ── Les matières et les pièges du palier « impossible » ───────────────────
+   Toutes purement fonction de l'état du joueur et du temps : aucune ne retient
+   quoi que ce soit hors de `PlayerState`. C'est la condition pour que le
+   rembobinage et le vérificateur continuent de marcher. */
+
+/** Frottement sur la glace. Presque nul : on garde son élan, et on le regrette. */
+export const FRICTION_ICE = 120;
+
+/** Accélération au sol sur la glace. Réduite : on ne se reprend pas vite. */
+export const ACCEL_ICE = 700;
+
+/** Impulsion rendue par un palier élastique. Plus forte que le saut : c'est ce
+ *  qui permet d'atteindre des hauteurs qu'aucun saut n'atteint. */
+export const BOUNCE_VELOCITY = 980;
+
+/** Un rebond ne se déclenche qu'au-delà de cette vitesse de chute — sinon on
+ *  tressaute indéfiniment en se posant. */
+export const BOUNCE_THRESHOLD = 120;
+
+/** Vitesse par défaut d'un tapis roulant, en pixels par seconde. */
+export const CONVEYOR_SPEED = 130;
+
+/** Délai avant qu'un palier friable ne cède, en secondes. Court : il faut le
+ *  traverser, pas s'y reposer. */
+export const CRUMBLE_DELAY = 0.45;
+
+/** Au-delà, le champ de bits des paliers friables déborderait. */
+export const MAX_CRUMBLE = 8;

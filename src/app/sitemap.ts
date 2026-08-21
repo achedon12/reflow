@@ -10,7 +10,7 @@ import { PUZZLES_UPDATED, UPDATED } from '@/lib/updated';
 export const dynamic = 'force-static';
 
 // Une entrée par langue ET par page — pages d'énigme comprises, ce qui porte
-// le plan du site à deux cent quarante-huit URL.
+// le plan du site à quatre cent trente-deux URL.
 //
 // ⚠️ SANS `alternates` : ils ajoutent des `xhtml:link`, et Chrome désactive son
 // visualiseur XML dès qu'un document contient l'espace de noms XHTML. Les

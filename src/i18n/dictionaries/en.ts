@@ -5,7 +5,7 @@ export const en: Dictionary = {
         title: 'Reflow',
         titleTag: 'Reflow — the platformer whose level is your browser window',
         description:
-            'A platformer where the scenery is the browser window. Resize it to move the platforms, switch themes to make more appear. 54 puzzles and endless generated runs, no account needed.',
+            'A platformer where the scenery is the browser window. Resize it to move the platforms, switch themes to make more appear. 100 puzzles and endless generated runs, no account needed.',
         ogAlt: 'Reflow — a platformer played with the browser window',
         keywords:
             'browser platformer, resize window game, original web game, browser puzzle game, free game no account, puzzle platformer',
@@ -35,7 +35,7 @@ export const en: Dictionary = {
         play: 'Play',
         playFirst: 'Start with the first puzzle',
         resume: 'Resume',
-        browse: 'See all 54 puzzles',
+        browse: 'See all 100 puzzles',
         endless: 'Endless runs',
         progress: '{done} of {total} puzzles finished',
         sections: [
@@ -48,8 +48,8 @@ export const en: Dictionary = {
                 body: 'Resizing is only the first. Some blocks exist only below a certain width. Others exist only in the light theme, or only in the dark one — the theme switch becomes a game control. Browser zoom changes the size of the playfield, the Back button rewinds time, and a window that is too narrow kills.',
             },
             {
-                title: 'Fifty-four puzzles, then the endless mode',
-                body: 'The fifty-four hand-built puzzles run from the first jump to sequences that ask you to resize mid-flight. Once they are done the endless mode takes over: every run is generated from a seed, none repeats, and difficulty climbs with the streak. A seed fits inside a link — the run you just played passes on as it is.',
+                title: 'One hundred puzzles, then the endless mode',
+                body: 'The hundred hand-built puzzles run from the first jump to sequences that ask you to resize mid-flight. Once they are done the endless mode takes over: every run is generated from a seed, none repeats, and difficulty climbs with the streak. A seed fits inside a link — the run you just played passes on as it is.',
             },
             {
                 title: 'No account, no advertising',
@@ -104,6 +104,8 @@ export const en: Dictionary = {
         hard: 'Hard',
         easyPlural: 'Easy',
         mediumPlural: 'Medium',
+        impossible: 'Impossible',
+        impossiblePlural: 'Impossible',
         hardPlural: 'Hard',
     },
     hints: {
@@ -134,6 +136,20 @@ export const en: Dictionary = {
                 'The exit stays shut while one orb remains. Check the counter at the top right.',
             crush:
                 'Shrinking can kill. Look at where you are standing before you pull an edge.',
+            ice:
+                'On ice, brake before the edge. Momentum carries, and so does the void.',
+            bounce:
+                'A springy platform throws you higher than a jump. Let yourself fall onto it.',
+            conveyor:
+                'The belt carries you: walk against it to hold your ground.',
+            blink:
+                'Count the beat. The ground always comes back on the same interval.',
+            chase:
+                'The blade lines up with you. Move, then come back: it takes time to drop again.',
+            wind:
+                'Wind changes the reach of your jumps. Take off earlier, or later.',
+            crumble:
+                'Do not stop on a crumbling ledge: cross it.',
         },
     },
     mechanics: {
@@ -168,6 +184,34 @@ export const en: Dictionary = {
         crush: {
             name: 'Crushing',
             body: 'Two walls meeting, and there is no room left for you. Shrinking the window can kill.',
+        },
+        ice: {
+            name: 'Ice',
+            body: 'A platform with no friction: you keep your momentum, and braking takes as much room as starting.',
+        },
+        bounce: {
+            name: 'Bounce',
+            body: 'A springy platform throws you higher than a jump. It is the only way to reach some ledges — and to come down on spikes.',
+        },
+        conveyor: {
+            name: 'The belt',
+            body: 'A platform that carries you while you stand on it. Staying still on it means walking.',
+        },
+        blink: {
+            name: 'Blinking',
+            body: 'Blocks that exist only part of the time. The ground under your feet vanishes on a fixed beat.',
+        },
+        chase: {
+            name: 'The tracking blade',
+            body: 'A blade fixed to the ceiling that lines up with your horizontal position. You cannot outrun it: you pass under it at the right moment.',
+        },
+        wind: {
+            name: 'Wind',
+            body: 'A zone that pushes constantly. It changes the reach of every jump that crosses it, one way or the other.',
+        },
+        crumble: {
+            name: 'Crumbling ledges',
+            body: 'They give way less than half a second after you land. They are crossed, not rested on.',
         },
     },
     puzzles: {
@@ -225,13 +269,243 @@ export const en: Dictionary = {
         charniere: { name: 'The Hinge', brief: 'Above 760 pixels, two walls close everything. Below, the path appears.' },
         souffle: { name: 'Last Breath', brief: 'Five moving steps, two orbs, no floor, and the exit against the right edge.' },
         epilogue: { name: 'The Epilogue', brief: 'Everything at once — the edges, the theme, the motion, the orbs and the void.' },
+        verglas: {
+            name: 'The Black Ice',
+            brief:
+                'Four ice ledges over the void. Braking takes as much room as setting off, and there is none.',
+        },
+        patinoire: {
+            name: 'The Rink',
+            brief:
+                'Wide sheets of ice, and spikes waiting below. Momentum lasts long after you let go of the key.',
+        },
+        banquise: {
+            name: 'The Ice Field',
+            brief:
+                'A serpentine frozen end to end, with a turnback halfway up. The turnback is the problem.',
+        },
+        derapage: {
+            name: 'The Skid',
+            brief:
+                'A belt pushing backwards, a sheet of ice, then a belt pushing the other way. Nothing holds still, you included.',
+        },
+        tremplin: {
+            name: 'The Springboard',
+            brief:
+                'A springy ledge throws you twice as high as a jump. It is the only way to reach the next one.',
+        },
+        catapulte: {
+            name: 'The Catapult',
+            brief:
+                'The same bounce, but the landing sways. You have to leave at the right moment, not when you feel ready.',
+        },
+        ressac: {
+            name: 'The Undertow',
+            brief:
+                'A bounce, then a gust in mid-flight. The reach of your jump is no longer the one you know.',
+        },
+        soufflerie: {
+            name: 'The Wind Tunnel',
+            brief:
+                'Three gaps no jump can cross. Only the wind crosses them, and it does not blow everywhere.',
+        },
+        bourrasque: {
+            name: 'The Squall',
+            brief:
+                'Two gusts framing a moving platform. The wind carries you, the swing takes you back.',
+        },
+        alize: {
+            name: 'The Trade Wind',
+            brief:
+                'The wind blows against you, over ice. That is enough to send you back into the void you just crossed.',
+        },
+        tapis: {
+            name: 'The Belt',
+            brief:
+                'Two conveyor belts running opposite ways. Standing still on them means walking.',
+        },
+        contresens: {
+            name: 'Against the Grain',
+            brief:
+                'Two belts, both pushing backwards, over the void. You advance by retreating more slowly.',
+        },
+        laminoir: {
+            name: 'The Rolling Mill',
+            brief:
+                'Two belts, two walls that meet when the window shrinks, and spikes in between.',
+        },
+        stroboscope: {
+            name: 'The Strobe',
+            brief:
+                'Two ledges blinking in opposition. The two are never there at once.',
+        },
+        intermittence: {
+            name: 'The Flicker',
+            brief:
+                'The ground comes back on a fixed interval — but not the same interval on both sides.',
+        },
+        battement: {
+            name: 'The Beat',
+            brief:
+                'One ledge blinking, one swinging, one blinking off-beat. Three clocks, none in tune.',
+        },
+        cendres: {
+            name: 'Ashes',
+            brief:
+                'Three ledges that give way less than half a second after you land. There is no stopping any more.',
+        },
+        effondrement: {
+            name: 'The Collapse',
+            brief:
+                'Crumbling ledges separated by a moving platform. Waiting is fatal, not waiting too.',
+        },
+        poussiere: {
+            name: 'Dust',
+            brief:
+                'Two orbs sitting on what is about to fall. You have to come back, and there will be nothing left.',
+        },
+        damocles: {
+            name: 'Damocles',
+            brief:
+                'A blade fixed to the ceiling lines up with your position and drops every two and a half seconds.',
+        },
+        traque: {
+            name: 'The Hunt',
+            brief:
+                'The blade follows you, and the ground gives way behind you. You can neither stop nor turn back.',
+        },
+        ombre: {
+            name: 'The Shadow',
+            brief:
+                'The path exists only in the dark theme, and the blade follows you through it.',
+        },
+        frimas: {
+            name: 'The Frost',
+            brief:
+                'Ice, including one moving ledge. You arrive fast, and you leave faster.',
+        },
+        avalanche: {
+            name: 'The Avalanche',
+            brief:
+                'Ice ledges that crumble. Braking takes longer than they allow.',
+        },
+        congere: {
+            name: 'The Snowdrift',
+            brief:
+                'One ice ledge appears only in a narrow window. Without it the gap is eighty pixels too wide.',
+        },
+        trebuchet: {
+            name: 'The Trebuchet',
+            brief:
+                'A bounce sends you straight into a ceiling of spikes. You have to step aside in mid-air.',
+        },
+        mortier: {
+            name: 'The Mortar',
+            brief:
+                'Two orbs, one of them at the very top. Only the bounce reaches it, and the exit is below.',
+        },
+        rafale: {
+            name: 'The Gust',
+            brief:
+                'The wind carries you over two gaps — but one of the two landings blinks.',
+        },
+        tourmente: {
+            name: 'The Storm',
+            brief:
+                'A gust, a blade that follows you, and a gap no jump can cross.',
+        },
+        sirocco: {
+            name: 'The Sirocco',
+            brief:
+                'The wind carries, the ledges give way. The second one will not hold long enough to build up speed.',
+        },
+        engrenage: {
+            name: 'The Gearing',
+            brief:
+                'A backwards belt followed by a crumbling ledge. The run-up you do not have, you will not get.',
+        },
+        moulin: {
+            name: 'The Mill',
+            brief:
+                'Two opposing belts, and a platform going back and forth between them.',
+        },
+        pilon: {
+            name: 'The Pestle',
+            brief:
+                'Two belts, two blades falling off-beat. It is the belt that decides where you are when they fall.',
+        },
+        eclair: {
+            name: 'The Flash',
+            brief:
+                'A blink twice as fast as usual, and only every other ledge.',
+        },
+        syncope: {
+            name: 'The Syncope',
+            brief:
+                'A belt carrying you backwards, towards a ledge that is not always there.',
+        },
+        arythmie: {
+            name: 'The Arrhythmia',
+            brief:
+                'Three ledges, three different periods, none of them landing on the others.',
+        },
+        dislocation: {
+            name: 'The Dislocation',
+            brief:
+                'One crumbling ledge, one blinking, one crumbling. Two ways of vanishing, alternating.',
+        },
+        erosion: {
+            name: 'The Erosion',
+            brief:
+                'Ice, then crumble, then ice. You arrive too fast on what will not hold.',
+        },
+        guet: {
+            name: 'The Watch',
+            brief:
+                'The blade follows you over two blinking ledges. Waiting for the ground means waiting for the blade.',
+        },
+        embuscade: {
+            name: 'The Ambush',
+            brief:
+                'One ledge exists only in a narrow window, and the blade does not let go while you look for it.',
+        },
+        curee: {
+            name: 'The Quarry',
+            brief:
+                'Two orbs to collect with a blade overhead. The detour is paid for.',
+        },
+        verrou: {
+            name: 'The Bolt',
+            brief:
+                'Ice between two walls that meet. You brake badly on it, and the passage closes.',
+        },
+        garrot: {
+            name: 'The Tourniquet',
+            brief:
+                'A belt pushing you towards the closing wall. Shrinking kills faster here than anywhere.',
+        },
+        'chausse-trappe': {
+            name: 'The Trapdoor',
+            brief:
+                'The middle ledge appears only in a narrow window — and it gives way like the others.',
+        },
+        apnee: {
+            name: 'Apnea',
+            brief:
+                'Five ledges in a row with nowhere to breathe: ice, crumble, blink, crumble, and two orbs.',
+        },
+        terminus: {
+            name: 'The Terminus',
+            brief:
+                'A bounce, a crumbling ledge in mid-air, a gust, a blade that follows, and the right edge. The last of the catalogue.',
+        },
     },
     puzzlesPage: {
         title: 'The puzzles',
-        heading: 'Fifty-four hand-built puzzles',
+        heading: 'One hundred hand-built puzzles',
         lede: 'From the first step to sequences that ask you to resize the window mid-flight.',
         metaDescription:
-            'The 54 puzzles of Reflow, sorted by difficulty. Each one plays on a browser mechanic: the edges of the window, appearances, the theme, motion, rewinding.',
+            'The 100 puzzles of Reflow, sorted by difficulty. Each one plays on a browser mechanic: the edges of the window, appearances, the theme, motion, rewinding.',
         done: '{done} of {total} finished',
         play: 'Play',
         statusDone: 'Finished',
@@ -240,7 +514,7 @@ export const en: Dictionary = {
         mechanicsLabel: 'Mechanics',
         endlessTitle: 'And then?',
         endlessBody:
-            'When all fifty-four have fallen, the endless runs take over: generated from a seed, never twice the same.',
+            'When all hundred have fallen, the endless runs take over: generated from a seed, never twice the same.',
         endlessCta: 'Move on to the endless runs',
     },
     puzzlePage: {
@@ -248,7 +522,7 @@ export const en: Dictionary = {
         previewHeading: 'Preview',
         previewAlt: 'Preview of the level {name}',
         previewNote:
-            'Drawn by the game engine itself, at the size the puzzle was designed for. Dashed: what exists only in the other theme, or only at another window size.',
+            'Drawn by the game engine itself, at the size the puzzle was designed for. Dashed: the crumbling ledges, and what exists only in the other theme or at another window size.',
         briefHeading: 'What there is to work out',
         mechanicsHeading: 'Mechanics in play',
         tierHeading: 'Difficulty',
@@ -329,7 +603,7 @@ export const en: Dictionary = {
     },
     mechanicsPage: {
         browserHeading: 'The six borrowed from the browser',
-        rulesHeading: 'And two rules that owe it nothing',
+        rulesHeading: 'And the game’s own rules',
         title: 'Mechanics',
         heading: 'What Reflow borrows from the browser',
         lede: 'Six mechanics, all taken from interfaces the browser already exposes — and that no game uses.',

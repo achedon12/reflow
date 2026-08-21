@@ -5,7 +5,7 @@ export const es: Dictionary = {
         title: 'Reflow',
         titleTag: 'Reflow — el juego de plataformas cuyo nivel es tu ventana',
         description:
-            'Un juego de plataformas donde el escenario es la ventana del navegador. Redimensiónala para mover las plataformas, cambia de tema para hacer aparecer otras. 54 enigmas y partidas infinitas, sin cuenta.',
+            'Un juego de plataformas donde el escenario es la ventana del navegador. Redimensiónala para mover las plataformas, cambia de tema para hacer aparecer otras. 100 enigmas y partidas infinitas, sin cuenta.',
         ogAlt: 'Reflow — un juego de plataformas jugado con la ventana del navegador',
         keywords:
             'juego de plataformas navegador, juego redimensionar ventana, juego web original, enigmas navegador, juego gratis sin cuenta, puzzle platformer',
@@ -35,7 +35,7 @@ export const es: Dictionary = {
         play: 'Jugar',
         playFirst: 'Empezar por el primer enigma',
         resume: 'Continuar',
-        browse: 'Ver los 54 enigmas',
+        browse: 'Ver los 100 enigmas',
         endless: 'Partidas infinitas',
         progress: '{done} enigmas resueltos de {total}',
         sections: [
@@ -48,8 +48,8 @@ export const es: Dictionary = {
                 body: 'Redimensionar es solo la primera. Hay bloques que solo existen por debajo de cierto ancho. Otros solo existen en el tema claro, o solo en el oscuro: el selector de tema se convierte en un mando del juego. El zoom del navegador cambia el tamaño del área de juego, el botón Atrás rebobina el tiempo, y una ventana demasiado estrecha mata.',
             },
             {
-                title: 'Cincuenta y cuatro enigmas, y luego el infinito',
-                body: 'Los cincuenta y cuatro enigmas escritos a mano van desde el primer salto hasta secuencias que exigen redimensionar en pleno vuelo. Una vez resueltos, el modo infinito toma el relevo: cada partida se genera a partir de una semilla, ninguna se repite, y la dificultad sube con la racha. Una semilla cabe en un enlace: la partida que acabas de jugar se transmite tal cual.',
+                title: 'Cien enigmas, y luego el infinito',
+                body: 'Los cien enigmas escritos a mano van desde el primer salto hasta secuencias que exigen redimensionar en pleno vuelo. Una vez resueltos, el modo infinito toma el relevo: cada partida se genera a partir de una semilla, ninguna se repite, y la dificultad sube con la racha. Una semilla cabe en un enlace: la partida que acabas de jugar se transmite tal cual.',
             },
             {
                 title: 'Sin cuenta y sin publicidad',
@@ -104,6 +104,8 @@ export const es: Dictionary = {
         hard: 'Difícil',
         easyPlural: 'Fáciles',
         mediumPlural: 'Medias',
+        impossible: 'Imposible',
+        impossiblePlural: 'Imposibles',
         hardPlural: 'Difíciles',
     },
     hints: {
@@ -134,6 +136,20 @@ export const es: Dictionary = {
                 'La salida sigue cerrada mientras quede un orbe. Mira el contador, arriba a la derecha.',
             crush:
                 'Encoger puede matar. Fíjate en dónde estás antes de tirar de un borde.',
+            ice:
+                'Sobre el hielo, frena antes del borde. El impulso se conserva, y el vacío también.',
+            bounce:
+                'Un rellano elástico te lanza más alto que un salto. Déjate caer encima.',
+            conveyor:
+                'La cinta te desplaza: camina a contracorriente para no moverte.',
+            blink:
+                'Cuenta el ritmo. El suelo siempre vuelve al mismo intervalo.',
+            chase:
+                'La cuchilla se alinea contigo. Muévete y vuelve: tarda en bajar de nuevo.',
+            wind:
+                'El viento cambia el alcance de tus saltos. Salta antes, o después.',
+            crumble:
+                'No te pares en un rellano frágil: atraviésalo.',
         },
     },
     mechanics: {
@@ -168,6 +184,34 @@ export const es: Dictionary = {
         crush: {
             name: 'El aplastamiento',
             body: 'Dos muros que se juntan, y ya no queda sitio para ti. Encoger la ventana puede matar.',
+        },
+        ice: {
+            name: 'El hielo',
+            body: 'Un rellano sin rozamiento: conservas el impulso, y frenar exige tanto espacio como arrancar.',
+        },
+        bounce: {
+            name: 'El rebote',
+            body: 'Un rellano elástico te lanza más alto que un salto. Es la única forma de alcanzar ciertos rellanos, y de caer sobre los pinchos.',
+        },
+        conveyor: {
+            name: 'La cinta',
+            body: 'Un rellano que te desplaza mientras estás encima. Quedarse quieto exige caminar.',
+        },
+        blink: {
+            name: 'El parpadeo',
+            body: 'Bloques que solo existen parte del tiempo. El suelo bajo tus pies desaparece a intervalos fijos.',
+        },
+        chase: {
+            name: 'La cuchilla que sigue',
+            body: 'Una cuchilla colgada del techo que se alinea con tu posición horizontal. No se la despista: se pasa por debajo en el momento justo.',
+        },
+        wind: {
+            name: 'El viento',
+            body: 'Una zona que empuja sin parar. Cambia el alcance de cada salto que la cruza, en un sentido o en el otro.',
+        },
+        crumble: {
+            name: 'Los rellanos frágiles',
+            body: 'Ceden menos de medio segundo después de pisarlos. Se cruzan, no se descansa en ellos.',
         },
     },
     puzzles: {
@@ -225,13 +269,243 @@ export const es: Dictionary = {
         charniere: { name: 'La bisagra', brief: 'Por encima de 760 píxeles, dos muros lo cierran todo. Por debajo, aparece el camino.' },
         souffle: { name: 'El último aliento', brief: 'Cinco rellanos móviles, dos orbes, ningún suelo y la salida contra el borde derecho.' },
         epilogue: { name: 'El epílogo', brief: 'Todo a la vez: los bordes, el tema, el movimiento, los orbes y el vacío.' },
+        verglas: {
+            name: 'El hielo negro',
+            brief:
+                'Cuatro rellanos de hielo sobre el vacío. Frenar exige tanto espacio como arrancar, y no lo hay.',
+        },
+        patinoire: {
+            name: 'La pista',
+            brief:
+                'Anchas placas de hielo, y pinchos esperando abajo. El impulso dura mucho después de soltar la tecla.',
+        },
+        banquise: {
+            name: 'El banco de hielo',
+            brief:
+                'Un serpentín helado de punta a punta, con una media vuelta a media altura. El problema es la media vuelta.',
+        },
+        derapage: {
+            name: 'El derrape',
+            brief:
+                'Una cinta que empuja al revés, una placa de hielo, y otra cinta que empuja al contrario. Nada se queda quieto, tú incluido.',
+        },
+        tremplin: {
+            name: 'El trampolín',
+            brief:
+                'Un rellano elástico te lanza el doble de alto que un salto. Es la única forma de alcanzar el siguiente.',
+        },
+        catapulte: {
+            name: 'La catapulta',
+            brief:
+                'El mismo rebote, pero la llegada oscila. Hay que salir en el momento justo, no cuando uno se siente listo.',
+        },
+        ressac: {
+            name: 'La resaca',
+            brief:
+                'Un rebote, y después una ráfaga en pleno vuelo. El alcance de tu salto ya no es el que conoces.',
+        },
+        soufflerie: {
+            name: 'El túnel de viento',
+            brief:
+                'Tres distancias que ningún salto cruza. Solo el viento las atraviesa, y no sopla en todas partes.',
+        },
+        bourrasque: {
+            name: 'La ráfaga',
+            brief:
+                'Dos ráfagas enmarcando una plataforma móvil. El viento te lleva, la oscilación te devuelve.',
+        },
+        alize: {
+            name: 'El alisio',
+            brief:
+                'El viento sopla en contra, sobre el hielo. Basta para devolverte al vacío que acabas de cruzar.',
+        },
+        tapis: {
+            name: 'La cinta',
+            brief:
+                'Dos cintas transportadoras en sentidos opuestos. Quedarse quieto encima exige caminar.',
+        },
+        contresens: {
+            name: 'A contracorriente',
+            brief:
+                'Dos cintas que empujan hacia atrás, sobre el vacío. Se avanza retrocediendo más despacio.',
+        },
+        laminoir: {
+            name: 'El laminador',
+            brief:
+                'Dos cintas, dos muros que se juntan al encoger la ventana, y pinchos en medio.',
+        },
+        stroboscope: {
+            name: 'El estroboscopio',
+            brief:
+                'Dos rellanos que parpadean en oposición. Nunca están los dos a la vez.',
+        },
+        intermittence: {
+            name: 'La intermitencia',
+            brief:
+                'El suelo vuelve a intervalos fijos, pero no al mismo intervalo en los dos lados.',
+        },
+        battement: {
+            name: 'El latido',
+            brief:
+                'Un rellano que parpadea, otro que oscila, otro que parpadea a contratiempo. Tres relojes, ninguno afinado.',
+        },
+        cendres: {
+            name: 'Las cenizas',
+            brief:
+                'Tres rellanos que ceden menos de medio segundo después de pisarlos. Ya no hay dónde pararse.',
+        },
+        effondrement: {
+            name: 'El derrumbe',
+            brief:
+                'Rellanos frágiles separados por una plataforma móvil. Esperar es fatal, y no esperar también.',
+        },
+        poussiere: {
+            name: 'El polvo',
+            brief:
+                'Dos orbes sobre lo que va a caerse. Hay que volver, y ya no quedará nada.',
+        },
+        damocles: {
+            name: 'Damocles',
+            brief:
+                'Una cuchilla colgada del techo se alinea contigo y cae cada dos segundos y medio.',
+        },
+        traque: {
+            name: 'La caza',
+            brief:
+                'La cuchilla te sigue y el suelo cede detrás de ti. No se puede parar ni volver.',
+        },
+        ombre: {
+            name: 'La sombra',
+            brief:
+                'El camino solo existe en el tema oscuro, y la cuchilla te sigue en él.',
+        },
+        frimas: {
+            name: 'La escarcha',
+            brief:
+                'Hielo, con un rellano móvil. Se llega deprisa, y se sale más deprisa aún.',
+        },
+        avalanche: {
+            name: 'La avalancha',
+            brief:
+                'Rellanos de hielo que ceden. Frenar tarda más de lo que ellos permiten.',
+        },
+        congere: {
+            name: 'El ventisquero',
+            brief:
+                'Un rellano de hielo solo aparece con la ventana estrecha. Sin él, el vacío mide ochenta píxeles de más.',
+        },
+        trebuchet: {
+            name: 'El trabuquete',
+            brief:
+                'Un rebote te manda directo a un techo de pinchos. Hay que apartarse en pleno vuelo.',
+        },
+        mortier: {
+            name: 'El mortero',
+            brief:
+                'Dos orbes, una de ellas arriba del todo. Solo el rebote llega, y la salida está abajo.',
+        },
+        rafale: {
+            name: 'La racha',
+            brief:
+                'El viento te lleva sobre dos distancias, pero uno de los dos rellanos de llegada parpadea.',
+        },
+        tourmente: {
+            name: 'La tormenta',
+            brief:
+                'Una ráfaga, una cuchilla que te sigue, y una distancia que ningún salto cruza.',
+        },
+        sirocco: {
+            name: 'El siroco',
+            brief:
+                'El viento lleva, los rellanos ceden. El segundo no aguanta el tiempo de coger carrerilla.',
+        },
+        engrenage: {
+            name: 'El engranaje',
+            brief:
+                'Una cinta en contra seguida de un rellano frágil. El impulso que no tienes, no lo tendrás.',
+        },
+        moulin: {
+            name: 'El molino',
+            brief:
+                'Dos cintas opuestas, y una plataforma que va y viene entre ambas.',
+        },
+        pilon: {
+            name: 'El pilón',
+            brief:
+                'Dos cintas, dos cuchillas cayendo a contratiempo. Es la cinta la que decide dónde estás cuando caen.',
+        },
+        eclair: {
+            name: 'El relámpago',
+            brief:
+                'Un parpadeo el doble de rápido de lo normal, y solo un rellano de cada dos.',
+        },
+        syncope: {
+            name: 'El síncope',
+            brief:
+                'Una cinta que te lleva hacia atrás, hacia un rellano que no siempre está.',
+        },
+        arythmie: {
+            name: 'La arritmia',
+            brief:
+                'Tres rellanos, tres períodos distintos, ninguno que coincida con los otros.',
+        },
+        dislocation: {
+            name: 'La dislocación',
+            brief:
+                'Un rellano frágil, uno que parpadea, otro frágil. Dos formas de desaparecer, alternadas.',
+        },
+        erosion: {
+            name: 'La erosión',
+            brief:
+                'Hielo, luego frágil, luego hielo. Se llega demasiado rápido a lo que no va a aguantar.',
+        },
+        guet: {
+            name: 'La guardia',
+            brief:
+                'La cuchilla te sigue sobre dos rellanos que parpadean. Esperar al suelo es esperar a la cuchilla.',
+        },
+        embuscade: {
+            name: 'La emboscada',
+            brief:
+                'Un rellano solo existe con la ventana estrecha, y la cuchilla no te suelta mientras lo buscas.',
+        },
+        curee: {
+            name: 'La montería',
+            brief:
+                'Dos orbes que recoger con una cuchilla encima de la cabeza. El rodeo se paga.',
+        },
+        verrou: {
+            name: 'El cerrojo',
+            brief:
+                'Hielo entre dos muros que se juntan. Se frena mal, y el paso se cierra.',
+        },
+        garrot: {
+            name: 'El torniquete',
+            brief:
+                'Una cinta que te empuja hacia el muro que se cierra. Encoger mata más rápido que en ningún otro sitio.',
+        },
+        'chausse-trappe': {
+            name: 'La trampa',
+            brief:
+                'El rellano del medio solo aparece con la ventana estrecha, y cede como los demás.',
+        },
+        apnee: {
+            name: 'La apnea',
+            brief:
+                'Cinco rellanos seguidos sin un sitio donde respirar: hielo, frágil, parpadeo, frágil, y dos orbes.',
+        },
+        terminus: {
+            name: 'El término',
+            brief:
+                'Un rebote, un rellano frágil en el aire, una ráfaga, una cuchilla que sigue, y el borde derecho. El último del catálogo.',
+        },
     },
     puzzlesPage: {
         title: 'Los enigmas',
-        heading: 'Cincuenta y cuatro enigmas escritos a mano',
+        heading: 'Cien enigmas escritos a mano',
         lede: 'Desde el primer escalón hasta secuencias que exigen redimensionar en pleno vuelo.',
         metaDescription:
-            'Los 54 enigmas de Reflow, ordenados por dificultad. Cada uno pone en juego una mecánica del navegador: los bordes de la ventana, las apariciones, el tema, el movimiento, el rebobinado.',
+            'Los 100 enigmas de Reflow, ordenados por dificultad. Cada uno pone en juego una mecánica del navegador: los bordes de la ventana, las apariciones, el tema, el movimiento, el rebobinado.',
         done: '{done} de {total} resueltos',
         play: 'Jugar',
         statusDone: 'Resuelto',
@@ -240,7 +514,7 @@ export const es: Dictionary = {
         mechanicsLabel: 'Mecánicas',
         endlessTitle: '¿Y después?',
         endlessBody:
-            'Cuando los cincuenta y cuatro hayan caído, las partidas infinitas toman el relevo: generadas a partir de una semilla, nunca dos veces iguales.',
+            'Cuando los cien hayan caído, las partidas infinitas toman el relevo: generadas a partir de una semilla, nunca dos veces iguales.',
         endlessCta: 'Pasar a las partidas infinitas',
     },
     puzzlePage: {
@@ -248,7 +522,7 @@ export const es: Dictionary = {
         previewHeading: 'Vista previa',
         previewAlt: 'Vista previa del nivel {name}',
         previewNote:
-            'Dibujado por el propio motor del juego, al tamaño para el que se diseñó el enigma. En línea discontinua: lo que solo existe en el otro tema, o a otro tamaño de ventana.',
+            'Dibujado por el propio motor del juego, al tamaño para el que se diseñó el enigma. En línea discontinua: los rellanos frágiles, y lo que solo existe en el otro tema o a otro tamaño de ventana.',
         briefHeading: 'Lo que hay que entender',
         mechanicsHeading: 'Mecánicas en juego',
         tierHeading: 'Dificultad',
@@ -329,7 +603,7 @@ export const es: Dictionary = {
     },
     mechanicsPage: {
         browserHeading: 'Las seis tomadas del navegador',
-        rulesHeading: 'Y dos reglas que no le deben nada',
+        rulesHeading: 'Y las reglas del propio juego',
         title: 'Mecánicas',
         heading: 'Lo que Reflow toma prestado del navegador',
         lede: 'Seis mecánicas, todas tomadas de interfaces que el navegador ya expone, y que ningún juego usa.',

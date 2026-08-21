@@ -26,7 +26,17 @@ export function LevelPreview({ level, label }: { level: Level; label: string }) 
         // Un bloc conditionnel est dessiné, mais en pointillés : il fait partie
         // du niveau sans faire partie de ce qu'on voit en arrivant.
         const conditional = !present(block, view, 'dark');
-        return { key: index, kind: block.kind, rect, conditional, moving: Boolean(block.motion) };
+        return {
+            key: index,
+            kind: block.kind,
+            rect,
+            conditional,
+            moving: Boolean(block.motion),
+            surface: block.surface,
+            crumble: Boolean(block.crumble),
+            blink: Boolean(block.blink),
+            chase: Boolean(block.chase),
+        };
     });
 
     const spawn = resolve(level.spawn, view);
@@ -69,13 +79,31 @@ export function LevelPreview({ level, label }: { level: Level; label: string }) 
                     };
 
                     if (block.kind === 'solid') {
+                        // Le liseré dit la MATIÈRE : c'est la seule chose qui
+                        // distingue un palier de glace d'un palier ordinaire,
+                        // en jeu comme sur l'aperçu.
+                        const edge =
+                            block.surface === 'ice'
+                                ? 'var(--ice)'
+                                : block.surface === 'bouncy'
+                                  ? 'var(--bounce)'
+                                  : block.surface === 'conveyor' || block.crumble
+                                    ? 'var(--belt)'
+                                    : 'var(--solid-edge)';
+                        const body = block.surface === 'ice' ? 'var(--ice-fill)' : 'var(--solid)';
                         return (
                             <g key={block.key}>
+                                {/* ⚠️ Un palier friable a besoin d'une ÉPAISSEUR de trait
+                                    pour que son pointillé se voie : réglée à zéro, la
+                                    découpe existait sans rien dessiner. */}
                                 <rect
                                     {...common}
-                                    fill={block.conditional ? 'none' : 'var(--solid)'}
-                                    stroke="var(--solid-edge)"
-                                    strokeWidth={block.conditional ? 2 : 0}
+                                    fill={block.conditional ? 'none' : body}
+                                    stroke={edge}
+                                    strokeWidth={block.conditional || block.crumble ? 2 : 0}
+                                    strokeDasharray={
+                                        block.conditional ? '9 7' : block.crumble ? '10 6' : undefined
+                                    }
                                 />
                                 {!block.conditional && (
                                     <rect
@@ -83,12 +111,13 @@ export function LevelPreview({ level, label }: { level: Level; label: string }) 
                                         y={block.rect.y}
                                         width={Math.max(2, block.rect.w)}
                                         height="3"
-                                        fill="var(--solid-edge)"
+                                        fill={edge}
                                     />
                                 )}
-                                {/* Une plateforme mobile porte une double flèche :
-                                    sans elle, l'aperçu la donne pour fixe. */}
-                                {block.moving && (
+                                {/* Ce qui bouge ou clignote porte un signe : sans
+                                    lui, l'aperçu donne pour fixe un palier qui
+                                    ne le sera jamais. */}
+                                {(block.moving || block.blink) && (
                                     <text
                                         x={block.rect.x + block.rect.w / 2}
                                         y={block.rect.y - 8}
@@ -96,7 +125,7 @@ export function LevelPreview({ level, label }: { level: Level; label: string }) 
                                         className="fill-fg-muted"
                                         fontSize="18"
                                     >
-                                        ↕
+                                        {block.blink ? '◌' : '↕'}
                                     </text>
                                 )}
                             </g>
@@ -104,7 +133,27 @@ export function LevelPreview({ level, label }: { level: Level; label: string }) 
                     }
 
                     if (block.kind === 'spike') {
-                        return <rect key={block.key} {...common} fill="var(--hazard)" />;
+                        return (
+                            <rect
+                                key={block.key}
+                                {...common}
+                                fill="var(--hazard)"
+                                opacity={block.chase ? 0.55 : common.opacity}
+                            />
+                        );
+                    }
+
+                    if (block.kind === 'wind') {
+                        return (
+                            <rect
+                                key={block.key}
+                                {...common}
+                                fill="var(--wind)"
+                                stroke="var(--wind-edge)"
+                                strokeWidth="2"
+                                strokeDasharray="8 6"
+                            />
+                        );
                     }
 
                     if (block.kind === 'goal') {

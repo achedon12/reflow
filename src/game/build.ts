@@ -1,5 +1,18 @@
 import { MAX_JUMP_RISE, maxRunForRise, PLAYER_H, PLAYER_W } from './constants';
-import type { Anchor, Block, Condition, Level, Mechanic, Motion, Rect, Theme, Tier, Viewport } from './types';
+import type {
+    Anchor,
+    Blink,
+    Block,
+    Condition,
+    Level,
+    Mechanic,
+    Motion,
+    Rect,
+    Surface,
+    Theme,
+    Tier,
+    Viewport,
+} from './types';
 
 /**
  * LE CONSTRUCTEUR D'ÉNIGMES.
@@ -45,6 +58,23 @@ export type StepSpec = {
     when?: Condition;
     /** Pose une orbe au-dessus du centre du palier. */
     orb?: boolean;
+    /** La matière du palier : glace, ressort ou tapis roulant. */
+    surface?: Surface;
+    /** Vitesse du tapis, signée. Sans effet sur les autres matières. */
+    speed?: number;
+    /** Le palier clignote. */
+    blink?: Blink;
+    /** Le palier cède peu après qu'on s'y pose. */
+    crumble?: boolean;
+    /**
+     * Dispense ce palier du contrôle de portée.
+     *
+     * ⚠️ À n'employer que lorsqu'on N'Y ARRIVE PAS par un saut ordinaire : un
+     * rebond, un tapis ou une rafale de vent portent bien au-delà de ce que le
+     * constructeur sait calculer. Le palier n'est alors plus garanti par lui —
+     * c'est `npm run levels`, qui rejoue la partie, qui en répond.
+     */
+    assisted?: boolean;
 };
 
 export type LevelSpec = {
@@ -132,20 +162,23 @@ export function buildLevel(spec: LevelSpec): Level {
         const effectiveRise = rise + swing.y;
         const effectiveGap = gap + swing.x;
 
-        if (effectiveRise > MAX_JUMP_RISE) {
+        // Un palier « assisté » n'est pas atteint par un saut : le rebond, le
+        // tapis ou le vent qui l'amènent sortent du modèle du constructeur.
+        // C'est le vérificateur qui en répond, en rejouant la partie.
+        if (!step.assisted && effectiveRise > MAX_JUMP_RISE) {
             throw new Error(
                 `${spec.id}, palier ${index + 1} : monte de ${effectiveRise} px, le saut plafonne à ${MAX_JUMP_RISE}`,
             );
         }
         const reach = maxRunForRise(Math.max(0, effectiveRise));
-        if (effectiveGap > reach) {
+        if (!step.assisted && effectiveGap > reach) {
             throw new Error(
                 `${spec.id}, palier ${index + 1} : écart de ${Math.round(effectiveGap)} px pour une montée de ${Math.round(effectiveRise)} px, la portée n'est que de ${Math.round(reach)}`,
             );
         }
         // Sans élan, on n'atteint jamais la vitesse de pointe : un saut long
         // demande de la piste sur le palier de départ.
-        if (effectiveGap > 74 && previous.w < 80) {
+        if (!step.assisted && effectiveGap > 74 && previous.w < 80) {
             throw new Error(
                 `${spec.id}, palier ${index + 1} : ${Math.round(effectiveGap)} px à franchir depuis un palier de ${Math.round(previous.w)} px, sans élan possible`,
             );
@@ -173,6 +206,10 @@ export function buildLevel(spec: LevelSpec): Level {
         if (step.motion) block.motion = step.motion;
         if (step.theme) block.theme = step.theme;
         if (step.when) block.when = step.when;
+        if (step.surface) block.surface = step.surface;
+        if (step.speed !== undefined) block.speed = step.speed;
+        if (step.blink) block.blink = step.blink;
+        if (step.crumble) block.crumble = step.crumble;
         blocks.push(block);
 
         if (step.orb) {

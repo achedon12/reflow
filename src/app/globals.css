@@ -43,6 +43,12 @@
     --orb: #b45309;
     --player: #5b21ff;
     --player-edge: #14161d;
+    --ice: #7dd3fc;
+    --ice-fill: #dbeafe;
+    --bounce: #0891b2;
+    --belt: #b45309;
+    --wind: rgb(91 33 255 / 0.09);
+    --wind-edge: rgb(91 33 255 / 0.35);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -69,6 +75,12 @@
         --orb: #fbbf24;
         --player: #ffffff;
         --player-edge: #9d7bff;
+        --ice: #67e8f9;
+        --ice-fill: #12303c;
+        --bounce: #22d3ee;
+        --belt: #fbbf24;
+        --wind: rgb(157 123 255 / 0.1);
+        --wind-edge: rgb(157 123 255 / 0.4);
     }
 }
 
@@ -98,6 +110,12 @@
     --orb: #fbbf24;
     --player: #ffffff;
     --player-edge: #9d7bff;
+    --ice: #67e8f9;
+    --ice-fill: #12303c;
+    --bounce: #22d3ee;
+    --belt: #fbbf24;
+    --wind: rgb(157 123 255 / 0.1);
+    --wind-edge: rgb(157 123 255 / 0.4);
 }
 
 @media (prefers-contrast: more) {

@@ -9,12 +9,23 @@ import type { Mechanic } from '@/game/types';
  *
  * Six sont réellement PRISES AU NAVIGATEUR — la taille de la fenêtre, ses
  * bords, les seuils d'apparition, le thème, l'historique, l'écrasement entre
- * deux bords. Les deux autres, le mouvement et les orbes, se trouveraient dans
- * n'importe quel jeu de plateforme : les compter avec les premières affaiblit
- * la seule promesse qui distingue ce jeu.
+ * deux bords. Les autres — mouvement, orbes, glace, rebond, tapis,
+ * clignotement, lame qui suit, vent, paliers friables — se trouveraient dans
+ * n'importe quel jeu de plateforme : les compter avec les premières
+ * affaiblirait la seule promesse qui distingue celui-ci.
  */
 const FROM_BROWSER: Mechanic[] = ['resize', 'edge', 'appear', 'theme', 'rewind', 'crush'];
-const FROM_THE_GAME: Mechanic[] = ['motion', 'orbs'];
+const FROM_THE_GAME: Mechanic[] = [
+    'motion',
+    'orbs',
+    'ice',
+    'bounce',
+    'conveyor',
+    'blink',
+    'chase',
+    'wind',
+    'crumble',
+];
 
 export function MechanicsView({ locale }: { locale: Locale }) {
     const d = getDictionary(locale);

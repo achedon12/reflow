@@ -30,6 +30,13 @@ import type { Level, Mechanic, Theme, Viewport } from './types';
 const DECISIVE: readonly Mechanic[] = [
     'theme',
     'appear',
+    'crumble',
+    'blink',
+    'chase',
+    'bounce',
+    'wind',
+    'ice',
+    'conveyor',
     'orbs',
     'rewind',
     'crush',

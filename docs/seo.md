@@ -10,17 +10,17 @@ Cliquer « Jouer » n'ouvre aucune URL. L'aire de jeu se superpose à la page
 courante, et la refermer rend la page telle qu'elle était.
 
 C'est la décision qui commande tout le reste. Un jeu qui occupe sa propre route
-ne laisse à un moteur qu'un `<div>` vide et un script ; ici, les **240 pages**
+ne laisse à un moteur qu'un `<div>` vide et un script ; ici, les **432 pages**
 du site restent du texte lisible, et chacune peut lancer une partie.
 
 ## Ce qui est produit
 
 | | |
 |---|---|
-| Pages | 240 — 6 pages × 4 langues, plus 54 énigmes × 4 langues |
+| Pages | 432 — 8 pages × 4 langues, plus 100 énigmes × 4 langues |
 | Canoniques | une par page et par langue, barre finale comprise |
-| `hreflang` | réciproques entre les 4 langues, plus `x-default`, sur les 240 |
-| Plan du site | 240 URL, avec `lastmod`, `changefreq` et `priority` |
+| `hreflang` | réciproques entre les 4 langues, plus `x-default`, sur les 432 |
+| Plan du site | 432 URL, avec `lastmod`, `changefreq` et `priority` |
 | Images de partage | 1200×630, **une par langue**, montrant un vrai niveau |
 
 ## Données structurées
@@ -31,7 +31,7 @@ moteur voit un site, un jeu et un auteur sans rapport entre eux.
 | Page | Entités |
 |---|---|
 | Accueil | `WebSite` + `VideoGame` + `Person`, liés par `@id`, prix zéro déclaré |
-| Catalogue | `CollectionPage` + `ItemList` de 54 entrées + `BreadcrumbList` |
+| Catalogue | `CollectionPage` + `ItemList` de 100 entrées + `BreadcrumbList` |
 | Énigme | `Game` rattaché au `VideoGame` par `isPartOf`, + `BreadcrumbList` |
 | Règles | `FAQPage` — six questions qu'un joueur pose réellement |
 | Mécaniques | `FAQPage` — huit mécaniques, huit réponses |
@@ -49,7 +49,7 @@ Ce sont elles qui font la surface du site. Chacune porte :
   référence de l'énigme — donc unique, et toujours à jour ;
 - sa difficulté, sa taille de conception, et les mécaniques qu'elle met en jeu,
   chacune décrite ;
-- un lien vers la précédente et la suivante, qui relie les 54 en chaîne.
+- un lien vers la précédente et la suivante, qui relie les 100 en chaîne.
 
 ⚠️ Le segment d'URL d'une énigme n'est **pas traduit**, contrairement au
 catalogue qui le porte : `/enigmes/lucarne/` et `/en/puzzles/lucarne/`. Un
@@ -60,7 +60,7 @@ pour un gain de mot-clé nul sur un nom inventé.
 
 - **`xhtml:link` dans le plan du site.** Chrome désactive son visualiseur XML
   dès qu'un document déclare l'espace de noms XHTML : le fichier se télécharge
-  au lieu de s'afficher. Les `hreflang` sont déjà dans le `<head>` des 240
+  au lieu de s'afficher. Les `hreflang` sont déjà dans le `<head>` des 432
   pages — les répéter là ne servait à rien et coûtait la lisibilité.
 - **`/404/` et `/_not-found/`.** `next build` les écrit en plus de `404.html`.
   Ils répondent 200 et Google les signale comme « soft 404 ».
@@ -70,7 +70,7 @@ pour un gain de mot-clé nul sur un nom inventé.
   nginx, la même page existerait à deux adresses.
 - **Les URL sans barre finale.** `trailingSlash: true` ne génère que
   `/enigmes/`, mais `try_files $uri/` sert la même page sur `/enigmes` sans
-  rien signaler. Les 240 redirections sont **dérivées** de la table des routes
+  rien signaler. Les 432 redirections sont **dérivées** de la table des routes
   par `npm run nginx` : écrites à la main, un oubli y serait invisible.
 - **Le jeton Search Console vide.** Une balise de vérification au contenu vide
   fait échouer la vérification au lieu de ne rien faire. Elle n'est donc émise
@@ -84,7 +84,7 @@ L'intégration continue le fait à chaque poussée
 ```bash
 npm run build
 grep -o '<link rel="alternate"[^>]*>' out/index.html      # 5 lignes
-grep -c '<url>' out/sitemap.xml                            # 240
+grep -c '<url>' out/sitemap.xml                            # 432
 grep -o 'application/ld+json' out/enigmes/lucarne/index.html
 test ! -d out/404 && test -f out/404.html && echo "élagage ok"
 ```
@@ -97,4 +97,4 @@ test ! -d out/404 && test -f out/404.html && echo "élagage ok"
   d'une région à l'autre, et les déclarer diluerait le signal.
 - Aucune page par mécanique. Elles vivent en `FAQPage` sur une seule page —
   huit pages de trois paragraphes seraient du contenu mince, exactement ce que
-  les 54 pages d'énigme évitent en portant chacune un aperçu unique.
+  les 100 pages d'énigme évitent en portant chacune un aperçu unique.

@@ -1,6 +1,6 @@
 import { LEVELS, PUZZLE_IDS } from '../src/data/levels.ts';
 import { generateLevel } from '../src/game/generator.ts';
-import { PLAYER_H, PLAYER_W } from '../src/game/constants.ts';
+import { MAX_CRUMBLE, PLAYER_H, PLAYER_W } from '../src/game/constants.ts';
 import { overlaps, present, resolve } from '../src/game/geometry.ts';
 import { REDUCED_MOTION_FACTOR, slowMotion } from '../src/game/reduced-motion.ts';
 import { CANDIDATE_VIEWS, solve } from '../src/game/solver.ts';
@@ -42,6 +42,9 @@ for (const level of LEVELS) {
     }
     if (level.blocks.filter((block) => block.kind === 'orb').length > 8) {
         fail(`${level.id} : plus de 8 orbes, le champ de bits déborde`);
+    }
+    if (level.blocks.filter((block) => block.crumble).length > MAX_CRUMBLE) {
+        fail(`${level.id} : plus de ${MAX_CRUMBLE} paliers friables, le champ de bits déborde`);
     }
     if (!(level.id in fr.puzzles)) {
         fail(`${level.id} : absent de \`puzzles\` dans le dictionnaire français`);

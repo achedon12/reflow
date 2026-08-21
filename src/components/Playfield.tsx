@@ -16,8 +16,8 @@ import {
 } from '@/game/constants';
 import { orbCount, spawnState, step } from '@/game/engine';
 import { decisiveMechanic, hintCount, unlockedHints } from '@/game/hints';
-import { motionOffset, present, resolve } from '@/game/geometry';
-import type { Input, Level, PlayerState, Viewport } from '@/game/types';
+import { solveBlocks } from '@/game/geometry';
+import type { Block, Input, Level, PlayerState, Viewport } from '@/game/types';
 import type { Dictionary } from '@/i18n';
 import { format } from '@/i18n/format';
 import { loadProgress, recordHints } from '@/lib/progress';
@@ -348,20 +348,33 @@ export function Playfield({
             const currentView = viewRef.current;
             const currentTheme = themeRef.current;
 
+            // ⚠️ On repasse par `solveBlocks` au lieu de résoudre chaque bloc à
+            // la main : lui seul connaît le clignotement, les paliers déjà
+            // tombés et la lame qui se cale sur le joueur. Résolus un par un,
+            // un bloc éteint restait dessiné et un palier tombé aussi.
+            const solved = solveBlocks(
+                level.blocks,
+                currentView,
+                currentTheme,
+                player.time,
+                player.time,
+                player,
+            );
+            const byIndex = new Map(solved.map((entry) => [entry.index, entry]));
+
             for (let index = 0; index < level.blocks.length; index += 1) {
                 const element = blockRefs.current[index];
                 if (!element) continue;
-                const block = level.blocks[index]!;
-                if (!present(block, currentView, currentTheme)) {
+                const placed = byIndex.get(index);
+                if (!placed) {
                     element.style.display = 'none';
                     continue;
                 }
-                const rect = resolve(block.rect, currentView);
-                const offset = motionOffset(block, player.time);
+                const block = level.blocks[index]!;
                 element.style.display = '';
-                element.style.width = `${rect.w}px`;
-                element.style.height = `${rect.h}px`;
-                element.style.transform = `translate3d(${rect.x + offset.x}px, ${rect.y + offset.y}px, 0)`;
+                element.style.width = `${placed.rect.w}px`;
+                element.style.height = `${placed.rect.h}px`;
+                element.style.transform = `translate3d(${placed.rect.x}px, ${placed.rect.y}px, 0)`;
 
                 if (block.kind === 'orb') {
                     const bit = orbBits.get(index);
@@ -649,15 +662,7 @@ export function Playfield({
                                     blockRefs.current[index] = element;
                                 }}
                                 aria-hidden="true"
-                                className={`absolute top-0 left-0 will-change-transform ${
-                                    block.kind === 'solid'
-                                        ? 'border-t-2 border-t-[var(--solid-edge)] bg-[var(--solid)]'
-                                        : block.kind === 'spike'
-                                          ? 'bg-[var(--hazard)]'
-                                          : block.kind === 'goal'
-                                            ? 'border-2 border-[var(--goal)] bg-[var(--goal-glow)]'
-                                            : 'orb border-2 border-[var(--orb)]'
-                                }`}
+                                className={`absolute top-0 left-0 will-change-transform ${blockClass(block)}`}
                             />
                         ))}
 
@@ -867,6 +872,29 @@ export function Playfield({
             </div>
         </div>
     );
+}
+
+/**
+ * L'habillage d'un bloc.
+ *
+ * Chaque matière doit se reconnaître AVANT d'être éprouvée : un joueur qui
+ * découvre qu'un palier est en glace en glissant dans le vide n'apprend rien,
+ * il subit. D'où un liseré propre à chacune, et le pointillé pour ce qui ne
+ * durera pas.
+ *
+ * ⚠️ La classe `orb` porte l'éclat de ramassage, dans `globals.css`. La retirer
+ * d'ici décrocherait l'animation sans casser une seule ligne de code.
+ */
+function blockClass(block: Block): string {
+    if (block.kind === 'spike') return 'bg-[var(--hazard)]';
+    if (block.kind === 'goal') return 'border-2 border-[var(--goal)] bg-[var(--goal-glow)]';
+    if (block.kind === 'orb') return 'orb border-2 border-[var(--orb)]';
+    if (block.kind === 'wind') return 'border border-dashed border-[var(--wind-edge)] bg-[var(--wind)]';
+    if (block.crumble) return 'border-t-2 border-dashed border-[var(--belt)] bg-[var(--solid)]';
+    if (block.surface === 'ice') return 'border-t-2 border-t-[var(--ice)] bg-[var(--ice-fill)]';
+    if (block.surface === 'bouncy') return 'border-t-4 border-t-[var(--bounce)] bg-[var(--solid)]';
+    if (block.surface === 'conveyor') return 'border-t-2 border-t-[var(--belt)] bg-[var(--solid)]';
+    return 'border-t-2 border-t-[var(--solid-edge)] bg-[var(--solid)]';
 }
 
 function TouchKey({
