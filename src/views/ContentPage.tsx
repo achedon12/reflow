@@ -13,6 +13,7 @@ import { EndlessView } from './EndlessView';
 import { MechanicsView } from './MechanicsView';
 import { PuzzlesView } from './PuzzlesView';
 import { RulesView } from './RulesView';
+import { TextPageView } from './TextPageView';
 
 /**
  * Le corps des pages annexes, partagé par les DEUX racines : le groupe
@@ -39,6 +40,9 @@ export function ContentPage({ locale, contentKey }: { locale: Locale; contentKey
             {contentKey === 'puzzles' && <PuzzlesView locale={locale} />}
             {contentKey === 'endless' && <EndlessView dictionary={getDictionary(locale)} />}
             {contentKey === 'about' && <AboutView locale={locale} />}
+            {(contentKey === 'legal' || contentKey === 'privacy') && (
+                <TextPageView locale={locale} page={contentKey} />
+            )}
 
             {scripts.map((json, index) => (
                 <script key={index} type="application/ld+json" dangerouslySetInnerHTML={{ __html: json }} />

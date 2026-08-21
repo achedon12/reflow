@@ -3,10 +3,26 @@
 import { PUZZLE_IDS } from '../data/levels';
 import { DEFAULT_LOCALE, type Locale } from './config';
 
-export type RouteKey = 'home' | 'rules' | 'mechanics' | 'puzzles' | 'endless' | 'about';
+export type RouteKey =
+    | 'home'
+    | 'rules'
+    | 'mechanics'
+    | 'puzzles'
+    | 'endless'
+    | 'about'
+    | 'legal'
+    | 'privacy';
 
 /** Les pages annexes, servies par `[slug]` dans les langues préfixées. */
-export const CONTENT_KEYS = ['rules', 'mechanics', 'puzzles', 'endless', 'about'] as const;
+export const CONTENT_KEYS = [
+    'rules',
+    'mechanics',
+    'puzzles',
+    'endless',
+    'about',
+    'legal',
+    'privacy',
+] as const;
 
 export type ContentKey = (typeof CONTENT_KEYS)[number];
 
@@ -31,6 +47,13 @@ const SLUGS: Record<RouteKey, Record<Locale, string>> = {
     // choix que sur Azimut — une exception pour cette page-là, pas un
     // renoncement aux slugs traduits.
     about: { fr: 'about', en: 'about', es: 'about', de: 'about' },
+    legal: {
+        fr: 'mentions-legales',
+        en: 'legal-notice',
+        es: 'aviso-legal',
+        de: 'impressum',
+    },
+    privacy: { fr: 'confidentialite', en: 'privacy', es: 'privacidad', de: 'datenschutz' },
 };
 
 export function path(key: RouteKey, locale: Locale): string {

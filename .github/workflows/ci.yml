@@ -49,7 +49,7 @@ jobs:
           done
           grep -q 'reflow.leoderoin.fr' out/sitemap.xml
           urls=$(grep -c '<url>' out/sitemap.xml)
-          [ "$urls" -eq 240 ] || { echo "le plan du site déclare $urls URL au lieu de 240"; exit 1; }
+          [ "$urls" -eq 248 ] || { echo "le plan du site déclare $urls URL au lieu de 248"; exit 1; }
           echo "Référencement conforme."
 
       # `prune-export` retire /404/ et /_not-found/, qui répondraient 200 et

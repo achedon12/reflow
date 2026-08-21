@@ -11,4 +11,3 @@ export function getDictionary(locale: Locale): Dictionary {
 }
 
 export type { Dictionary };
-export type PuzzleKey = keyof typeof fr.puzzles;

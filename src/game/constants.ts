@@ -62,10 +62,16 @@ export const REWIND_EVERY = 2;
 /** Vitesse du rembobinage continu, en multiples du temps réel. */
 export const REWIND_SPEED = 2.5;
 
-/** Marges de sécurité du générateur, dérivées des constantes ci-dessus.
- *  Portée maximale d'un saut : ~152 px ; hauteur : ~102 px. On garde une marge
- *  d'un tiers, parce qu'un saut à la limite théorique n'est pas jouable. */
-export const MAX_JUMP_RUN = 118;
+/**
+ * Hauteur de saut retenue pour construire un niveau.
+ *
+ * La trajectoire monte à ~102 px ; on s'arrête à 74. Un saut à la limite
+ * théorique atteint son sommet à vitesse nulle : il existe sur le papier et ne
+ * se joue pas.
+ *
+ * La PORTÉE correspondante n'est pas une constante — elle dépend de la hauteur
+ * à franchir, voir `maxRunForRise`.
+ */
 export const MAX_JUMP_RISE = 74;
 
 /**

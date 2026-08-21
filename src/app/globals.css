@@ -238,24 +238,22 @@
         background-position: bottom left;
     }
 
-    /* La cote : un nombre entre deux tirets, comme sur un plan. */
-    .dim::before,
-    .dim::after {
-        content: '';
-        display: inline-block;
-        width: 0.75rem;
-        height: 1px;
-        vertical-align: middle;
-        background: currentColor;
-        opacity: 0.5;
+    /* Les commandes tactiles, montrées au POINTEUR et non à la largeur.
+       ⚠️ Elles étaient conditionnées à `sm:hidden`, donc visibles en dessous de
+       640 px — et rétrécir la fenêtre EST la mécanique du jeu. « La verticale »
+       est conçue pour 620×640 : à sa cote de référence, deux pavés de 56 px
+       surgissaient dans les coins bas et recouvraient le niveau.
+
+       `pointer: coarse` décrit le dispositif de pointage principal, pas la
+       taille de l'écran : c'était le bon signal depuis le début. */
+    .touch-only {
+        display: none;
     }
 
-    .dim::before {
-        margin-right: 0.4rem;
-    }
-
-    .dim::after {
-        margin-left: 0.4rem;
+    @media (pointer: coarse) {
+        .touch-only {
+            display: flex;
+        }
     }
 
     [id] {

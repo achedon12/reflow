@@ -75,6 +75,10 @@ function copyFor(d: Dictionary, key: RouteKey): { titleTag: string; description:
             return { titleTag: `${d.endless.title} — ${d.meta.title}`, description: d.endless.metaDescription };
         case 'about':
             return { titleTag: `${d.about.title} — ${d.meta.title}`, description: d.about.metaDescription };
+        case 'legal':
+            return { titleTag: `${d.legal.title} — ${d.meta.title}`, description: d.legal.metaDescription };
+        case 'privacy':
+            return { titleTag: `${d.privacy.title} — ${d.meta.title}`, description: d.privacy.metaDescription };
     }
 }
 
@@ -222,6 +226,8 @@ export function buildBreadcrumbJsonLd(locale: Locale, key: ContentKey): string {
         puzzles: d.puzzlesPage.title,
         endless: d.endless.title,
         about: d.about.title,
+        legal: d.legal.title,
+        privacy: d.privacy.title,
     }[key];
 
     return JSON.stringify({

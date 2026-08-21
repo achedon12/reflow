@@ -151,7 +151,7 @@ export const en: Dictionary = {
         },
         motion: {
             name: 'Motion',
-            body: 'Platforms that come and go, blades that drop from the ceiling. Waiting for the right moment is an action in its own right.',
+            body: 'Platforms that come and go, blades that drop from the ceiling. Waiting for the right moment is an action in its own right. If your system asks for reduced motion, these movements run at half speed.',
         },
         theme: {
             name: 'Theme',
@@ -328,6 +328,8 @@ export const en: Dictionary = {
         back: 'Play',
     },
     mechanicsPage: {
+        browserHeading: 'The six borrowed from the browser',
+        rulesHeading: 'And two rules that owe it nothing',
         title: 'Mechanics',
         heading: 'What Reflow borrows from the browser',
         lede: 'Six mechanics, all taken from interfaces the browser already exposes — and that no game uses.',
@@ -361,8 +363,77 @@ export const en: Dictionary = {
                 body: '{author}, developer. Reflow joins Azimut, Push Your Luck and Loups-Garous, gathered on a common board.',
             },
         ],
+        clearTitle: 'Erase your progress',
+        clearBody:
+            'Your finished puzzles, your best times, the hints you unlocked and your best streak live in this browser and nowhere else. This button deletes them, and there is no undo.',
+        clearButton: 'Erase everything',
+        cleared: 'Erased',
         contactTitle: 'Write',
         contactBody: 'An impossible puzzle, a clumsy translation, an idea:',
+        back: 'Play',
+    },
+    legal: {
+        title: 'Legal notice',
+        heading: 'Legal notice',
+        lede: 'The information the law requires from a publicly accessible site.',
+        metaDescription:
+            'Publisher, host and terms of use for reflow.leoderoin.fr, the platformer whose level is the browser window.',
+        sections: [
+            {
+                title: 'Publisher',
+                body: 'The site reflow.leoderoin.fr is published by {author}, personally and non-commercially. The publication director is the publisher himself.',
+            },
+            {
+                title: 'Host',
+                body: 'The site is hosted by {host}, {address}. Telephone: {phone}. Company number {registration}.',
+            },
+            {
+                title: 'Content',
+                body: 'The texts, the levels, the engine and the illustrations on this site are the work of its publisher. The source code is released under the MIT licence. The Space Grotesk and JetBrains Mono typefaces are distributed under the SIL Open Font licence.',
+            },
+            {
+                title: 'Outbound links',
+                body: 'This site links only to jeux.leoderoin.fr, its author’s personal site and the public code repository. It carries no advertising and no commercial or affiliate link.',
+            },
+        ],
+        contactTitle: 'Contact',
+        contactBody: 'For any question about this notice:',
+        back: 'Play',
+    },
+    privacy: {
+        title: 'Privacy',
+        heading: 'Privacy',
+        lede: 'What is measured, what is not, and where it stays.',
+        metaDescription:
+            'What Reflow measures, what it does not, and what stays in your browser. No account, no third-party tracker, no measurement cookie.',
+        sections: [
+            {
+                title: 'Your progress',
+                body: 'The puzzles you have finished, your best times, the hints you have unlocked and your best endless streak are kept in your browser’s local storage. They are NEVER sent to a server: there is none. You can erase all of it with one button, from the “about” page.',
+            },
+            {
+                title: 'The game itself',
+                body: 'The physics engine and the level generation run entirely in your browser. A generated run is born from a seed computed on your machine, and nothing you play is transmitted anywhere.',
+            },
+            {
+                title: 'Audience measurement',
+                body: 'The site uses Matomo, installed on the same server. It records the pages visited, the browser language, the device type and the referring page. No data goes to a third-party service, and there is no ad network and no embedded social widget.',
+            },
+            {
+                title: 'Cookies',
+                body: 'None. Matomo is configured without cookies, which spares this site a consent banner. Your theme choice is kept in local storage and never sent to the server.',
+            },
+            {
+                title: 'Server logs',
+                body: 'Like any web server, this one keeps technical access logs: IP address, date, page requested. They serve diagnosis and security, and are used for nothing else.',
+            },
+            {
+                title: 'Your rights',
+                body: 'You may request access to the data concerning you, its correction or its erasure. The request is made by email and needs no justification.',
+            },
+        ],
+        contactTitle: 'Write',
+        contactBody: 'To exercise your rights or ask a question:',
         back: 'Play',
     },
     footer: {

@@ -151,7 +151,7 @@ export const de: Dictionary = {
         },
         motion: {
             name: 'Bewegung',
-            body: 'Plattformen, die hin und her fahren, Klingen, die von der Decke fallen. Auf den richtigen Moment zu warten ist eine eigenständige Handlung.',
+            body: 'Plattformen, die hin und her fahren, Klingen, die von der Decke fallen. Auf den richtigen Moment zu warten ist eine eigenständige Handlung. Wenn dein System reduzierte Bewegung verlangt, laufen diese Bewegungen halb so schnell.',
         },
         theme: {
             name: 'Das Thema',
@@ -328,6 +328,8 @@ export const de: Dictionary = {
         back: 'Spielen',
     },
     mechanicsPage: {
+        browserHeading: 'Die sechs dem Browser abgeschauten',
+        rulesHeading: 'Und zwei Regeln, die ihm nichts schulden',
         title: 'Mechaniken',
         heading: 'Was Reflow dem Browser abschaut',
         lede: 'Sechs Mechaniken, alle aus Schnittstellen, die der Browser längst bereitstellt — und die kein Spiel benutzt.',
@@ -361,8 +363,77 @@ export const de: Dictionary = {
                 body: '{author}, Entwickler. Reflow gesellt sich zu Azimut, Push Your Luck und Loups-Garous, versammelt auf einer gemeinsamen Übersicht.',
             },
         ],
+        clearTitle: 'Deinen Fortschritt löschen',
+        clearBody:
+            'Deine gelösten Rätsel, deine Bestzeiten, die freigeschalteten Hinweise und deine beste Serie liegen in diesem Browser und sonst nirgends. Diese Schaltfläche löscht sie, ohne Weg zurück.',
+        clearButton: 'Alles löschen',
+        cleared: 'Gelöscht',
         contactTitle: 'Schreiben',
         contactBody: 'Ein unmögliches Rätsel, eine holprige Übersetzung, eine Idee:',
+        back: 'Spielen',
+    },
+    legal: {
+        title: 'Impressum',
+        heading: 'Impressum',
+        lede: 'Die Angaben, die das Gesetz von einer öffentlich zugänglichen Seite verlangt.',
+        metaDescription:
+            'Herausgeber, Hoster und Nutzungsbedingungen von reflow.leoderoin.fr, dem Jump-and-Run, dessen Level das Browserfenster ist.',
+        sections: [
+            {
+                title: 'Herausgeber',
+                body: 'Die Seite reflow.leoderoin.fr wird von {author} herausgegeben, privat und nicht gewerblich. Verantwortlich für den Inhalt ist der Herausgeber selbst.',
+            },
+            {
+                title: 'Hoster',
+                body: 'Die Seite wird gehostet von {host}, {address}. Telefon: {phone}. Registernummer {registration}.',
+            },
+            {
+                title: 'Inhalt',
+                body: 'Die Texte, die Level, die Engine und die Illustrationen dieser Seite stammen von ihrem Herausgeber. Der Quellcode steht unter der MIT-Lizenz. Die Schriften Space Grotesk und JetBrains Mono werden unter der SIL-Open-Font-Lizenz vertrieben.',
+            },
+            {
+                title: 'Ausgehende Links',
+                body: 'Diese Seite verlinkt nur auf jeux.leoderoin.fr, die private Seite ihres Autors und das öffentliche Code-Repository. Sie zeigt keine Werbung und enthält keinen kommerziellen oder Affiliate-Link.',
+            },
+        ],
+        contactTitle: 'Kontakt',
+        contactBody: 'Bei Fragen zu diesem Impressum:',
+        back: 'Spielen',
+    },
+    privacy: {
+        title: 'Datenschutz',
+        heading: 'Datenschutz',
+        lede: 'Was gemessen wird, was nicht, und wo es bleibt.',
+        metaDescription:
+            'Was Reflow misst, was nicht, und was in deinem Browser bleibt. Kein Konto, kein Tracker Dritter, kein Mess-Cookie.',
+        sections: [
+            {
+                title: 'Dein Fortschritt',
+                body: 'Die gelösten Rätsel, deine Bestzeiten, die freigeschalteten Hinweise und deine beste Endlos-Serie liegen im lokalen Speicher deines Browsers. Sie werden NIE an einen Server gesendet: es gibt keinen. Du kannst alles mit einer Schaltfläche löschen, auf der Seite „Über“.',
+            },
+            {
+                title: 'Das Spiel selbst',
+                body: 'Die Physik-Engine und die Levelerzeugung laufen vollständig in deinem Browser. Eine erzeugte Partie entsteht aus einem Startwert, der auf deinem Rechner berechnet wird, und nichts von dem, was du spielst, wird irgendwohin übertragen.',
+            },
+            {
+                title: 'Reichweitenmessung',
+                body: 'Die Seite nutzt Matomo, installiert auf demselben Server. Erfasst werden die aufgerufenen Seiten, die Browsersprache, der Gerätetyp und die verweisende Seite. Keine Daten gehen an einen Dritten, und es gibt weder Werbenetzwerk noch eingebettetes soziales Netzwerk.',
+            },
+            {
+                title: 'Cookies',
+                body: 'Keine. Matomo ist ohne Cookies eingerichtet, was dieser Seite ein Einwilligungsbanner erspart. Deine Themenwahl bleibt im lokalen Speicher und wird nie an den Server gesendet.',
+            },
+            {
+                title: 'Server-Protokolle',
+                body: 'Wie jeder Webserver führt auch dieser technische Zugriffsprotokolle: IP-Adresse, Datum, angeforderte Seite. Sie dienen der Fehlersuche und der Sicherheit und werden zu nichts anderem genutzt.',
+            },
+            {
+                title: 'Deine Rechte',
+                body: 'Du kannst Auskunft über die dich betreffenden Daten, ihre Berichtigung oder ihre Löschung verlangen. Die Anfrage erfolgt per E-Mail und muss nicht begründet werden.',
+            },
+        ],
+        contactTitle: 'Schreiben',
+        contactBody: 'Um deine Rechte auszuüben oder eine Frage zu stellen:',
         back: 'Spielen',
     },
     footer: {

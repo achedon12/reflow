@@ -134,6 +134,27 @@ export function Playfield({
     const [read, setRead] = useState(unlocked);
     const [hintOpen, setHintOpen] = useState(false);
 
+    // L'avertissement « il faut un clavier ».
+    //
+    // ⚠️ Testé sur le POINTEUR et non sur la largeur : une fenêtre étroite sur
+    // un ordinateur reste jouable, c'est même ce que plusieurs énigmes
+    // demandent. Ce qui manque sur un téléphone, ce sont les touches ET la
+    // poignée de redimensionnement — pas des pixels.
+    //
+    // `any-pointer: fine` rattrape la tablette munie d'un clavier et d'un
+    // trackpad, où le jeu se tient parfaitement.
+    //
+    // Lu à l'initialisation et non dans un effet : cette aire de jeu n'existe
+    // qu'après un clic, elle n'est jamais rendue côté serveur — il n'y a donc
+    // aucune hydratation à désynchroniser, et un état posé depuis un effet
+    // provoque un rendu en cascade.
+    const [dismissedTouch, setDismissedTouch] = useState(false);
+    const [needsKeyboard] = useState(
+        () =>
+            window.matchMedia('(pointer: coarse)').matches &&
+            !window.matchMedia('(any-pointer: fine)').matches,
+    );
+
     const playerRef = useRef<HTMLDivElement | null>(null);
     const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
     const timeRef = useRef<HTMLSpanElement | null>(null);
@@ -676,6 +697,31 @@ export function Playfield({
                     {unlocked > read ? dictionary.hints.available : ''}
                 </p>
 
+                {needsKeyboard && !dismissedTouch && (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-bg/90 px-6">
+                        <div className="w-full max-w-sm border border-border-strong bg-bg-elevated p-5">
+                            <h2 className="text-lg font-semibold">{dictionary.game.touchTitle}</h2>
+                            <p className="mt-2 text-sm text-fg-muted text-pretty">{dictionary.game.touchBody}</p>
+                            <div className="mt-4 flex flex-wrap gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setDismissedTouch(true)}
+                                    className="border border-accent bg-accent px-3 py-1.5 text-sm text-accent-contrast transition-opacity hover:opacity-90"
+                                >
+                                    {dictionary.game.touchAnyway}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={onClose}
+                                    className="border border-border-strong px-3 py-1.5 text-sm text-fg transition-colors hover:bg-bg-sunken"
+                                >
+                                    {dictionary.game.close}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {hintOpen && (
                     <div className="absolute inset-0 flex items-center justify-center bg-bg/85 px-6">
                         <div className="w-full max-w-md border border-border-strong bg-bg-elevated p-5">
@@ -780,7 +826,7 @@ export function Playfield({
                 {/* Commandes tactiles. Le jeu réclame un clavier ET une fenêtre
                     redimensionnable, ce qu'un téléphone n'a pas — mais refuser
                     net priverait un visiteur curieux de tout aperçu. */}
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-between p-3 sm:hidden">
+                <div className="touch-only pointer-events-none absolute inset-x-0 bottom-0 justify-between p-3">
                     <div className="pointer-events-auto flex gap-2">
                         <TouchKey
                             label={dictionary.game.controlMove}

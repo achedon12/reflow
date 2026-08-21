@@ -18,11 +18,6 @@ export function anchored(
     return { ax, ay, ox, oy, aw: 0, ah: 0, ow: w, oh: h };
 }
 
-/** Une bande qui traverse toute la largeur de la fenêtre. */
-export function band(ay: number, oy: number, h: number, insetLeft = 0, insetRight = 0): Anchor {
-    return { ax: 0, ay, ox: insetLeft, oy, aw: 1, ah: 0, ow: -(insetLeft + insetRight), oh: h };
-}
-
 export function resolve(anchor: Anchor, view: Viewport): Rect {
     return {
         x: anchor.ax * view.w + anchor.ox,

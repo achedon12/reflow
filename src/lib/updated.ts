@@ -15,6 +15,8 @@ export const UPDATED: Record<RouteKey, string> = {
     puzzles: '2026-08-20',
     endless: '2026-08-20',
     about: '2026-08-20',
+    legal: '2026-08-21',
+    privacy: '2026-08-21',
 };
 
 /** Les pages d'énigme changent quand le niveau change, pas quand le site est

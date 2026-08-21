@@ -10,7 +10,7 @@ import { PUZZLES_UPDATED, UPDATED } from '@/lib/updated';
 export const dynamic = 'force-static';
 
 // Une entrée par langue ET par page — pages d'énigme comprises, ce qui porte
-// le plan du site à deux cent quarante URL.
+// le plan du site à deux cent quarante-huit URL.
 //
 // ⚠️ SANS `alternates` : ils ajoutent des `xhtml:link`, et Chrome désactive son
 // visualiseur XML dès qu'un document contient l'espace de noms XHTML. Les
@@ -22,6 +22,8 @@ const PAGES: { key: RouteKey; priority: number; changeFrequency: 'weekly' | 'mon
     { key: 'mechanics', priority: 0.7, changeFrequency: 'monthly' },
     { key: 'rules', priority: 0.6, changeFrequency: 'monthly' },
     { key: 'about', priority: 0.4, changeFrequency: 'monthly' },
+    { key: 'legal', priority: 0.2, changeFrequency: 'monthly' },
+    { key: 'privacy', priority: 0.2, changeFrequency: 'monthly' },
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

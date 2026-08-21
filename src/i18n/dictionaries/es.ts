@@ -151,7 +151,7 @@ export const es: Dictionary = {
         },
         motion: {
             name: 'Movimiento',
-            body: 'Plataformas que van y vienen, cuchillas que caen del techo. Esperar el momento justo es una acción por derecho propio.',
+            body: 'Plataformas que van y vienen, cuchillas que caen del techo. Esperar el momento justo es una acción por derecho propio. Si tu sistema pide reducir las animaciones, estos movimientos van a media velocidad.',
         },
         theme: {
             name: 'El tema',
@@ -328,6 +328,8 @@ export const es: Dictionary = {
         back: 'Jugar',
     },
     mechanicsPage: {
+        browserHeading: 'Las seis tomadas del navegador',
+        rulesHeading: 'Y dos reglas que no le deben nada',
         title: 'Mecánicas',
         heading: 'Lo que Reflow toma prestado del navegador',
         lede: 'Seis mecánicas, todas tomadas de interfaces que el navegador ya expone, y que ningún juego usa.',
@@ -361,8 +363,77 @@ export const es: Dictionary = {
                 body: '{author}, desarrollador. Reflow se suma a Azimut, Push Your Luck y Loups-Garous, reunidos en un panel común.',
             },
         ],
+        clearTitle: 'Borrar tu progreso',
+        clearBody:
+            'Tus enigmas resueltos, tus mejores tiempos, tus pistas desbloqueadas y tu mejor racha viven en este navegador y en ningún otro sitio. Este botón los elimina, y no hay vuelta atrás.',
+        clearButton: 'Borrarlo todo',
+        cleared: 'Borrado',
         contactTitle: 'Escribir',
         contactBody: 'Un enigma imposible, una traducción torpe, una idea:',
+        back: 'Jugar',
+    },
+    legal: {
+        title: 'Aviso legal',
+        heading: 'Aviso legal',
+        lede: 'La información que la ley exige a un sitio accesible al público.',
+        metaDescription:
+            'Editor, alojamiento y condiciones de uso de reflow.leoderoin.fr, el juego de plataformas cuyo nivel es la ventana del navegador.',
+        sections: [
+            {
+                title: 'Editor',
+                body: 'El sitio reflow.leoderoin.fr está editado por {author}, a título personal y no comercial. El director de la publicación es el propio editor.',
+            },
+            {
+                title: 'Alojamiento',
+                body: 'El sitio está alojado por {host}, {address}. Teléfono: {phone}. SIREN {registration}.',
+            },
+            {
+                title: 'Contenido',
+                body: 'Los textos, los niveles, el motor y las ilustraciones de este sitio son obra de su editor. El código fuente se publica bajo licencia MIT. Las tipografías Space Grotesk y JetBrains Mono se distribuyen bajo licencia SIL Open Font.',
+            },
+            {
+                title: 'Enlaces salientes',
+                body: 'Este sitio solo enlaza a jeux.leoderoin.fr, al sitio personal de su autor y al repositorio público del código. No muestra publicidad ni contiene ningún enlace comercial o de afiliación.',
+            },
+        ],
+        contactTitle: 'Contacto',
+        contactBody: 'Para cualquier pregunta sobre este aviso:',
+        back: 'Jugar',
+    },
+    privacy: {
+        title: 'Privacidad',
+        heading: 'Privacidad',
+        lede: 'Lo que se mide, lo que no, y dónde se queda.',
+        metaDescription:
+            'Lo que se mide en Reflow, lo que no, y lo que se queda en tu navegador. Sin cuenta, sin rastreadores de terceros, sin cookies de medición.',
+        sections: [
+            {
+                title: 'Tu progreso',
+                body: 'Los enigmas resueltos, tus mejores tiempos, las pistas desbloqueadas y tu mejor racha en modo infinito se guardan en el almacenamiento local de tu navegador. NUNCA se envían a un servidor: no lo hay. Puedes borrarlo todo con un botón, desde la página «acerca de».',
+            },
+            {
+                title: 'El juego en sí',
+                body: 'El motor físico y la generación de niveles se ejecutan enteramente en tu navegador. Una partida generada nace de una semilla calculada en tu máquina, y nada de lo que juegas se transmite a ninguna parte.',
+            },
+            {
+                title: 'Medición de audiencia',
+                body: 'El sitio usa Matomo, instalado en el mismo servidor. Se registran las páginas consultadas, el idioma del navegador, el tipo de dispositivo y la página de procedencia. Ningún dato se transmite a un servicio de terceros, y no hay red publicitaria ni widget social incrustado.',
+            },
+            {
+                title: 'Cookies',
+                body: 'Ninguna. Matomo está configurado sin cookies, lo que exime a este sitio del banner de consentimiento. Tu elección de tema se guarda en el almacenamiento local y nunca se envía al servidor.',
+            },
+            {
+                title: 'Registros del servidor',
+                body: 'Como todo servidor web, este conserva registros técnicos de acceso: dirección IP, fecha, página solicitada. Sirven para el diagnóstico y la seguridad, y no se usan para nada más.',
+            },
+            {
+                title: 'Tus derechos',
+                body: 'Puedes solicitar el acceso a los datos que te conciernen, su rectificación o su supresión. La solicitud se hace por correo y no necesita motivo.',
+            },
+        ],
+        contactTitle: 'Escribir',
+        contactBody: 'Para ejercer tus derechos o preguntar algo:',
         back: 'Jugar',
     },
     footer: {

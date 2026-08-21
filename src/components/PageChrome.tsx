@@ -6,7 +6,15 @@ import { path, type RouteKey } from '@/i18n/routes';
 import { Credits } from './Credits';
 import { SiteHeader } from './SiteHeader';
 
-const FOOTER_NAV: Exclude<RouteKey, 'home'>[] = ['puzzles', 'endless', 'mechanics', 'rules', 'about'];
+const FOOTER_NAV: Exclude<RouteKey, 'home'>[] = [
+    'puzzles',
+    'endless',
+    'mechanics',
+    'rules',
+    'about',
+    'legal',
+    'privacy',
+];
 
 export function PageChrome({
     locale,
@@ -26,6 +34,8 @@ export function PageChrome({
         mechanics: d.header.navMechanics,
         rules: d.header.navRules,
         about: d.header.navAbout,
+        legal: d.legal.title,
+        privacy: d.privacy.title,
     };
 
     return (

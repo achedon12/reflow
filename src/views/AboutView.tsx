@@ -1,3 +1,4 @@
+import { ClearProgress } from '@/components/ClearProgress';
 import { getDictionary } from '@/i18n';
 import type { Locale } from '@/i18n/config';
 import { AUTHOR } from '@/lib/site';
@@ -38,6 +39,16 @@ export function AboutView({ locale }: { locale: Locale }) {
                     </section>
                 ))}
             </div>
+
+            {/* Le bouton d'effacement. La page de confidentialité renvoie ici :
+                les deux se tiennent, ou aucune des deux n'est vraie. */}
+            <section className="border border-border-subtle p-6">
+                <h2 className="text-lg">{d.about.clearTitle}</h2>
+                <p className="mt-2 max-w-xl text-sm text-fg-muted text-pretty">{d.about.clearBody}</p>
+                <div className="mt-4">
+                    <ClearProgress dictionary={d} />
+                </div>
+            </section>
 
             <section className="border border-border-subtle p-6">
                 <h2 className="text-lg">{d.about.contactTitle}</h2>

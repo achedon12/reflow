@@ -14,16 +14,6 @@ export function isLocale(value: string): value is Locale {
     return (LOCALES as readonly string[]).includes(value);
 }
 
-// Barre finale comprise : `trailingSlash: true` impose cette forme, et une
-// canonique qui s'en écarte déclare une URL que le serveur redirige.
-export function localePath(locale: Locale): string {
-    return locale === DEFAULT_LOCALE ? '/' : `/${locale}/`;
-}
-
-export function localeUrl(locale: Locale, siteUrl: string): string {
-    return `${siteUrl.replace(/\/$/, '')}${localePath(locale)}`;
-}
-
 // Endonymes : sinon le sélecteur n'est lisible que par ceux qui n'en ont pas
 // besoin.
 export const LOCALE_NAMES: Record<Locale, string> = {

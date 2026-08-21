@@ -2,6 +2,7 @@ import { LEVELS, PUZZLE_IDS } from '../src/data/levels.ts';
 import { generateLevel } from '../src/game/generator.ts';
 import { PLAYER_H, PLAYER_W } from '../src/game/constants.ts';
 import { overlaps, present, resolve } from '../src/game/geometry.ts';
+import { REDUCED_MOTION_FACTOR, slowMotion } from '../src/game/reduced-motion.ts';
 import { CANDIDATE_VIEWS, solve } from '../src/game/solver.ts';
 import type { Level, Theme, Viewport } from '../src/game/types.ts';
 import { fr } from '../src/i18n/dictionaries/fr.ts';
@@ -99,6 +100,34 @@ for (const level of LEVELS) {
         fail(`${level.id} : aucune solution trouvée, à aucune des ${views(level).length} tailles essayées`);
     }
 }
+
+// ── Le mouvement réduit ─────────────────────────────────────────────────────
+// `prefers-reduced-motion` allonge la période des blocs mobiles. Rien ne dit
+// a priori qu'un niveau reste finissable une fois ralenti : un saut calé sur
+// une phase peut ne plus tomber au même endroit. On le rejoue donc.
+console.log('\nMouvement réduit (périodes ×' + REDUCED_MOTION_FACTOR + ')');
+
+const MOVING = LEVELS.filter((level) => level.blocks.some((block) => block.motion));
+for (const level of MOVING) {
+    const slowed = slowMotion(level);
+    const themes: Theme[] = level.blocks.some((block) => block.theme) ? ['dark', 'light'] : ['dark'];
+    let solved: Viewport | null = null;
+    for (const view of views(level)) {
+        for (const theme of themes) {
+            if (solve(slowed, view, theme).solved) {
+                solved = view;
+                break;
+            }
+        }
+        if (solved) break;
+    }
+    if (solved) {
+        console.log(`  ✓ ${level.id.padEnd(13)} ${`${solved.w}×${solved.h}`.padEnd(9)}`);
+    } else {
+        fail(`${level.id} : plus finissable une fois le mouvement ralenti`);
+    }
+}
+console.log(`  ${MOVING.length} énigmes à mouvement vérifiées`);
 
 // ── Les niveaux générés ─────────────────────────────────────────────────────
 // La génération construit le chemin plateforme par plateforme, donc elle est

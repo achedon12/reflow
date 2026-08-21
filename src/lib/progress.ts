@@ -138,6 +138,21 @@ export function recordPuzzle(id: string, time: number, tries: number): Progress 
     return progress;
 }
 
+/**
+ * Efface tout, sans retour.
+ *
+ * Ce n'est pas une commodité : la page de confidentialité PROMET ce bouton.
+ * Le retirer rendrait ce texte faux.
+ */
+export function clearProgress(): void {
+    try {
+        localStorage.removeItem(KEY);
+    } catch {
+        // Stockage indisponible : il n'y avait rien à effacer.
+    }
+    invalidate({ puzzles: {}, endlessBest: 0, hints: {} });
+}
+
 /** Retient qu'un joueur a atteint ce palier d'indices. Jamais à la baisse. */
 export function recordHints(id: string, unlocked: number): void {
     const progress = loadProgress();

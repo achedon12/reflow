@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 import { LEVELS, levelById } from '@/data/levels';
 import { HUD_HEIGHT } from '@/game/constants';
 import { generateLevel } from '@/game/generator';
+import { prefersReducedMotion, slowMotion } from '@/game/reduced-motion';
 import { hashSeed } from '@/game/rng';
 import type { Level, Viewport } from '@/game/types';
 import type { Dictionary } from '@/i18n';
@@ -74,18 +75,21 @@ export function GameProvider({
 }) {
     const [session, setSession] = useState<Session | null>(null);
 
+    // Le réglage est lu au LANCEMENT et non pendant la partie : le changer en
+    // plein saut ferait bouger le décor sous le joueur.
     const startPuzzle = useCallback((id: string) => {
         const level = levelById(id);
-        if (level) setSession({ kind: 'puzzle', level });
+        if (level) setSession({ kind: 'puzzle', level: prefersReducedMotion() ? slowMotion(level) : level });
     }, []);
 
     const startEndless = useCallback((seed?: string, depth = 1) => {
         const label = seed && seed.trim() ? seed.trim() : randomSeed();
-        const level = generateLevel({
+        const generated = generateLevel({
             seed: hashSeed(label),
             depth,
             reference: referenceViewport(),
         });
+        const level = prefersReducedMotion() ? slowMotion(generated) : generated;
         setSession({ kind: 'endless', level, depth, seed: label });
     }, []);
 
@@ -104,8 +108,12 @@ export function GameProvider({
         }
         const index = LEVELS.findIndex((level) => level.id === session.level.id);
         const following = LEVELS[index + 1];
-        if (following) setSession({ kind: 'puzzle', level: following });
-        else setSession(null);
+        if (following) {
+            setSession({
+                kind: 'puzzle',
+                level: prefersReducedMotion() ? slowMotion(following) : following,
+            });
+        } else setSession(null);
     }, [session, startEndless]);
 
     const onWin = useCallback(

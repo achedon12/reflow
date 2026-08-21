@@ -2,10 +2,36 @@ import { getDictionary } from '@/i18n';
 import type { Locale } from '@/i18n/config';
 import type { Mechanic } from '@/game/types';
 
-const ORDER: Mechanic[] = ['resize', 'edge', 'appear', 'motion', 'theme', 'rewind', 'orbs', 'crush'];
+/**
+ * ⚠️ La séparation n'est pas cosmétique : la page s'intitulait « les six
+ * mécaniques » et en listait huit, dans les quatre langues et jusque dans sa
+ * description pour les moteurs.
+ *
+ * Six sont réellement PRISES AU NAVIGATEUR — la taille de la fenêtre, ses
+ * bords, les seuils d'apparition, le thème, l'historique, l'écrasement entre
+ * deux bords. Les deux autres, le mouvement et les orbes, se trouveraient dans
+ * n'importe quel jeu de plateforme : les compter avec les premières affaiblit
+ * la seule promesse qui distingue ce jeu.
+ */
+const FROM_BROWSER: Mechanic[] = ['resize', 'edge', 'appear', 'theme', 'rewind', 'crush'];
+const FROM_THE_GAME: Mechanic[] = ['motion', 'orbs'];
 
 export function MechanicsView({ locale }: { locale: Locale }) {
     const d = getDictionary(locale);
+
+    const list = (keys: Mechanic[], offset: number) => (
+        <ul className="grid gap-px border border-border-subtle bg-border-subtle sm:grid-cols-2">
+            {keys.map((key, index) => (
+                <li key={key} className="flex flex-col gap-2 bg-bg p-6">
+                    <span className="numeric text-xs text-accent">
+                        {String(offset + index + 1).padStart(2, '0')}
+                    </span>
+                    <h3 className="text-lg">{d.mechanics[key].name}</h3>
+                    <p className="text-sm leading-relaxed text-fg-muted text-pretty">{d.mechanics[key].body}</p>
+                </li>
+            ))}
+        </ul>
+    );
 
     return (
         <div className="flex flex-col gap-10">
@@ -16,15 +42,15 @@ export function MechanicsView({ locale }: { locale: Locale }) {
 
             <p className="max-w-2xl text-base leading-relaxed text-fg text-pretty">{d.mechanicsPage.intro}</p>
 
-            <ul className="grid gap-px border border-border-subtle bg-border-subtle sm:grid-cols-2">
-                {ORDER.map((key, index) => (
-                    <li key={key} className="flex flex-col gap-2 bg-bg p-6">
-                        <span className="numeric text-xs text-accent">{String(index + 1).padStart(2, '0')}</span>
-                        <h2 className="text-lg">{d.mechanics[key].name}</h2>
-                        <p className="text-sm leading-relaxed text-fg-muted text-pretty">{d.mechanics[key].body}</p>
-                    </li>
-                ))}
-            </ul>
+            <section className="flex flex-col gap-4">
+                <h2 className="label text-fg-muted">{d.mechanicsPage.browserHeading}</h2>
+                {list(FROM_BROWSER, 0)}
+            </section>
+
+            <section className="flex flex-col gap-4">
+                <h2 className="label text-fg-muted">{d.mechanicsPage.rulesHeading}</h2>
+                {list(FROM_THE_GAME, FROM_BROWSER.length)}
+            </section>
 
             <p className="max-w-2xl border-l-2 border-border-strong pl-5 text-sm leading-relaxed text-fg-muted text-pretty">
                 {d.mechanicsPage.outro}
