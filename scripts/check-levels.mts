@@ -43,6 +43,11 @@ for (const level of LEVELS) {
     if (level.blocks.filter((block) => block.kind === 'orb').length > 8) {
         fail(`${level.id} : plus de 8 orbes, le champ de bits déborde`);
     }
+    // ⚠️ Les lames suiveuses partagent `chaseX` dans l'état du joueur : deux
+    // dans le même niveau viseraient le même point, ce qui n'a aucun sens.
+    if (level.blocks.filter((block) => block.chase).length > 1) {
+        fail(`${level.id} : plus d'une lame suiveuse, elles partageraient la même visée`);
+    }
     if (level.blocks.filter((block) => block.crumble).length > MAX_CRUMBLE) {
         fail(`${level.id} : plus de ${MAX_CRUMBLE} paliers friables, le champ de bits déborde`);
     }
@@ -61,6 +66,49 @@ for (const level of LEVELS) {
             if (overlaps(box, resolve(block.rect, level.reference))) {
                 fail(`${level.id} : le joueur apparaît dans un bloc (thème ${theme})`);
             }
+        }
+    }
+}
+
+// ── Les pièges mobiles menacent-ils quelqu'un ? ─────────────────────────────
+//
+// ⚠️ CE CONTRÔLE EXISTE À CAUSE D'UN VRAI DÉFAUT. Les lames étaient accrochées
+// au HAUT de la fenêtre, tous les paliers pendent du BAS : elles s'arrêtaient
+// deux cents pixels au-dessus de la tête du joueur, et s'en éloignaient encore
+// dès qu'on agrandissait la fenêtre. Cinq énigmes ont vécu avec des lames
+// purement décoratives.
+//
+// Le reste du vérificateur ne pouvait pas le voir : il prouve qu'un niveau se
+// TERMINE, jamais qu'il résiste. Un piège inoffensif rend le niveau plus
+// facile, donc il passe en silence — c'est exactement le genre de régression
+// qu'aucun test de bout en bout ne rattrape.
+for (const level of LEVELS) {
+    const bands = level.blocks
+        .filter((block) => block.kind === 'solid')
+        .map((block) => {
+            const rect = resolve(block.rect, level.reference);
+            // La bande occupée par un joueur debout dessus.
+            return { x: rect.x, w: rect.w, top: rect.y - PLAYER_H, bottom: rect.y };
+        });
+
+    for (const block of level.blocks) {
+        if (block.kind !== 'spike' || !block.motion) continue;
+        const rect = resolve(block.rect, level.reference);
+        const lowest = rect.y + rect.h + Math.abs(block.motion.dy);
+        const highest = rect.y - Math.abs(block.motion.dy);
+
+        // Une lame qui suit le joueur se place elle-même en X : seule sa course
+        // verticale se vérifie.
+        const reaches = bands.some(
+            (band) =>
+                lowest >= band.top &&
+                highest <= band.bottom &&
+                (block.chase || (rect.x < band.x + band.w + 40 && rect.x + rect.w > band.x - 40)),
+        );
+        if (!reaches) {
+            fail(
+                `${level.id} : une lame ne menace personne — sa course s'arrête à y=${Math.round(lowest)}, hors de toute bande de jeu`,
+            );
         }
     }
 }

@@ -150,6 +150,10 @@ export const fr = {
                 'Le vent change la portée de vos sauts. Décollez plus tôt, ou plus tard.',
             crumble:
                 'Ne vous arrêtez pas sur un palier friable : traversez-le.',
+            gravity:
+                'Fais pivoter l’écran. Ce qui était un mur devient un sol.',
+            screen:
+                'L’écran de jeu se règle : tire ses poignées, tourne-le.',
         },
     },
     mechanics: {
@@ -212,6 +216,14 @@ export const fr = {
         crumble: {
             name: 'Les paliers friables',
             body: 'Ils cèdent moins d\'une demi-seconde après qu\'on s\'y est posé. Ils se traversent, ils ne se reposent pas.',
+        },
+        gravity: {
+            name: 'La gravité',
+            body: 'L’écran pivote par quarts de tour, et la chute suit. Un même niveau lu de côté n’est plus le même : les plateformes deviennent des murs, et le sol un plafond.',
+        },
+        screen: {
+            name: 'L’écran intérieur',
+            body: 'L’aire de jeu est un écran que vous réglez vous-même : ses poignées la redimensionnent, sa rotation change le sens de la chute. La fenêtre du navigateur en reste la limite.',
         },
     },
     puzzles: {

@@ -35,11 +35,7 @@ export function ClearProgress({ dictionary }: { dictionary: Dictionary }) {
                 clearProgress();
                 setState('done');
             }}
-            className={`inline-flex items-center gap-2 border px-3 py-1.5 text-sm transition-colors ${
-                state === 'confirm'
-                    ? 'border-hazard text-hazard'
-                    : 'border-border-strong text-fg hover:bg-bg-sunken'
-            }`}
+            className={`btn ${state === 'confirm' ? 'border-hazard text-hazard' : ''}`}
         >
             <Trash2 aria-hidden="true" className="size-4" />
             {state === 'confirm' ? `${dictionary.about.clearButton} ?` : dictionary.about.clearButton}

@@ -150,6 +150,10 @@ export const de: Dictionary = {
                 'Der Wind ändert die Reichweite deiner Sprünge. Spring früher oder später.',
             crumble:
                 'Bleib nicht auf einem brüchigen Absatz stehen: quere ihn.',
+            gravity:
+                'Dreh den Bildschirm. Was eine Wand war, wird zum Boden.',
+            screen:
+                'Das Spielfeld lässt sich einstellen: zieh an den Griffen, dreh es.',
         },
     },
     mechanics: {
@@ -212,6 +216,14 @@ export const de: Dictionary = {
         crumble: {
             name: 'Die brüchigen Absätze',
             body: 'Sie geben keine halbe Sekunde nach dem Aufsetzen nach. Man quert sie, man ruht nicht darauf.',
+        },
+        gravity: {
+            name: 'Die Schwerkraft',
+            body: 'Der Bildschirm dreht sich in Vierteldrehungen, und der Fall folgt. Dasselbe Level seitlich gelesen ist nicht mehr dasselbe: Plattformen werden zu Wänden, der Boden zur Decke.',
+        },
+        screen: {
+            name: 'Der innere Bildschirm',
+            body: 'Das Spielfeld ist ein Bildschirm, den du selbst einstellst: seine Griffe verändern seine Größe, seine Drehung die Fallrichtung. Das Browserfenster bleibt seine Grenze.',
         },
     },
     puzzles: {

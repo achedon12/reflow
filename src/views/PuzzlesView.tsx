@@ -19,12 +19,12 @@ export function PuzzlesView({ locale }: { locale: Locale }) {
 
             <PuzzleGrid locale={locale} dictionary={d} />
 
-            <section className="border border-border-subtle p-6">
+            <section className="panel p-6">
                 <h2 className="text-lg">{d.puzzlesPage.endlessTitle}</h2>
                 <p className="mt-2 max-w-xl text-sm text-fg-muted text-pretty">{d.puzzlesPage.endlessBody}</p>
                 <Link
                     href={path('endless', locale)}
-                    className="mt-4 inline-flex items-center gap-1.5 border border-border-strong px-3 py-2 text-sm text-fg no-underline transition-colors hover:bg-bg-sunken"
+                    className="btn mt-4"
                 >
                     {d.puzzlesPage.endlessCta}
                     <ArrowRight aria-hidden="true" className="size-4" />

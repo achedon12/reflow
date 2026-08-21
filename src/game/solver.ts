@@ -1,7 +1,7 @@
 import { PLAYER_H, PLAYER_W, STEP } from './constants';
 import { spawnState, step } from './engine';
-import { present, resolve } from './geometry';
-import type { Level, PlayerState, Theme, Viewport } from './types';
+import { present, reframePlayer, resolve, rotateRect } from './geometry';
+import type { Level, PlayerState, Quarter, Theme, Viewport } from './types';
 
 /**
  * LE VÉRIFICATEUR DE NIVEAUX.
@@ -45,6 +45,7 @@ const PER_CELL = 5;
 
 type Node = {
     player: PlayerState;
+    quarter: Quarter;
     theme: Theme;
     /** Le saut était-il maintenu à la fin du palier précédent ? Il faut le
      *  savoir : `jumpPressed` ne vaut que sur le FRONT montant. */
@@ -73,7 +74,7 @@ function heuristic(level: Level, view: Viewport, node: Node): number {
         if (taken) continue;
         remaining += 1;
         if (!present(block, view, node.theme)) continue;
-        const rect = resolve(block.rect, view);
+        const rect = rotateRect(resolve(block.rect, view), view, node.quarter);
         best = Math.min(best, Math.hypot(rect.x + rect.w / 2 - px, rect.y + rect.h / 2 - py));
     }
     // Le NOMBRE d'orbes restantes domine la distance : sans ce poids, un état
@@ -84,10 +85,16 @@ function heuristic(level: Level, view: Viewport, node: Node): number {
     for (const block of level.blocks) {
         if (block.kind !== 'goal') continue;
         if (!present(block, view, node.theme)) continue;
-        const rect = resolve(block.rect, view);
+        const rect = rotateRect(resolve(block.rect, view), view, node.quarter);
         best = Math.min(best, Math.hypot(rect.x + rect.w / 2 - px, rect.y + rect.h / 2 - py));
     }
     return best;
+}
+
+/** Le niveau demande-t-il de faire pivoter l'écran ? Si non, on n'ajoute pas
+ *  cette action : elle quadruplerait l'arbre pour rien. */
+function usesGravity(level: Level): boolean {
+    return level.mechanics.includes('gravity');
 }
 
 /** Le niveau demande-t-il de basculer le thème ? Si non, on n'ajoute pas cette
@@ -139,15 +146,24 @@ export function solve(level: Level, view: Viewport, startTheme: Theme = 'dark'):
     const beam = harsh ? BEAM_HARSH : BEAM;
     const layers = harsh ? LAYERS_HARSH : MAX_LAYERS;
     const themeMatters = usesTheme(level);
-    const actions: { dir: -1 | 0 | 1; jump: boolean; toggle: boolean }[] = [];
+    const gravityMatters = usesGravity(level);
+    const actions: { dir: -1 | 0 | 1; jump: boolean; toggle: boolean; turn: 0 | 1 | 3 }[] = [];
     for (const dir of [-1, 0, 1] as const) {
         for (const jump of [false, true]) {
-            actions.push({ dir, jump, toggle: false });
-            if (themeMatters) actions.push({ dir, jump, toggle: true });
+            actions.push({ dir, jump, toggle: false, turn: 0 });
+            if (themeMatters) actions.push({ dir, jump, toggle: true, turn: 0 });
+            // Un quart de tour dans un sens ou dans l'autre. Deux d'un coup se
+            // font en deux actions — inutile de les énumérer.
+            if (gravityMatters) {
+                actions.push({ dir, jump, toggle: false, turn: 1 });
+                actions.push({ dir, jump, toggle: false, turn: 3 });
+            }
         }
     }
 
-    let layer: Node[] = [{ player: spawnState(level, view), theme: startTheme, holding: false }];
+    let layer: Node[] = [
+        { player: spawnState(level, view), quarter: 0, theme: startTheme, holding: false },
+    ];
     let explored = 0;
 
     for (let depth = 0; depth < layers; depth += 1) {
@@ -162,7 +178,11 @@ export function solve(level: Level, view: Viewport, startTheme: Theme = 'dark'):
                         : 'dark'
                     : node.theme;
 
-                let player = node.player;
+                const quarter = (((node.quarter + action.turn) % 4) as Quarter);
+                let player =
+                    quarter === node.quarter
+                        ? node.player
+                        : reframePlayer(node.player, view, node.quarter, quarter);
                 let dead = false;
                 let won = false;
 
@@ -180,6 +200,7 @@ export function solve(level: Level, view: Viewport, startTheme: Theme = 'dark'):
                             jumpPressed: pressed,
                         },
                         STEP,
+                        quarter,
                     );
                     explored += 1;
                     player = result.player;
@@ -198,7 +219,7 @@ export function solve(level: Level, view: Viewport, startTheme: Theme = 'dark'):
                 }
                 if (dead) continue;
 
-                const candidate: Node = { player, theme, holding: action.jump };
+                const candidate: Node = { player, quarter, theme, holding: action.jump };
                 const key = keyOf(candidate);
                 if (seen.has(key)) continue;
                 seen.add(key);

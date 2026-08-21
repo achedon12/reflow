@@ -41,12 +41,30 @@ const floorSpikesR = (right: number, w: number): Block => ({
     rect: anchored(1, -right, 1, -16, w, 16),
 });
 
-/** Une lame qui tombe du plafond et remonte. */
-const blade = (x: number, drop: number, extra: Partial<Block> = {}): Block => ({
+/**
+ * Une lame suspendue au-dessus d'un palier, qui descend le traverser.
+ *
+ * ⚠️ `up` est la hauteur du palier QU'ELLE MENACE, mesurée depuis le bas de la
+ * fenêtre — et la lame est ancrée au bas comme lui.
+ *
+ * La version précédente l'accrochait au HAUT de la fenêtre, avec une simple
+ * course en pixels. Comme tous les paliers pendent du bas, les deux ne se
+ * rencontraient jamais : à la cote de référence, les lames de « La guillotine »
+ * s'arrêtaient 200 px au-dessus de la tête du joueur, et s'en éloignaient
+ * encore dès qu'on agrandissait la fenêtre. Cinq énigmes ont vécu avec des
+ * lames purement décoratives.
+ *
+ * Le vérificateur ne pouvait rien y voir : il prouve qu'un niveau se TERMINE,
+ * jamais qu'il résiste. Un piège inoffensif rend le niveau plus facile, donc
+ * il passe.
+ *
+ * Au repos la lame laisse 40 px au-dessus de la tête ; au bas de sa course elle
+ * descend 40 px SOUS le dessus du palier, donc à travers le joueur.
+ */
+const blade = (x: number, up: number, period = 2.2, phase = 0): Block => ({
     kind: 'spike',
-    rect: anchored(0, x, 0, -10, 22, 120),
-    motion: { dx: 0, dy: drop, period: 2.2 },
-    ...extra,
+    rect: anchored(0, x, 1, -(up + 220), 22, 150),
+    motion: { dx: 0, dy: 110, period, phase },
 });
 
 /** Un mur posé sur le sol, ancré à un bord. */
@@ -69,12 +87,20 @@ const windZone = (x: number, up: number, w: number, h: number, force: number): B
     force,
 });
 
-/** La lame suspendue qui se cale sur le joueur, et retombe à intervalle fixe. */
-const stalker = (drop: number, period: number, phase = 0): Block => ({
+/**
+ * La lame suspendue qui se cale sur le joueur, et retombe à intervalle fixe.
+ *
+ * ⚠️ Même correction que `blade` : elle pendait du HAUT de la fenêtre et
+ * s'arrêtait deux cents pixels au-dessus de la tête du joueur. `up` est
+ * désormais la hauteur du palier le plus BAS qu'elle doit menacer, mesurée
+ * depuis le bas de la fenêtre — et sa course de 420 px lui permet de balayer
+ * plusieurs paliers d'un même niveau.
+ */
+const stalker = (up: number, period: number, phase = 0): Block => ({
     kind: 'spike',
-    rect: anchored(0, 0, 0, -24, 24, 130),
+    rect: anchored(0, 0, 1, -(up + 260), 24, 180),
     chase: true,
-    motion: { dx: 0, dy: drop, period, phase },
+    motion: { dx: 0, dy: 120, period, phase },
 });
 
 export const SPECS: readonly LevelSpec[] = [
@@ -384,7 +410,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 60, gap: 66, w: 110 },
             { rise: 60, gap: 66, w: 140 },
         ],
-        extras: [blade(300, 130), blade(560, 130, { motion: { dx: 0, dy: 130, period: 2.2, phase: 0.5 } }), floorSpikes(180, 640)],
+        extras: [blade(300, 60), blade(560, 180, 2.2, 0.5), floorSpikes(180, 640)],
     },
     {
         id: 'traverse',
@@ -427,9 +453,9 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 0, gap: 96, w: 150 },
         ],
         extras: [
-            blade(268, 150),
-            blade(520, 150, { motion: { dx: 0, dy: 150, period: 2.2, phase: 0.5 } }),
-            blade(770, 150, { motion: { dx: 0, dy: 150, period: 2.2, phase: 0.25 } }),
+            blade(268, 66),
+            blade(520, 66, 2.2, 0.5),
+            blade(770, 66, 2.2, 0.25),
             floorSpikes(180, 660),
         ],
     },
@@ -472,7 +498,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 40, gap: 62, w: 110, theme: 'light', motion: { dx: 0, dy: 26, period: 3.2 } },
             { rise: 40, gap: 78, w: 150, theme: 'light' },
         ],
-        extras: [floorSpikes(220, 620), blade(430, 120, { theme: 'light' })],
+        extras: [floorSpikes(220, 620), { ...blade(430, 102), theme: 'light' }],
     },
     {
         id: 'cordee',
@@ -679,9 +705,9 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 0, gap: 70, w: 140 },
         ],
         extras: [
-            blade(398, 160),
-            blade(598, 160, { motion: { dx: 0, dy: 160, period: 2.0, phase: 0.33 } }),
-            blade(798, 160, { motion: { dx: 0, dy: 160, period: 2.0, phase: 0.66 } }),
+            blade(398, 62, 2.0),
+            blade(598, 62, 2.0, 0.33),
+            blade(798, 62, 2.0, 0.66),
             floorSpikes(180, 700),
         ],
     },
@@ -1150,7 +1176,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 40, gap: 70, w: 150 },
             { rise: 40, gap: 70, w: 150 },
         ],
-        extras: [stalker(150, 2.4), floorSpikes(230, 620)],
+        extras: [stalker(56, 2.4), floorSpikes(230, 620)],
     },
     {
         id: 'traque',
@@ -1160,11 +1186,17 @@ export const SPECS: readonly LevelSpec[] = [
         floor: 'deadly',
         start: { x: 30, up: 60, w: 150 },
         steps: [
-            { rise: 34, gap: 54, w: 110, crumble: true },
-            { rise: 34, gap: 54, w: 110, crumble: true },
-            { rise: 34, gap: 58, w: 150 },
+            { rise: 34, gap: 52, w: 140, crumble: true },
+            { rise: 34, gap: 52, w: 140, crumble: true },
+            { rise: 34, gap: 56, w: 150 },
         ],
-        extras: [stalker(170, 2.2)],
+        // ⚠️ Période 4,2 s et non 2,2 : une lame rapide au-dessus de paliers
+        // qui s'effondrent ne laissait qu'une demi-seconde pour fuir, sur
+        // 110 px de large et au-dessus du vide. Le niveau n'était plus
+        // difficile, il était insoluble — le vérificateur l'a refusé. À 3,4 s
+        // il ne se terminait qu'en fenêtre réduite, donc pas à la cote que le
+        // jeu affiche comme repère.
+        extras: [stalker(60, 4.2)],
     },
     {
         id: 'ombre',
@@ -1177,7 +1209,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 40, gap: 68, w: 140, theme: 'dark' },
             { rise: 40, gap: 68, w: 150, theme: 'dark' },
         ],
-        extras: [stalker(160, 2.6), floorSpikes(220, 640)],
+        extras: [stalker(56, 2.6), floorSpikes(220, 640)],
     },
     {
         id: 'frimas',
@@ -1271,7 +1303,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 40, gap: 110, w: 140, assisted: true },
             { rise: 40, gap: 64, w: 150 },
         ],
-        extras: [windZone(280, 300, 260, 240, 640), stalker(150, 2.8), floorSpikes(230, 600)],
+        extras: [windZone(280, 300, 260, 240, 640), stalker(56, 2.8), floorSpikes(230, 600)],
     },
     {
         id: 'sirocco',
@@ -1325,7 +1357,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 0, gap: 74, w: 170, surface: 'conveyor', speed: -140 },
             { rise: 0, gap: 74, w: 150 },
         ],
-        extras: [blade(330, 170), blade(600, 170, { motion: { dx: 0, dy: 170, period: 2.2, phase: 0.5 } }), floorSpikes(220, 620)],
+        extras: [blade(330, 56), blade(600, 56, 2.2, 0.5), floorSpikes(220, 620)],
     },
     {
         id: 'eclair',
@@ -1407,7 +1439,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 30, gap: 54, w: 120, blink: { period: 2.6, duty: 0.6, phase: 0.5 } },
             { rise: 30, gap: 58, w: 150 },
         ],
-        extras: [stalker(160, 3.0)],
+        extras: [stalker(60, 3.0)],
     },
     {
         id: 'embuscade',
@@ -1420,7 +1452,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 40, gap: 64, w: 130, when: { maxW: 920 } },
             { rise: 40, gap: 60, w: 150 },
         ],
-        extras: [stalker(150, 2.4), floorSpikes(200, 560)],
+        extras: [stalker(56, 2.4), floorSpikes(200, 560)],
     },
     {
         id: 'curee',
@@ -1433,7 +1465,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 40, gap: 66, w: 140, orb: true },
             { rise: 40, gap: 66, w: 150 },
         ],
-        extras: [stalker(160, 2.6), floorSpikes(220, 620)],
+        extras: [stalker(56, 2.6), floorSpikes(220, 620)],
     },
     {
         id: 'verrou',
@@ -1501,6 +1533,6 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 175, gap: 60, w: 110, assisted: true, crumble: true },
             { rise: 30, gap: 110, w: 150, assisted: true, edge: 'right' },
         ],
-        extras: [windZone(420, 340, 260, 240, 700), stalker(150, 3.0)],
+        extras: [windZone(420, 340, 260, 240, 700), stalker(60, 3.0)],
     },
 ];

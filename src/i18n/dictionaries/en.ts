@@ -150,6 +150,10 @@ export const en: Dictionary = {
                 'Wind changes the reach of your jumps. Take off earlier, or later.',
             crumble:
                 'Do not stop on a crumbling ledge: cross it.',
+            gravity:
+                'Turn the screen. What was a wall becomes a floor.',
+            screen:
+                'The playfield can be set: drag its handles, turn it.',
         },
     },
     mechanics: {
@@ -212,6 +216,14 @@ export const en: Dictionary = {
         crumble: {
             name: 'Crumbling ledges',
             body: 'They give way less than half a second after you land. They are crossed, not rested on.',
+        },
+        gravity: {
+            name: 'Gravity',
+            body: 'The screen turns by quarter turns, and falling follows. The same level read sideways is not the same one: platforms become walls, and the floor a ceiling.',
+        },
+        screen: {
+            name: 'The inner screen',
+            body: 'The playfield is a screen you set yourself: its handles resize it, its rotation changes which way you fall. The browser window remains its limit.',
         },
     },
     puzzles: {

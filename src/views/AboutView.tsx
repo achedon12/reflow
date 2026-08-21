@@ -28,7 +28,7 @@ export function AboutView({ locale }: { locale: Locale }) {
                                         <a
                                             href={AUTHOR.site}
                                             rel="author"
-                                            className="text-fg no-underline underline-offset-2 hover:text-accent hover:underline"
+                                            className="tap text-fg no-underline underline-offset-2 hover:text-accent hover:underline"
                                         >
                                             {AUTHOR.name}
                                         </a>
@@ -42,7 +42,7 @@ export function AboutView({ locale }: { locale: Locale }) {
 
             {/* Le bouton d'effacement. La page de confidentialité renvoie ici :
                 les deux se tiennent, ou aucune des deux n'est vraie. */}
-            <section className="border border-border-subtle p-6">
+            <section className="panel p-6">
                 <h2 className="text-lg">{d.about.clearTitle}</h2>
                 <p className="mt-2 max-w-xl text-sm text-fg-muted text-pretty">{d.about.clearBody}</p>
                 <div className="mt-4">
@@ -50,13 +50,13 @@ export function AboutView({ locale }: { locale: Locale }) {
                 </div>
             </section>
 
-            <section className="border border-border-subtle p-6">
+            <section className="panel p-6">
                 <h2 className="text-lg">{d.about.contactTitle}</h2>
                 <p className="mt-2 text-sm text-fg-muted">
                     {d.about.contactBody}{' '}
                     <a
                         href={`mailto:${AUTHOR.email}`}
-                        className="text-fg no-underline underline-offset-2 hover:text-accent hover:underline"
+                        className="tap text-fg no-underline underline-offset-2 hover:text-accent hover:underline"
                     >
                         {AUTHOR.email}
                     </a>

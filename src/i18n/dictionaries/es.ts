@@ -150,6 +150,10 @@ export const es: Dictionary = {
                 'El viento cambia el alcance de tus saltos. Salta antes, o después.',
             crumble:
                 'No te pares en un rellano frágil: atraviésalo.',
+            gravity:
+                'Gira la pantalla. Lo que era un muro se vuelve suelo.',
+            screen:
+                'El área de juego se ajusta: tira de sus tiradores, gírala.',
         },
     },
     mechanics: {
@@ -212,6 +216,14 @@ export const es: Dictionary = {
         crumble: {
             name: 'Los rellanos frágiles',
             body: 'Ceden menos de medio segundo después de pisarlos. Se cruzan, no se descansa en ellos.',
+        },
+        gravity: {
+            name: 'La gravedad',
+            body: 'La pantalla gira por cuartos de vuelta, y la caída la sigue. El mismo nivel leído de lado ya no es el mismo: las plataformas se vuelven muros, y el suelo un techo.',
+        },
+        screen: {
+            name: 'La pantalla interior',
+            body: 'El área de juego es una pantalla que tú ajustas: sus tiradores la redimensionan, su rotación cambia el sentido de la caída. La ventana del navegador sigue siendo su límite.',
         },
     },
     puzzles: {

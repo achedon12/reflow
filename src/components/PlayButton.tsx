@@ -32,11 +32,7 @@ export function PlayButton({
                 if (puzzleId) startPuzzle(puzzleId);
                 else startEndless(seed, depth);
             }}
-            className={
-                variant === 'primary'
-                    ? 'inline-flex items-center gap-2 border border-accent bg-accent px-4 py-2 text-sm font-medium text-accent-contrast transition-opacity hover:opacity-90'
-                    : 'inline-flex items-center gap-2 border border-border-strong px-3 py-1.5 text-sm text-fg transition-colors hover:bg-bg-sunken'
-            }
+            className={variant === 'primary' ? 'btn btn-accent' : 'btn'}
         >
             <Play aria-hidden="true" className="size-4" />
             {children}

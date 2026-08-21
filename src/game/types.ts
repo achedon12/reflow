@@ -121,7 +121,9 @@ export type Mechanic =
     | 'blink'
     | 'chase'
     | 'wind'
-    | 'crumble';
+    | 'crumble'
+    | 'gravity'
+    | 'screen';
 
 export type Tier = 'easy' | 'medium' | 'hard' | 'impossible';
 
@@ -142,6 +144,21 @@ export type Level = {
 };
 
 export type Viewport = { w: number; h: number };
+
+/**
+ * L'ORIENTATION DE L'ÉCRAN, en quarts de tour horaires.
+ *
+ * 0 : la gravité tire vers le bas du monde, 1 : vers la gauche, 2 : vers le
+ * haut, 3 : vers la droite.
+ *
+ * ⚠️ Le moteur ne connaît QU'UNE gravité, dirigée vers le bas. Tourner l'écran
+ * ne change donc rien à la physique : on exprime la géométrie du niveau dans
+ * le repère où la gravité tombe, on simule, et l'affichage montre ce repère
+ * tel quel — le niveau paraît pivoter, le personnage marche toujours sur ses
+ * pieds. C'est ce qui permet d'ajouter la gravité orientable sans toucher une
+ * ligne des collisions, ni invalider la preuve de jouabilité des cent énigmes.
+ */
+export type Quarter = 0 | 1 | 2 | 3;
 
 export type Theme = 'light' | 'dark';
 
@@ -164,6 +181,14 @@ export type PlayerState = {
     crumbling: number;
     /** L'instant où il a commencé à céder. */
     crumbleAt: number;
+    /**
+     * La position que la lame suiveuse a RETENUE.
+     *
+     * Elle se cale sur le joueur tant qu'elle est haute, puis se fige dès
+     * qu'elle amorce sa descente : elle frappe donc là où l'on ÉTAIT. Sans ce
+     * délai, elle tombait toujours sur la tête et il n'y avait rien à esquiver.
+     */
+    chaseX: number;
     /** Index du bloc sur lequel le joueur repose, ou -1 pour le sol de la
      *  fenêtre. C'est lui qui dit quelle plateforme mobile doit l'emporter. */
     ground: number;

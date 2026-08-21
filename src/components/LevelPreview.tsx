@@ -42,7 +42,7 @@ export function LevelPreview({ level, label }: { level: Level; label: string }) 
     const spawn = resolve(level.spawn, view);
 
     return (
-        <figure className="border border-border-subtle">
+        <figure className="panel">
             <svg
                 viewBox={`0 0 ${view.w} ${view.h}`}
                 className="block h-auto w-full bg-bg-sunken"

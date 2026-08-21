@@ -1,5 +1,14 @@
-import { PLAYER_W } from './constants';
-import type { Anchor, Block, Condition, PlayerState, Rect, Theme, Viewport } from './types';
+import { PLAYER_H, PLAYER_W } from './constants';
+import type {
+    Anchor,
+    Block,
+    Condition,
+    PlayerState,
+    Quarter,
+    Rect,
+    Theme,
+    Viewport,
+} from './types';
 
 /** Un ancrage en pixels purs, sans aucune part de fenêtre. */
 export function fixed(x: number, y: number, w: number, h: number): Anchor {
@@ -19,6 +28,99 @@ export function anchored(
     return { ax, ay, ox, oy, aw: 0, ah: 0, ow: w, oh: h };
 }
 
+/**
+ * L'aire de jeu vue depuis le repère où la gravité tombe.
+ *
+ * Un quart de tour impair échange largeur et hauteur : un écran de 1000×560
+ * couché devient un puits de 560×1000.
+ */
+export function playViewport(view: Viewport, quarter: Quarter): Viewport {
+    return quarter % 2 === 0 ? { w: view.w, h: view.h } : { w: view.h, h: view.w };
+}
+
+/**
+ * Transporte un rectangle du monde vers le repère de la gravité.
+ *
+ * Les quatre cas sont écrits en toutes lettres plutôt que dérivés d'une
+ * matrice : ils se relisent, et une erreur de signe dans une matrice de
+ * rotation ne se voit qu'en jouant.
+ */
+export function rotateRect(rect: Rect, view: Viewport, quarter: Quarter): Rect {
+    switch (quarter) {
+        case 0:
+            return rect;
+        case 1:
+            // Le sol devient le bord GAUCHE du monde.
+            return { x: rect.y, y: view.w - rect.x - rect.w, w: rect.h, h: rect.w };
+        case 2:
+            // Le sol devient le bord HAUT : tout est retourné.
+            return { x: view.w - rect.x - rect.w, y: view.h - rect.y - rect.h, w: rect.w, h: rect.h };
+        case 3:
+            // Le sol devient le bord DROIT.
+            return { x: view.h - rect.y - rect.h, y: rect.x, w: rect.h, h: rect.w };
+    }
+}
+
+/** Le chemin inverse : du repère de la gravité vers le monde. */
+export function unrotateRect(rect: Rect, view: Viewport, quarter: Quarter): Rect {
+    switch (quarter) {
+        case 0:
+            return rect;
+        case 1:
+            return { x: view.w - rect.y - rect.h, y: rect.x, w: rect.h, h: rect.w };
+        case 2:
+            return { x: view.w - rect.x - rect.w, y: view.h - rect.y - rect.h, w: rect.w, h: rect.h };
+        case 3:
+            return { x: rect.y, y: view.h - rect.x - rect.w, w: rect.h, h: rect.w };
+    }
+}
+
+/** Une vitesse suit la même rotation que les positions, sans les décalages. */
+export function rotateVelocity(vx: number, vy: number, quarter: Quarter): { vx: number; vy: number } {
+    switch (quarter) {
+        case 0:
+            return { vx, vy };
+        case 1:
+            return { vx: vy, vy: -vx };
+        case 2:
+            return { vx: -vx, vy: -vy };
+        case 3:
+            return { vx: -vy, vy: vx };
+    }
+}
+
+/**
+ * Transporte le joueur d'un repère de gravité à un autre.
+ *
+ * Sa position dans LE MONDE ne bouge pas : c'est le sol qui change de côté.
+ * Sans ce transport, faire pivoter l'écran en plein saut téléporterait le
+ * personnage, et le rembobinage ne pourrait plus rien rattraper.
+ */
+export function reframePlayer(
+    player: PlayerState,
+    view: Viewport,
+    from: Quarter,
+    to: Quarter,
+): PlayerState {
+    if (from === to) return player;
+    const world = unrotateRect({ x: player.x, y: player.y, w: PLAYER_W, h: PLAYER_H }, view, from);
+    const placed = rotateRect(world, view, to);
+    const inWorld = rotateVelocity(player.vx, player.vy, ((4 - from) % 4) as Quarter);
+    const moved = rotateVelocity(inWorld.vx, inWorld.vy, to);
+    return {
+        ...player,
+        x: placed.x,
+        y: placed.y,
+        vx: moved.vx,
+        vy: moved.vy,
+        // Le sol a changé de côté : ce sur quoi on reposait ne porte plus.
+        grounded: false,
+        ground: -2,
+        coyote: 0,
+        chaseX: placed.x,
+    };
+}
+
 export function resolve(anchor: Anchor, view: Viewport): Rect {
     return {
         x: anchor.ax * view.w + anchor.ox,
@@ -35,6 +137,19 @@ export function matches(condition: Condition | undefined, view: Viewport): boole
     if (condition.minH !== undefined && view.h < condition.minH) return false;
     if (condition.maxH !== undefined && view.h > condition.maxH) return false;
     return true;
+}
+
+/**
+ * La lame suiveuse est-elle en train de VISER ?
+ *
+ * Elle vise pendant la moitié haute de son cycle, et se fige pendant la
+ * descente. C'est ce délai qui la rend esquivable : elle frappe là où l'on
+ * était un instant plus tôt, pas là où l'on est.
+ */
+export function aiming(block: Block, time: number): boolean {
+    if (!block.motion) return true;
+    const angle = 2 * Math.PI * (time / block.motion.period + (block.motion.phase ?? 0));
+    return Math.sin(angle) < 0;
 }
 
 /** Le bloc clignotant est-il là à cet instant ? Pure fonction du temps. */
@@ -123,22 +238,35 @@ export function solveBlocks(
     time: number,
     previousTime: number,
     player?: PlayerState,
+    quarter: Quarter = 0,
 ): SolvedBlock[] {
     const out: SolvedBlock[] = [];
     for (let index = 0; index < blocks.length; index += 1) {
         const block = blocks[index]!;
         const broken = player ? { blocks, index, bits: player.broken } : undefined;
+        // ⚠️ Les conditions de taille (`when`) s'évaluent sur l'écran RÉEL, pas
+        // sur sa vue tournée : un écran de 1000×560 reste large de 1000 même
+        // couché. La rotation est une commande à part.
         if (!present(block, view, theme, time, broken)) continue;
 
-        const base = resolve(block.rect, view);
+        // On résout l'ancrage dans le monde, PUIS on bascule dans le repère de
+        // la gravité. Le mouvement, lui, s'applique après la rotation : une
+        // lame tombe toujours vers le sol courant, quel que soit le quart de
+        // tour.
+        const base = rotateRect(resolve(block.rect, view), view, quarter);
         const now = motionOffset(block, time);
         const before = motionOffset(block, previousTime);
 
         let x = base.x + now.x;
         if (block.chase && player) {
-            // Centrée sur le joueur, mais bornée par la fenêtre : une lame qui
-            // sort du cadre ne menace plus personne.
-            const wanted = player.x + PLAYER_W / 2 - base.w / 2;
+            // ⚠️ `chaseX`, pas `player.x` : la lame vise la position qu'elle a
+            // RETENUE avant d'amorcer sa descente. Calée sur la position
+            // vivante, elle tombait toujours sur la tête — il n'y avait rien à
+            // esquiver, et les huit énigmes concernées devenaient insolubles.
+            //
+            // Bornée par la fenêtre : une lame qui sort du cadre ne menace plus
+            // personne.
+            const wanted = player.chaseX + PLAYER_W / 2 - base.w / 2;
             x = Math.max(0, Math.min(view.w - base.w, wanted));
         }
 

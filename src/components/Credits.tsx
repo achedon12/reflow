@@ -3,7 +3,8 @@ import type { Dictionary } from '@/i18n';
 import { format } from '@/i18n/format';
 import { APP_VERSION, AUTHOR, HUB_URL, REPOSITORY } from '@/lib/site';
 
-const linkClass = 'text-fg no-underline underline-offset-2 transition-colors hover:text-accent hover:underline';
+const linkClass =
+    'tap text-fg no-underline underline-offset-2 transition-colors hover:text-accent hover:underline';
 
 /** Le jeton `{author}` devient un lien. Découper la phrase en dur autour du
  *  nom marcherait en français et casserait dans les autres langues. */

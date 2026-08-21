@@ -3,7 +3,7 @@ import { getDictionary } from '@/i18n';
 import type { Locale } from '@/i18n/config';
 import { AUTHOR, HOST } from '@/lib/site';
 
-const LINK = 'text-fg no-underline underline-offset-2 hover:text-accent hover:underline';
+const LINK = 'tap text-fg no-underline underline-offset-2 hover:text-accent hover:underline';
 
 /**
  * Remplace les jetons d'un paragraphe par leurs valeurs.

@@ -1,9 +1,18 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { ArrowLeft, ArrowRight, Lightbulb, Moon, RotateCcw, Sun, Undo2, X } from 'lucide-react';
 import {
-    HUD_HEIGHT,
+    ArrowLeft,
+    ArrowRight,
+    Lightbulb,
+    Moon,
+    RotateCcw,
+    RotateCw,
+    Sun,
+    Undo2,
+    X,
+} from 'lucide-react';
+import {
     MAX_CATCHUP,
     MIN_PLAYFIELD_H,
     MIN_PLAYFIELD_W,
@@ -16,11 +25,14 @@ import {
 } from '@/game/constants';
 import { orbCount, spawnState, step } from '@/game/engine';
 import { decisiveMechanic, hintCount, unlockedHints } from '@/game/hints';
-import { solveBlocks } from '@/game/geometry';
-import type { Block, Input, Level, PlayerState, Viewport } from '@/game/types';
+import { playViewport, reframePlayer, solveBlocks } from '@/game/geometry';
+import type { Block, Input, Level, PlayerState, Quarter } from '@/game/types';
 import type { Dictionary } from '@/i18n';
 import { format } from '@/i18n/format';
 import { loadProgress, recordHints } from '@/lib/progress';
+import { ScreenHandles } from './ScreenHandles';
+import { ScreenRuler } from './ScreenRuler';
+import { useScreen } from './useScreen';
 import {
     getResolvedTheme,
     getServerResolved,
@@ -72,27 +84,6 @@ export type PlayfieldProps = {
     title: string;
 };
 
-function useViewport(): { view: Viewport; ready: boolean } {
-    const [view, setView] = useState<Viewport>({ w: 0, h: 0 });
-
-    useEffect(() => {
-        const measure = () => {
-            setView({ w: window.innerWidth, h: window.innerHeight - HUD_HEIGHT });
-        };
-        measure();
-        window.addEventListener('resize', measure);
-        // Le zoom par pincement et la barre d'URL mobile ne déclenchent pas
-        // toujours `resize` : `visualViewport` est le seul à les rapporter.
-        window.visualViewport?.addEventListener('resize', measure);
-        return () => {
-            window.removeEventListener('resize', measure);
-            window.visualViewport?.removeEventListener('resize', measure);
-        };
-    }, []);
-
-    return { view, ready: view.w > 0 };
-}
-
 const KEYS_LEFT = new Set(['ArrowLeft', 'a', 'A', 'q', 'Q']);
 const KEYS_RIGHT = new Set(['ArrowRight', 'd', 'D']);
 const KEYS_JUMP = new Set([' ', 'Spacebar', 'ArrowUp', 'w', 'W', 'z', 'Z']);
@@ -108,7 +99,8 @@ export function Playfield({
     title,
 }: PlayfieldProps) {
     const level = session.level;
-    const { view, ready } = useViewport();
+    const { screen, ref: screenRef, resize, turn } = useScreen();
+    const view = { w: screen.w, h: screen.h };
     const theme = useSyncExternalStore(subscribeTheme, getResolvedTheme, getServerResolved);
 
     const [won, setWon] = useState<{ time: number; tries: number } | null>(null);
@@ -156,10 +148,10 @@ export function Playfield({
     );
 
     const playerRef = useRef<HTMLDivElement | null>(null);
+    const panelRef = useRef<HTMLDivElement | null>(null);
     const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
     const timeRef = useRef<HTMLSpanElement | null>(null);
     const orbsRef = useRef<HTMLSpanElement | null>(null);
-    const sizeRef = useRef<HTMLSpanElement | null>(null);
     const deathRef = useRef<HTMLParagraphElement | null>(null);
 
     // Tout l'état vivant tient dans une seule référence : le relire au prochain
@@ -184,12 +176,10 @@ export function Playfield({
     // du thème et du rappel de victoire les plus récents, sans être reconstruite
     // — la reconstruire relancerait la partie à chaque pixel de
     // redimensionnement, c'est-à-dire pendant tout le geste du joueur.
-    const viewRef = useRef(view);
     const themeRef = useRef(theme);
     const winRef = useRef(onWin);
     const pausedRef = useRef(false);
     useEffect(() => {
-        viewRef.current = view;
         themeRef.current = theme;
         winRef.current = onWin;
         // La lecture d'un indice met la partie EN PAUSE : lire pendant qu'on
@@ -226,16 +216,42 @@ export function Playfield({
         });
         return bits;
     }, [level]);
-    const playable = ready && view.w >= MIN_PLAYFIELD_W && view.h >= MIN_PLAYFIELD_H;
+    const playable = screen.w >= MIN_PLAYFIELD_W && screen.h >= MIN_PLAYFIELD_H;
 
     const respawn = useCallback(() => {
         const state = game.current;
-        state.player = spawnState(level, viewRef.current);
+        const now = screenRef.current;
+        state.player = spawnState(level, { w: now.w, h: now.h }, now.quarter);
         state.history = [];
         state.frames = 0;
         state.rewinding = false;
         state.deadFor = 0;
-    }, [level]);
+    }, [level, screenRef]);
+
+    /**
+     * Le quart de tour, appliqué AU JOUEUR aussi.
+     *
+     * Sa position dans le monde ne doit pas bouger : c'est le sol qui change de
+     * côté. Sans ce transport, pivoter en plein saut le téléporterait.
+     */
+    const rotate = useCallback(
+        (delta: 1 | 3) => {
+            const state = game.current;
+            const before = screenRef.current;
+            if (state.player) {
+                state.player = reframePlayer(
+                    state.player,
+                    { w: before.w, h: before.h },
+                    before.quarter,
+                    (((before.quarter + delta) % 4) as Quarter),
+                );
+                // Le rembobinage ne doit pas ramener dans l'ancien repère.
+                state.history = [];
+            }
+            turn(delta);
+        },
+        [screenRef, turn],
+    );
 
     const restart = useCallback(() => {
         const state = game.current;
@@ -260,6 +276,10 @@ export function Playfield({
                 input.current.jump = true;
             } else if (event.key === 'r' || event.key === 'R') {
                 game.current.rewinding = true;
+            } else if (event.key === 'g' || event.key === 'G') {
+                // ⚠️ Pas `R` : c'est déjà le rembobinage. Deux commandes sur la
+                // même touche, c'est une mort à chaque tentative de pivot.
+                rotate(event.shiftKey ? 3 : 1);
             } else if (event.key === 't' || event.key === 'T') {
                 // Basculer le thème SANS quitter le clavier : sur les énigmes
                 // à thème, aller chercher le bouton du pied de page ferait
@@ -292,7 +312,7 @@ export function Playfield({
             window.removeEventListener('keydown', down);
             window.removeEventListener('keyup', up);
         };
-    }, [onClose, restart]);
+    }, [onClose, restart, rotate]);
 
     // ── Le bouton Précédent comme rembobinage ───────────────────────────────
     //
@@ -345,7 +365,10 @@ export function Playfield({
         const paint = () => {
             const player = state.player;
             if (!player) return;
-            const currentView = viewRef.current;
+            const now = screenRef.current;
+            const currentView = { w: now.w, h: now.h };
+            const quarter = now.quarter;
+            const frame = playViewport(currentView, quarter);
             const currentTheme = themeRef.current;
 
             // ⚠️ On repasse par `solveBlocks` au lieu de résoudre chaque bloc à
@@ -359,8 +382,17 @@ export function Playfield({
                 player.time,
                 player.time,
                 player,
+                quarter,
             );
             const byIndex = new Map(solved.map((entry) => [entry.index, entry]));
+
+            // L'écran occupe la place de son encombrement TOURNÉ : couché, un
+            // écran de 1000×560 devient un puits de 560×1000.
+            const panel = panelRef.current;
+            if (panel) {
+                panel.style.width = `${frame.w}px`;
+                panel.style.height = `${frame.h}px`;
+            }
 
             for (let index = 0; index < level.blocks.length; index += 1) {
                 const element = blockRefs.current[index];
@@ -411,7 +443,6 @@ export function Playfield({
                 }
                 orbsRef.current.textContent = `${taken}/${totalOrbs}`;
             }
-            if (sizeRef.current) sizeRef.current.textContent = `${currentView.w}×${currentView.h}`;
         };
 
         const frame = (now: number) => {
@@ -470,7 +501,7 @@ export function Playfield({
 
                 const result = step(
                     level,
-                    viewRef.current,
+                    { w: screenRef.current.w, h: screenRef.current.h },
                     themeRef.current,
                     state.player,
                     input.current,
@@ -509,7 +540,7 @@ export function Playfield({
 
         raf = requestAnimationFrame(frame);
         return () => cancelAnimationFrame(raf);
-    }, [dictionary, level, orbBits, persisted, playable, respawn, totalOrbs]);
+    }, [dictionary, level, orbBits, persisted, playable, respawn, screenRef, totalOrbs]);
 
     const copyShare = useCallback(() => {
         if (!shareUrl) return;
@@ -519,33 +550,39 @@ export function Playfield({
         });
     }, [shareUrl]);
 
-    const matchesReference =
-        Math.abs(view.w - level.reference.w) <= 40 && Math.abs(view.h - level.reference.h) <= 40;
-
     return (
-        <div className="fixed inset-0 z-50 flex flex-col bg-bg" role="application" aria-label={dictionary.game.title}>
-            {/* La bande de commandes, en haut : elle tient lieu de barre
-                d'outils, et les cotes qu'elle affiche SONT une information de
-                jeu — c'est là qu'on lit la taille de sa propre fenêtre. */}
+        <div
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 overflow-hidden bg-bg-sunken p-3"
+            role="application"
+            aria-label={dictionary.game.title}
+        >
+            {/* La bande de commandes : elle tient lieu de barre de titre à
+                l'écran de jeu, et les cotes qu'elle affiche SONT une
+                information — c'est là qu'on lit la taille qu'on est en train
+                de régler.
+
+                ⚠️ Les intitulés disparaissent sous 640 px et les icônes
+                restent : à 390 px, la barre débordait de 110 px et poussait le
+                chrono et la cote hors de l'écran. */}
             <div
-                className="flex shrink-0 items-center gap-2 border-b border-border-subtle bg-bg-elevated px-3"
-                style={{ height: HUD_HEIGHT }}
+                className="flex w-full max-w-full shrink-0 flex-wrap items-center gap-1.5 border border-border-subtle bg-bg-elevated px-2 py-1.5"
+                style={{ maxWidth: Math.max(320, playViewport(view, screen.quarter).w) }}
             >
                 <button
                     type="button"
                     onClick={onClose}
-                    className="flex items-center gap-1.5 border border-border-subtle px-2 py-1 text-xs text-fg-muted transition-colors hover:border-border-strong hover:text-fg"
+                    className="btn btn-slim"
                 >
                     <X aria-hidden="true" className="size-3.5" />
-                    {dictionary.game.close}
+                    <span className="hidden sm:inline">{dictionary.game.close}</span>
                 </button>
                 <button
                     type="button"
                     onClick={restart}
-                    className="flex items-center gap-1.5 border border-border-subtle px-2 py-1 text-xs text-fg-muted transition-colors hover:border-border-strong hover:text-fg"
+                    className="btn btn-slim"
                 >
                     <RotateCcw aria-hidden="true" className="size-3.5" />
-                    {dictionary.game.restart}
+                    <span className="hidden sm:inline">{dictionary.game.restart}</span>
                 </button>
                 <button
                     type="button"
@@ -558,10 +595,10 @@ export function Playfield({
                     onPointerLeave={() => {
                         game.current.rewinding = false;
                     }}
-                    className="flex items-center gap-1.5 border border-border-subtle px-2 py-1 text-xs text-fg-muted transition-colors hover:border-border-strong hover:text-fg"
+                    className="btn btn-slim"
                 >
                     <Undo2 aria-hidden="true" className="size-3.5" />
-                    {dictionary.game.rewind}
+                    <span className="hidden sm:inline">{dictionary.game.rewind}</span>
                 </button>
 
                 {/* La bascule de thème, DANS l'aire de jeu.
@@ -569,11 +606,25 @@ export function Playfield({
                     titre que le saut — et l'aire couvre toute la fenêtre, donc
                     le sélecteur du pied de page est hors d'atteinte pendant la
                     partie. Il n'était joignable qu'en quittant le niveau. */}
+                {/* La rotation : elle emporte la gravité. C'est la commande
+                    qui manquait — redimensionner ne faisait varier qu'une
+                    dimension du problème. */}
+                <button
+                    type="button"
+                    onClick={(event) => rotate(event.shiftKey ? 3 : 1)}
+                    title={`${dictionary.mechanics.gravity.name} (G)`}
+                    className="btn btn-slim"
+                >
+                    <RotateCw aria-hidden="true" className="size-3.5" />
+                    <span className="sr-only">{dictionary.mechanics.gravity.name}</span>
+                    <kbd className="numeric text-[0.65rem]">G</kbd>
+                </button>
+
                 <button
                     type="button"
                     onClick={toggleResolvedTheme}
                     title={`${dictionary.mechanics.theme.name} (T)`}
-                    className="flex items-center gap-1.5 border border-border-subtle px-2 py-1 text-xs text-fg-muted transition-colors hover:border-border-strong hover:text-fg"
+                    className="btn btn-slim"
                 >
                     {theme === 'dark' ? (
                         <Moon aria-hidden="true" className="size-3.5" />
@@ -595,11 +646,7 @@ export function Playfield({
                             setHintOpen(true);
                             setRead(unlocked);
                         }}
-                        className={`flex items-center gap-1.5 border px-2 py-1 text-xs transition-colors ${
-                            unlocked > read
-                                ? 'border-accent text-accent'
-                                : 'border-border-subtle text-fg-muted hover:border-border-strong hover:text-fg'
-                        }`}
+                        className={`btn btn-slim ${unlocked > read ? 'border-accent text-accent' : ''}`}
                     >
                         <Lightbulb aria-hidden="true" className="size-3.5" />
                         {dictionary.hints.button}
@@ -624,26 +671,58 @@ export function Playfield({
                     <span className="numeric">
                         <span ref={timeRef}>0.00</span> s
                     </span>
-                    {/* La cote : la taille courante, et celle à laquelle le
-                        niveau a été conçu. Elle passe au violet quand les deux
-                        se rejoignent — c'est un repère, pas une solution. */}
-                    <span
-                        className={`numeric border px-2 py-0.5 ${
-                            matchesReference ? 'border-accent text-accent' : 'border-border-subtle text-fg-muted'
-                        }`}
-                        title={`${level.reference.w}×${level.reference.h}`}
-                    >
-                        <span ref={sizeRef}>
-                            {view.w}×{view.h}
+                    {/* La cote est MODIFIABLE : c'est un panneau de propriétés,
+                        pas un afficheur. On règle l'écran à la poignée ou au
+                        clavier, comme on veut.
+
+                        ⚠️ Elle n'indique plus la cote de conception du niveau.
+                        L'afficher revenait à donner la réponse : il suffisait
+                        de recopier deux nombres pour que la mécanique
+                        disparaisse. Elle reste sur la page de l'énigme, pour
+                        qui la cherche. */}
+                    <span className="numeric flex items-center gap-1 border border-border-subtle px-1.5 py-0.5">
+                        <input
+                            type="number"
+                            aria-label={`${dictionary.game.size} — L`}
+                            value={screen.w}
+                            min={MIN_PLAYFIELD_W}
+                            onChange={(event) => resize(Number(event.target.value) || screen.w, screen.h)}
+                            className="w-12 bg-transparent text-right text-fg outline-none focus-visible:text-accent"
+                        />
+                        <span aria-hidden="true" className="text-fg-muted">
+                            ×
                         </span>
+                        <input
+                            type="number"
+                            aria-label={`${dictionary.game.size} — H`}
+                            value={screen.h}
+                            min={MIN_PLAYFIELD_H}
+                            onChange={(event) => resize(screen.w, Number(event.target.value) || screen.h)}
+                            className="w-12 bg-transparent text-left text-fg outline-none focus-visible:text-accent"
+                        />
                     </span>
                 </p>
             </div>
 
-            {/* L'aire elle-même. `overflow-hidden` et non `visible` : un bloc
-                ancré à un bord peut sortir du cadre quand la fenêtre change de
-                taille, et il ne doit alors pas allonger la page. */}
-            <div className="playfield-grid relative flex-1 overflow-hidden">
+            {/* L'ÉCRAN DE JEU. Sa taille est celle que le joueur règle, et non
+                celle de la fenêtre : c'est lui l'instrument.
+
+                `overflow-hidden` et non `visible` : un bloc ancré à un bord
+                peut sortir du cadre quand l'écran change de taille, et il ne
+                doit alors pas déborder sur la page. */}
+            <div className="relative shrink-0 pt-6 pl-7">
+                <ScreenRuler
+                    width={playViewport(view, screen.quarter).w}
+                    height={playViewport(view, screen.quarter).h}
+                />
+                <div
+                    ref={panelRef}
+                    className="playfield-grid relative overflow-hidden border border-border-strong bg-bg"
+                    style={{
+                        width: playViewport(view, screen.quarter).w,
+                        height: playViewport(view, screen.quarter).h,
+                    }}
+                >
                 {!playable && (
                     <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center">
                         <h2 className="text-lg font-semibold">{dictionary.game.tooSmall}</h2>
@@ -704,23 +783,23 @@ export function Playfield({
 
                 {needsKeyboard && !dismissedTouch && (
                     <div className="absolute inset-0 z-10 flex items-center justify-center bg-bg/90 px-6">
-                        <div className="w-full max-w-sm border border-border-strong bg-bg-elevated p-5">
+                        <div className="panel w-full max-w-sm bg-bg-elevated p-5">
                             <h2 className="text-lg font-semibold">{dictionary.game.touchTitle}</h2>
                             <p className="mt-2 text-sm text-fg-muted text-pretty">{dictionary.game.touchBody}</p>
                             <div className="mt-4 flex flex-wrap gap-2">
                                 <button
                                     type="button"
                                     onClick={() => setDismissedTouch(true)}
-                                    className="border border-accent bg-accent px-3 py-1.5 text-sm text-accent-contrast transition-opacity hover:opacity-90"
+                                    className="btn btn-accent"
                                 >
                                     {dictionary.game.touchAnyway}
                                 </button>
                                 <button
                                     type="button"
                                     onClick={onClose}
-                                    className="border border-border-strong px-3 py-1.5 text-sm text-fg transition-colors hover:bg-bg-sunken"
+                                    className="btn"
                                 >
-                                    {dictionary.game.close}
+                                    <span className="hidden sm:inline">{dictionary.game.close}</span>
                                 </button>
                             </div>
                         </div>
@@ -729,7 +808,7 @@ export function Playfield({
 
                 {hintOpen && (
                     <div className="absolute inset-0 flex items-center justify-center bg-bg/85 px-6">
-                        <div className="w-full max-w-md border border-border-strong bg-bg-elevated p-5">
+                        <div className="panel w-full max-w-md bg-bg-elevated p-5">
                             <p className="label text-accent">
                                 {format(dictionary.hints.heading, { n: unlocked, total: hintCount() })}
                             </p>
@@ -780,7 +859,7 @@ export function Playfield({
 
                 {won && (
                     <div className="absolute inset-0 flex items-center justify-center bg-bg/85 px-6">
-                        <div className="w-full max-w-sm border border-border-strong bg-bg-elevated p-5">
+                        <div className="panel w-full max-w-sm bg-bg-elevated p-5">
                             <p className="label text-goal">{dictionary.game.won}</p>
                             <p className="numeric mt-2 text-lg text-fg">
                                 {won.tries === 1
@@ -795,7 +874,7 @@ export function Playfield({
                                     <button
                                         type="button"
                                         onClick={onNext}
-                                        className="border border-accent bg-accent px-3 py-1.5 text-sm text-accent-contrast transition-opacity hover:opacity-90"
+                                        className="btn btn-accent"
                                     >
                                         {nextLabel}
                                     </button>
@@ -803,7 +882,7 @@ export function Playfield({
                                 <button
                                     type="button"
                                     onClick={restart}
-                                    className="border border-border-strong px-3 py-1.5 text-sm text-fg transition-colors hover:bg-bg-sunken"
+                                    className="btn"
                                 >
                                     {dictionary.game.retry}
                                 </button>
@@ -811,7 +890,7 @@ export function Playfield({
                                     <button
                                         type="button"
                                         onClick={copyShare}
-                                        className="border border-border-strong px-3 py-1.5 text-sm text-fg transition-colors hover:bg-bg-sunken"
+                                        className="btn"
                                     >
                                         {copied ? dictionary.game.copied : dictionary.game.share}
                                     </button>
@@ -819,7 +898,7 @@ export function Playfield({
                                 <button
                                     type="button"
                                     onClick={onClose}
-                                    className="border border-border-subtle px-3 py-1.5 text-sm text-fg-muted transition-colors hover:text-fg"
+                                    className="btn"
                                 >
                                     {dictionary.game.backToCatalogue}
                                 </button>
@@ -828,9 +907,16 @@ export function Playfield({
                     </div>
                 )}
 
-                {/* Commandes tactiles. Le jeu réclame un clavier ET une fenêtre
-                    redimensionnable, ce qu'un téléphone n'a pas — mais refuser
-                    net priverait un visiteur curieux de tout aperçu. */}
+                <ScreenHandles
+                    quarter={screen.quarter}
+                    current={() => ({ w: screenRef.current.w, h: screenRef.current.h })}
+                    onResize={resize}
+                    label={dictionary.game.size}
+                />
+
+                {/* Commandes tactiles. Le jeu réclame un clavier, ce qu'un
+                    téléphone n'a pas — mais l'écran de jeu, lui, s'y règle
+                    parfaitement au doigt. */}
                 <div className="touch-only pointer-events-none absolute inset-x-0 bottom-0 justify-between p-3">
                     <div className="pointer-events-auto flex gap-2">
                         <TouchKey
@@ -868,6 +954,7 @@ export function Playfield({
                     >
                         <span className="text-xs">{dictionary.game.controlJump}</span>
                     </TouchKey>
+                    </div>
                 </div>
             </div>
         </div>

@@ -61,7 +61,7 @@ export function PageChrome({
                                 key={key}
                                 href={path(key, locale)}
                                 aria-current={routeKey === key ? 'page' : undefined}
-                                className="label text-fg-muted no-underline transition-colors hover:text-fg aria-[current=page]:text-fg"
+                                className="tap label text-fg-muted no-underline transition-colors hover:text-fg aria-[current=page]:text-fg"
                             >
                                 {labels[key]}
                             </Link>

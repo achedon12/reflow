@@ -28,7 +28,7 @@ export function PuzzleView({ locale, level }: { locale: Locale; level: Level }) 
     return (
         <article className="flex flex-col gap-10">
             <nav aria-label={d.puzzlePage.breadcrumb} className="label text-fg-muted">
-                <Link href={path('puzzles', locale)} className="text-fg-muted no-underline hover:text-fg">
+                <Link href={path('puzzles', locale)} className="tap text-fg-muted no-underline hover:text-fg">
                     {d.puzzlePage.breadcrumb}
                 </Link>
                 <span aria-hidden="true" className="mx-2 text-border-strong">
@@ -82,7 +82,7 @@ export function PuzzleView({ locale, level }: { locale: Locale; level: Level }) 
                 {previous ? (
                     <Link
                         href={puzzlePath(previous.id, locale)}
-                        className="inline-flex items-center gap-1.5 text-sm text-fg-muted no-underline hover:text-fg"
+                        className="tap inline-flex items-center gap-1.5 text-sm text-fg-muted no-underline hover:text-fg"
                     >
                         <ArrowLeft aria-hidden="true" className="size-4" />
                         {d.puzzlePage.previous}
@@ -93,7 +93,7 @@ export function PuzzleView({ locale, level }: { locale: Locale; level: Level }) 
                 {following && (
                     <Link
                         href={puzzlePath(following.id, locale)}
-                        className="inline-flex items-center gap-1.5 text-sm text-fg-muted no-underline hover:text-fg"
+                        className="tap inline-flex items-center gap-1.5 text-sm text-fg-muted no-underline hover:text-fg"
                     >
                         {d.puzzlePage.next}
                         <ArrowRight aria-hidden="true" className="size-4" />

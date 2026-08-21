@@ -31,7 +31,7 @@ export function SiteHeader({
                 <Link
                     href={path('home', locale)}
                     aria-current={routeKey === 'home' ? 'page' : undefined}
-                    className="flex shrink-0 items-center gap-2 text-fg no-underline"
+                    className="tap flex shrink-0 items-center gap-2 text-fg no-underline"
                 >
                     {/* La marque : une fenêtre qui contient un niveau, et
                         derrière elle le cadre de sa taille précédente. Le même
@@ -77,7 +77,7 @@ export function SiteHeader({
                                 key={item.key}
                                 href={path(item.key, locale)}
                                 aria-current={routeKey === item.key ? 'page' : undefined}
-                                className="label text-fg-muted no-underline transition-colors hover:text-fg aria-[current=page]:text-fg"
+                                className="tap label text-fg-muted no-underline transition-colors hover:text-fg aria-[current=page]:text-fg"
                             >
                                 {item.label(dictionary)}
                             </Link>

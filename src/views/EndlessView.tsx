@@ -46,12 +46,12 @@ export function EndlessView({ dictionary }: { dictionary: Dictionary }) {
                 <p className="max-w-xl text-lg text-fg-muted text-pretty">{d.endless.lede}</p>
             </header>
 
-            <section className="border border-border-subtle p-6">
+            <section className="panel p-6">
                 <div className="flex flex-wrap items-center gap-3">
                     <button
                         type="button"
                         onClick={() => startEndless()}
-                        className="border border-accent bg-accent px-4 py-2 text-sm font-medium text-accent-contrast transition-opacity hover:opacity-90"
+                        className="btn btn-accent"
                     >
                         {d.endless.start}
                     </button>
@@ -77,12 +77,12 @@ export function EndlessView({ dictionary }: { dictionary: Dictionary }) {
                             defaultValue=""
                             placeholder={d.endless.seedPlaceholder}
                             maxLength={32}
-                            className="numeric w-56 border border-border-strong bg-bg-elevated px-3 py-1.5 text-sm text-fg outline-none focus-visible:border-accent"
+                            className="numeric w-56 border border-border-strong bg-bg-elevated px-3 py-2 text-sm text-fg outline-none focus-visible:border-accent"
                         />
                     </label>
                     <button
                         type="submit"
-                        className="border border-border-strong px-3 py-1.5 text-sm text-fg transition-colors hover:bg-bg-sunken"
+                        className="btn"
                     >
                         {d.endless.seedApply}
                     </button>

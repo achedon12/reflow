@@ -22,7 +22,7 @@ export function HomeView({ locale }: { locale: Locale }) {
                     <PlayButton puzzleId={first.id}>{d.home.play}</PlayButton>
                     <Link
                         href={path('puzzles', locale)}
-                        className="inline-flex items-center gap-1.5 border border-border-strong px-3 py-2 text-sm text-fg no-underline transition-colors hover:bg-bg-sunken"
+                        className="btn"
                     >
                         {d.home.browse}
                         <ArrowRight aria-hidden="true" className="size-4" />
@@ -52,13 +52,13 @@ export function HomeView({ locale }: { locale: Locale }) {
             <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label={d.header.navLabel}>
                 <Link
                     href={path('rules', locale)}
-                    className="text-sm text-fg no-underline underline-offset-4 hover:text-accent hover:underline"
+                    className="tap text-sm text-fg no-underline underline-offset-4 hover:text-accent hover:underline"
                 >
                     {d.home.rulesLink}
                 </Link>
                 <Link
                     href={path('mechanics', locale)}
-                    className="text-sm text-fg no-underline underline-offset-4 hover:text-accent hover:underline"
+                    className="tap text-sm text-fg no-underline underline-offset-4 hover:text-accent hover:underline"
                 >
                     {d.home.mechanicsLink}
                 </Link>

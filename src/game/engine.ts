@@ -18,11 +18,20 @@ import {
     PLAYER_H,
     PLAYER_W,
 } from './constants';
-import { crumbleBit, overlaps, resolve, solveBlocks, type SolvedBlock } from './geometry';
-import type { Input, Level, Outcome, PlayerState, Rect, Theme, Viewport } from './types';
+import {
+    aiming,
+    crumbleBit,
+    overlaps,
+    playViewport,
+    resolve,
+    rotateRect,
+    solveBlocks,
+    type SolvedBlock,
+} from './geometry';
+import type { Input, Level, Outcome, PlayerState, Quarter, Rect, Theme, Viewport } from './types';
 
-export function spawnState(level: Level, view: Viewport): PlayerState {
-    const spawn = resolve(level.spawn, view);
+export function spawnState(level: Level, view: Viewport, quarter: Quarter = 0): PlayerState {
+    const spawn = rotateRect(resolve(level.spawn, view), view, quarter);
     return {
         x: spawn.x,
         y: spawn.y,
@@ -32,6 +41,7 @@ export function spawnState(level: Level, view: Viewport): PlayerState {
         coyote: 0,
         buffer: 0,
         orbs: 0,
+        chaseX: spawn.x,
         broken: 0,
         crumbling: -1,
         crumbleAt: 0,
@@ -164,6 +174,7 @@ export function step(
     previous: PlayerState,
     input: Input,
     dt: number,
+    quarter: Quarter = 0,
 ): StepResult {
     const player: PlayerState = { ...previous };
     const previousTime = player.time;
@@ -176,7 +187,23 @@ export function step(
         player.crumbling = -1;
     }
 
-    const blocks = solveBlocks(level.blocks, view, theme, player.time, previousTime, player);
+    // La lame suiveuse vise tant qu'elle est haute, puis se fige. Mis à jour
+    // AVANT de résoudre la géométrie : c'est la position retenue qui décide où
+    // elle se trouve cette image.
+    //
+    // ⚠️ Une seule lame suiveuse par niveau — elles partagent cette valeur.
+    // `npm run levels` le vérifie.
+    for (const block of level.blocks) {
+        if (!block.chase) continue;
+        if (aiming(block, player.time)) player.chaseX = player.x;
+        break;
+    }
+
+    // ⚠️ Toute la suite travaille dans le repère de la gravité : c'est LUI que
+    // décrivent `play`, les blocs résolus et la position du joueur. Le monde
+    // n'existe plus qu'au moment de résoudre les ancrages.
+    const play = playViewport(view, quarter);
+    const blocks = solveBlocks(level.blocks, view, theme, player.time, previousTime, player, quarter);
     const solids = blocks.filter((block) => block.kind === 'solid');
 
     // Une plateforme mobile emporte ce qui repose dessus. Appliqué AVANT tout
@@ -197,7 +224,7 @@ export function step(
     /** La matière sous les pieds. C'est elle qui décide du frottement. */
     const footing = carrier?.surface;
 
-    if (!separate(player, solids, view, level.floor === 'solid')) {
+    if (!separate(player, solids, play, level.floor === 'solid')) {
         return { player, outcome: 'dead-crush' };
     }
 
@@ -250,7 +277,7 @@ export function step(
     player.ground = -2;
 
     collideAxis(player, solids, 'x', player.vx * dt);
-    player.x = Math.max(0, Math.min(view.w - PLAYER_W, player.x));
+    player.x = Math.max(0, Math.min(play.w - PLAYER_W, player.x));
 
     const fallSpeed = player.vy;
     collideAxis(player, solids, 'y', player.vy * dt);
@@ -280,9 +307,9 @@ export function step(
         player.vy = 0;
     }
 
-    if (player.y + PLAYER_H >= view.h) {
+    if (player.y + PLAYER_H >= play.h) {
         if (level.floor === 'deadly') return { player, outcome: 'dead-fall' };
-        player.y = view.h - PLAYER_H;
+        player.y = play.h - PLAYER_H;
         player.vy = 0;
         player.grounded = true;
         player.ground = -1;
