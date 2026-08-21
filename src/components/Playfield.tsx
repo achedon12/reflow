@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { ArrowLeft, ArrowRight, RotateCcw, Undo2, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Moon, RotateCcw, Sun, Undo2, X } from 'lucide-react';
 import {
     HUD_HEIGHT,
     MAX_CATCHUP,
@@ -441,6 +441,26 @@ export function Playfield({
                 >
                     <Undo2 aria-hidden="true" className="size-3.5" />
                     {dictionary.game.rewind}
+                </button>
+
+                {/* La bascule de thème, DANS l'aire de jeu.
+                    Sur les énigmes à thème, c'est une commande de jeu au même
+                    titre que le saut — et l'aire couvre toute la fenêtre, donc
+                    le sélecteur du pied de page est hors d'atteinte pendant la
+                    partie. Il n'était joignable qu'en quittant le niveau. */}
+                <button
+                    type="button"
+                    onClick={toggleResolvedTheme}
+                    title={`${dictionary.mechanics.theme.name} (T)`}
+                    className="flex items-center gap-1.5 border border-border-subtle px-2 py-1 text-xs text-fg-muted transition-colors hover:border-border-strong hover:text-fg"
+                >
+                    {theme === 'dark' ? (
+                        <Moon aria-hidden="true" className="size-3.5" />
+                    ) : (
+                        <Sun aria-hidden="true" className="size-3.5" />
+                    )}
+                    <span className="sr-only">{dictionary.mechanics.theme.name}</span>
+                    <kbd className="numeric text-[0.65rem] text-fg-muted">T</kbd>
                 </button>
 
                 <p className="ml-3 hidden truncate text-xs text-fg md:block">{title}</p>
