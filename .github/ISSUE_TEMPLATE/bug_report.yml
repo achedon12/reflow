@@ -1,0 +1,82 @@
+name: Bug
+description: Signaler un comportement incorrect
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci pour le signalement. **Pour une faille de sécurité, n'utilise pas
+        ce formulaire** : voir SECURITY.md.
+
+        Si le bug porte sur une énigme, la **taille de fenêtre** est
+        indispensable : la géométrie en dépend entièrement, et sans elle le cas
+        ne se rejoue pas. Elle est affichée en haut à droite pendant la partie.
+  - type: textarea
+    id: observe
+    attributes:
+      label: Ce qui se passe
+      description: Décris le comportement observé.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ce qui devrait se passer
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire
+      placeholder: |
+        1. Ouvrir l'énigme…
+        2. Redimensionner la fenêtre à…
+        3. Sauter depuis…
+    validations:
+      required: true
+  - type: input
+    id: puzzle
+    attributes:
+      label: Énigme concernée
+      description: Le dernier segment de l'URL, par exemple « lucarne ». Ou « partie infinie ».
+      placeholder: lucarne
+  - type: input
+    id: size
+    attributes:
+      label: Taille de fenêtre
+      description: La cote affichée en haut à droite pendant la partie.
+      placeholder: 1024×612
+    validations:
+      required: true
+  - type: input
+    id: seed
+    attributes:
+      label: Graine et palier
+      description: Pour une partie infinie uniquement. Le bouton « copier le lien » les contient.
+      placeholder: k3f9pa — palier 7
+  - type: dropdown
+    id: locale
+    attributes:
+      label: Langue
+      options: ["Français", "English", "Español", "Deutsch"]
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Thème
+      options: ["Système", "Clair", "Sombre", "Les trois"]
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Navigateur et appareil
+      placeholder: Firefox 130 sur Ubuntu 24.04
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version affichée en bas de page
+      placeholder: Version 0.1.0

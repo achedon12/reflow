@@ -1,0 +1,61 @@
+# Stack de PRODUCTION de reflow.leoderoin.fr.
+#
+# Le site est entièrement statique : un seul conteneur nginx, aucune base,
+# aucun processus Node. Le moteur physique et la génération des niveaux
+# tournent dans le navigateur du visiteur — il n'y a rien à stocker côté
+# serveur, et rien à sauvegarder.
+#
+# Isolation vis-à-vis des autres stacks de la machine : projet Docker `reflow`,
+# réseau `reflow_network`, conteneur préfixé `reflow_`.
+#
+# ⚠️ PORTS DÉJÀ PRIS SUR LE SERVEUR : 3000 (werewolf), 3001/3005 (pushyourluck),
+# 3006 (jeux), 3007 (azimut), 3307 (MySQL), 5433 (Postgres), 6379 (Redis).
+# D'où le 3009.
+#
+# Lancer :  docker compose -p reflow up -d --build
+services:
+
+  reflow_web:
+    container_name: reflow_web
+    image: reflow-leoderoin:latest
+    build:
+      context: .
+      # Ces valeurs partent dans les fichiers produits : elles doivent être
+      # connues à la CONSTRUCTION. Une NEXT_PUBLIC_SITE_URL fausse donne un
+      # site qui s'affiche parfaitement et se référence sur le mauvais domaine.
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://reflow.leoderoin.fr}
+        NEXT_PUBLIC_APP_VERSION: ${NEXT_PUBLIC_APP_VERSION:-0.1.0}
+        NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: ${NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION:-}
+        NEXT_PUBLIC_MATOMO_URL: ${NEXT_PUBLIC_MATOMO_URL:-}
+        NEXT_PUBLIC_MATOMO_SITE_ID: ${NEXT_PUBLIC_MATOMO_SITE_ID:-}
+    ports:
+      # Lié à la boucle locale : le conteneur n'est joignable que par le proxy
+      # inverse installé sur la même machine. Sans ça, n'importe qui peut
+      # atteindre http://serveur:3009 et court-circuiter nginx — donc le TLS,
+      # la limitation de débit et les journaux d'accès.
+      - "127.0.0.1:${REFLOW_HOST_PORT:-3009}:8080"
+    networks:
+      - reflow_network
+    restart: unless-stopped
+    # Le conteneur n'écrit rien : ni cache, ni journal sur disque, ni dépôt de
+    # fichier. Un système de fichiers en lecture seule ferme la porte à un
+    # dépôt de fichier par une faille de nginx.
+    read_only: true
+    # Seuls chemins dont nginx a besoin en écriture. La configuration, elle,
+    # est déjà écrite dans l'image : rien à générer au démarrage.
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  reflow_network:
+    name: reflow_network

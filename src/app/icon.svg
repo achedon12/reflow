@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Reflow">
+  <!-- LA MARQUE : une fenêtre qui contient un niveau, et derrière elle le cadre
+       de sa taille précédente.
+       C'est le jeu entier en un signe — le décor EST la fenêtre, et la fenêtre
+       change de taille. Tout ce qui est dessiné à l'intérieur reprend les
+       couleurs de jeu du site : plateforme sombre à liseré violet, personnage
+       blanc, sortie lime. Le quadrillage est celui du fond des pages.
+
+       L'ORDRE compte : le cadre fantôme passe DERRIÈRE, la fenêtre courante
+       devant. C'est ce qui dit lequel des deux est l'état actuel. -->
+  <defs>
+    <pattern id="paper" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#9d7bff" stroke-opacity="0.16" stroke-width="1.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="512" height="512" fill="#0b0d12"/>
+
+  <!-- La taille précédente, en trait seul -->
+  <rect x="74" y="104" width="252" height="196" fill="none" stroke="#9d7bff" stroke-width="16"/>
+
+  <!-- La fenêtre courante, et le niveau dedans -->
+  <rect x="160" y="180" width="280" height="216" fill="#141824" stroke="#7b8398" stroke-width="12"/>
+  <rect x="166" y="186" width="268" height="204" fill="url(#paper)"/>
+
+  <!-- Les deux paliers : corps sombre, liseré violet sur le dessus -->
+  <rect x="186" y="348" width="94" height="16" fill="#2b3247"/>
+  <rect x="186" y="348" width="94" height="5" fill="#9d7bff"/>
+  <rect x="300" y="300" width="86" height="16" fill="#2b3247"/>
+  <rect x="300" y="300" width="86" height="5" fill="#9d7bff"/>
+
+  <!-- Le personnage, posé sur le premier palier -->
+  <rect x="198" y="310" width="30" height="38" fill="#ffffff"/>
+
+  <!-- La sortie, posée sur le second -->
+  <rect x="326" y="262" width="30" height="38" fill="none" stroke="#a3e635" stroke-width="8"/>
+</svg>

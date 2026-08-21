@@ -1,0 +1,21 @@
+node_modules
+.next
+out
+next-env.d.ts
+*.tsbuildinfo
+
+.env
+.env.local
+
+# Réglages d'éditeur : ils décrivent une machine, pas le projet.
+/.idea
+/.vscode
+
+.DS_Store
+
+# Outils d'assistance : ils décrivent un poste de travail, pas le projet.
+# `AGENTS.md` est REGÉNÉRÉ par `next dev` à chaque lancement — l'ignorer est le
+# seul moyen de ne pas le retrouver en modification non commitée.
+/.claude
+CLAUDE.md
+AGENTS.md

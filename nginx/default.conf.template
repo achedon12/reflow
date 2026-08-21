@@ -1,0 +1,128 @@
+# Source de la configuration servie en production. Le Dockerfile y remplace
+# __MATOMO_HOST__ par l'origine Matomo au moment de la CONSTRUCTION, et copie
+# le résultat dans /etc/nginx/conf.d/.
+#
+# ⚠️ NE PAS revenir au mécanisme de templates de l'image nginx (envsubst au
+# démarrage) : il écrit dans /etc/nginx/conf.d, que `read_only: true` interdit,
+# et un tmpfs posé là appartient à root alors que le conteneur tourne en uid
+# 101. nginx démarre quand même, sans aucun `server` — donc sans écouter.
+server {
+    # 8080 et non 80 : l'image tourne sans privilèges, et un port sous 1024
+    # exige root.
+    listen 8080;
+    listen [::]:8080;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    charset utf-8;
+    server_tokens off;
+
+    # ⚠️ Sans ça, nginx écrit ses redirections en ABSOLU à partir de son propre
+    # port d'écoute : un `/en` renverrait « Location: http://127.0.0.1:8080/en/ ».
+    # Derrière le proxy inverse, le visiteur serait expédié sur un hôte et un
+    # port qui ne sortent pas de la machine.
+    absolute_redirect off;
+
+    # Vaut pour les réponses qui ne redéfinissent aucun add_header. Toutes les
+    # autres doivent inclure le fragment elles-mêmes — voir le fichier.
+    include /etc/nginx/security-headers.conf;
+
+    gzip on;
+    gzip_vary on;
+    gzip_comp_level 6;
+    gzip_min_length 1024;
+    # `text/xml` ET `application/xml` : nginx sert sitemap.xml en text/xml, et
+    # ne compresserait rien avec la seule variante `application/`.
+    gzip_types text/plain text/css text/xml application/javascript application/json application/xml application/rss+xml image/svg+xml application/manifest+json;
+
+    # `/fr/` n'est jamais généré : le français vit sur `/`. La redirection
+    # existe pour les liens écrits à la main et pour qui devine l'URL.
+    location = /fr/ { return 301 /; }
+    location = /fr  { return 301 /; }
+
+    # Redirections « sans barre finale » vers la forme canonique, DÉRIVÉES de
+    # `src/i18n/routes.ts` par `npm run nginx`. Rien à tenir à la main ici.
+    include /etc/nginx/redirects.conf;
+
+    # L'export produit `/index.html` ; le servir aussi sous son nom de fichier
+    # créerait une seconde URL pour la même page.
+    #
+    # ⚠️ Le test sur $request_uri est OBLIGATOIRE. Le module `index` réécrit `/`
+    # en `/index.html` EN INTERNE et repasse par les locations : un
+    # `return 301 /` inconditionnel se déclenche sur cette réécriture et fait
+    # boucler la page d'accueil sur elle-même.
+    location = /index.html {
+        if ($request_uri = /index.html) { return 301 /; }
+        include /etc/nginx/security-headers.conf;
+        add_header Cache-Control "public, max-age=0, must-revalidate" always;
+    }
+
+    # Les fichiers de `_next/static` portent un condensat dans leur nom : leur
+    # contenu ne change jamais à URL constante, un an de cache est sûr.
+    #
+    # ⚠️ Le `^~` est OBLIGATOIRE. Sans lui, nginx continue d'évaluer les
+    # locations en EXPRESSION RÉGULIÈRE, qui l'emportent sur un préfixe simple :
+    # les polices de `/_next/static/media/*.woff2` tomberaient dans la règle
+    # `\.(png|svg|...|woff2)$` juste en dessous, avec 30 jours au lieu d'un an.
+    location ^~ /_next/static/ {
+        include /etc/nginx/security-headers.conf;
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
+        access_log off;
+    }
+
+    location ~* \.(png|svg|ico|webp|woff2)$ {
+        include /etc/nginx/security-headers.conf;
+        add_header Cache-Control "public, max-age=2592000" always;
+        access_log off;
+    }
+
+    # Le HTML n'est PAS mis en cache durablement : c'est ce qui fait qu'un
+    # déploiement se voit tout de suite. Les niveaux, eux, ne sont pas dans le
+    # HTML — une partie générée tient dans le fragment d'URL, jamais servi.
+    location / {
+        include /etc/nginx/security-headers.conf;
+        add_header Cache-Control "public, max-age=0, must-revalidate" always;
+        try_files $uri $uri/ $uri.html =404;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+        include /etc/nginx/security-headers.conf;
+        add_header Cache-Control "no-store" always;
+    }
+
+    # Le plan du site est servi en `application/xml` : c'est le type qui
+    # déclenche le visualiseur XML du navigateur. Sans cette règle, mime.types
+    # le donne en `text/xml` et le navigateur le télécharge.
+    #
+    # `types { }` vide, puis `default_type` : `default_type` seul ne l'emporte
+    # pas sur une correspondance d'extension. Le bloc est PORTÉ PAR CETTE
+    # LOCATION — posé au niveau du serveur, il ferait perdre son type au reste.
+    location = /sitemap.xml {
+        types { }
+        default_type application/xml;
+        include /etc/nginx/security-headers.conf;
+        add_header Cache-Control "public, max-age=0, must-revalidate" always;
+    }
+
+    # ⚠️ `.webmanifest` est absent de mime.types et partirait en
+    # `application/octet-stream`. Corrigé par `default_type` sur CETTE adresse,
+    # surtout pas par un bloc `types` au niveau du serveur : en nginx un bloc
+    # `types` REMPLACE toute la table MIME du contexte au lieu de l'étendre.
+    location = /manifest.webmanifest {
+        default_type application/manifest+json;
+        include /etc/nginx/security-headers.conf;
+        add_header Cache-Control "public, max-age=0, must-revalidate" always;
+    }
+
+    # Sonde du healthcheck Compose. `access_log off` évite de noyer les vrais
+    # accès sous une ligne toutes les quinze secondes.
+    location = /healthz {
+        access_log off;
+        default_type text/plain;
+        return 200 "ok\n";
+    }
+}

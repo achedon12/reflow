@@ -1,0 +1,15 @@
+node_modules
+.next
+out
+.git
+.github
+.idea
+*.md
+!README.md
+.env
+.env.local
+docker-compose*.yml
+Dockerfile*
+.claude
+CLAUDE.md
+AGENTS.md

@@ -1,0 +1,43 @@
+# Stack de DÉVELOPPEMENT — isolée des autres projets de la machine.
+# Le port 3008 est celui de `npm run dev` : 3000 est au loup-garou, 3001 à
+# Push Your Luck, 3003 au panneau de jeux, 3004 à Azimut.
+#
+# Elle n'est pas obligatoire : `npm run dev` sur l'hôte fait la même chose.
+# Elle existe pour retrouver la version de Node de la production sans
+# l'installer, et pour repartir d'un node_modules propre en une commande.
+#
+# Lancer :  docker compose -p reflow -f docker-compose.dev.yml up -d --build
+services:
+
+  reflow_dev:
+    container_name: reflow_dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    environment:
+      NEXT_PUBLIC_SITE_URL: http://localhost:3008
+      # Aucune mesure d'audience en développement : la moindre valeur ici
+      # enverrait des vues de test dans les statistiques du site réel.
+      NEXT_PUBLIC_MATOMO_URL: ""
+      NEXT_PUBLIC_MATOMO_SITE_ID: ""
+      # Sans ça, la détection de changement de fichier ne traverse pas le
+      # montage sur certains systèmes de fichiers de l'hôte.
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "127.0.0.1:3008:3008"
+    volumes:
+      - .:/app
+      # ⚠️ Ce volume ANONYME doit rester : sans lui, le montage de `.` masque
+      # le node_modules de l'image par celui de l'hôte — compilé pour une autre
+      # plateforme, et le conteneur meurt sur un binaire illisible.
+      - /app/node_modules
+      # Idem pour le cache de construction : le partager avec l'hôte fait
+      # entrer en collision les deux `next dev`.
+      - /app/.next
+    networks:
+      - reflow_network
+    restart: unless-stopped
+
+networks:
+  reflow_network:
+    name: reflow_network

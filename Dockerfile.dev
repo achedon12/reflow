@@ -1,0 +1,14 @@
+# syntax=docker/dockerfile:1
+
+# Image de DÉVELOPPEMENT uniquement : le code est monté depuis l'hôte, seules
+# les dépendances sont figées dans l'image. Elle n'est jamais publiée.
+FROM node:26-alpine
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+
+EXPOSE 3008
+# `-H 0.0.0.0` est obligatoire dans un conteneur : lié à la seule boucle
+# locale, le serveur ne serait joignable que depuis l'intérieur de l'image.
+CMD ["npx", "next", "dev", "-p", "3008", "-H", "0.0.0.0"]

@@ -1,0 +1,47 @@
+name: Idée
+description: Proposer une amélioration, ou une énigme
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Reflow tient sur quatre contraintes : **le niveau est la fenêtre**,
+        **aucun serveur**, **aucune énigme non prouvée finissable**, **quatre
+        langues**. Les idées qui les respectent ont toutes leurs chances ;
+        celles qui demandent un serveur, un compte ou un classement, aucune.
+
+        Une énigme qui serait jouable telle quelle dans n'importe quel autre
+        jeu de plateforme n'a pas sa place ici : c'est le redimensionnement qui
+        doit faire l'énigme.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Le problème
+      description: Qu'est-ce qui ne va pas aujourd'hui ? Le « pourquoi » avant le « quoi ».
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Ce que tu proposes
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Nature
+      options:
+        - Une énigme
+        - Une mécanique de jeu
+        - Design ou ergonomie
+        - Traduction ou nouvelle langue
+        - Référencement ou performance
+        - Accessibilité
+        - Autre
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Ce que tu as envisagé d'autre
+      description: Facultatif, mais ça évite de refaire le tour.

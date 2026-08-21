@@ -1,0 +1,28 @@
+# ⚠️ CE FICHIER EXISTE À CAUSE D'UN PIÈGE DE NGINX : un `add_header` posé dans
+# un bloc `location` ANNULE tous ceux hérités du bloc `server`. Les en-têtes
+# étaient donc bien présents sur /healthz — qui n'en a aucun besoin — et
+# absents de toutes les pages HTML, qui en ont un `Cache-Control` propre.
+#
+# D'où ce fragment, à inclure DANS CHAQUE `location` qui pose un add_header.
+# Vérifier après toute modification :
+#     curl -sI http://127.0.0.1:3009/ | grep -i content-security-policy
+#
+# `always` est indispensable : sans lui, nginx omet l'en-tête sur les réponses
+# d'erreur — dont la page 404, qui est du HTML comme les autres.
+#
+# `'unsafe-inline'` sur script-src n'est pas un oubli : Next injecte ses propres
+# scripts en ligne pour l'hydratation. La politique garde son sens — elle
+# interdit tout script d'un hôte tiers, et `connect-src` empêche
+# l'exfiltration vers un serveur arbitraire.
+#
+# ⚠️ `frame-ancestors 'self'` et `X-Frame-Options` sont VOLONTAIRES malgré la
+# mécanique multi-fenêtres du jeu : celle-ci ouvre de vraies fenêtres par
+# `window.open`, jamais des iframes. Autoriser l'encadrement n'apporterait rien
+# au jeu et ouvrirait le détournement de clic.
+add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' __MATOMO_HOST__; style-src 'self' 'unsafe-inline'; img-src 'self' data: __MATOMO_HOST__; font-src 'self' data:; connect-src 'self' __MATOMO_HOST__; manifest-src 'self'; upgrade-insecure-requests" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header X-Frame-Options "SAMEORIGIN" always;
+# Un jeu de plateforme au clavier n'a besoin d'aucune de ces interfaces : les
+# refuser évite qu'une dépendance compromise puisse seulement les demander.
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()" always;

@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+
+      # `--ignore-scripts` évite de compiler sharp, qui ne sert qu'à
+      # `npm run og` — un script de poste de développement dont le résultat est
+      # versionné.
+      - run: npm ci --ignore-scripts
+
+      - run: npm run typecheck
+      - run: npm run lint
+
+      # L'URL importe : c'est elle qui écrit les canoniques et le sitemap. La
+      # construction réussirait sur un mauvais domaine sans rien signaler.
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://reflow.leoderoin.fr
+
+      # LE contrôle du projet : le moteur physique rejoue les cinquante-quatre
+      # énigmes et prouve qu'elles sont finissables. Une énigme impossible ne
+      # plante pas — elle est simplement injouable, et rien d'autre ne le dirait.
+      - name: Vérifier que les énigmes sont finissables
+        run: npm run levels
+
+      # Garde-fous sur ce que le référencement ne pardonne pas.
+      - name: Vérifier les balises de référencement
+        run: |
+          set -e
+          for page in out/index.html out/en/index.html out/es/index.html out/de/index.html \
+                      out/enigmes/lucarne/index.html out/de/raetsel/lucarne/index.html; do
+            grep -q '<link rel="canonical"' "$page" || { echo "canonical manquante dans $page"; exit 1; }
+            count=$(grep -o '<link rel="alternate"' "$page" | wc -l)
+            [ "$count" -eq 5 ] || { echo "$page déclare $count alternatives au lieu de 5"; exit 1; }
+            grep -q 'application/ld+json' "$page" || { echo "données structurées absentes de $page"; exit 1; }
+          done
+          grep -q 'reflow.leoderoin.fr' out/sitemap.xml
+          urls=$(grep -c '<url>' out/sitemap.xml)
+          [ "$urls" -eq 240 ] || { echo "le plan du site déclare $urls URL au lieu de 240"; exit 1; }
+          echo "Référencement conforme."
+
+      # `prune-export` retire /404/ et /_not-found/, qui répondraient 200 et
+      # que Google signale comme des « soft 404 ». Une régression ici est
+      # invisible à l'œil.
+      - name: Vérifier l'élagage des pages d'erreur
+        run: |
+          set -e
+          test ! -d out/404 || { echo "out/404/ n'a pas été élagué"; exit 1; }
+          test ! -d out/_not-found || { echo "out/_not-found/ n'a pas été élagué"; exit 1; }
+          test -f out/404.html || { echo "out/404.html manquant"; exit 1; }
+          echo "Élagage conforme."
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # L'image de production est le seul artefact réellement déployé : la
+      # construire en intégration continue évite de découvrir au déploiement
+      # qu'une étape du Dockerfile ne passe plus.
+      - name: Construire l'image de production
+        run: docker build --build-arg NEXT_PUBLIC_SITE_URL=https://reflow.leoderoin.fr -t reflow-leoderoin:ci .
+
+      - name: Démarrer le conteneur et sonder
+        run: |
+          set -e
+          docker run -d --name reflow_ci -p 8099:8080 reflow-leoderoin:ci
+          for i in $(seq 1 20); do
+            if curl -sf http://127.0.0.1:8099/healthz > /dev/null; then break; fi
+            sleep 1
+          done
+          curl -sf http://127.0.0.1:8099/healthz
+          # La CSP est posée par un fragment inclus dans CHAQUE location : la
+          # sonder sur une vraie page est le seul moyen de le vérifier.
+          curl -sI http://127.0.0.1:8099/ | grep -qi 'content-security-policy'
+          # Une URL sans barre finale doit rediriger, pas servir un doublon.
+          code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8099/enigmes)
+          [ "$code" = "301" ] || { echo "/enigmes répond $code au lieu de 301"; exit 1; }
+          echo "Image conforme."
+
+      - name: Arrêter le conteneur
+        if: always()
+        run: docker rm -f reflow_ci || true

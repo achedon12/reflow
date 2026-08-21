@@ -1,0 +1,279 @@
+@import 'tailwindcss';
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Palette — l'inspecteur d'éléments
+
+   Volontairement ÉLOIGNÉE des trois autres jeux de la maison : le panneau est
+   un papier crème arrondi, Azimut un instrument de mesure bleu nuit, Push Your
+   Luck un tapis doré. Reflow est un OUTIL : papier millimétré, cotes, poignées
+   de redimensionnement, angles vifs et zéro rayon.
+
+   Le violet est la couleur d'interface. Le lime appartient à la SORTIE et à
+   rien d'autre : c'est une information, pas une décoration. Le magenta
+   appartient à ce qui tue.
+
+   Chaque couleur a sa valeur de base sur `:root`. Une couleur définie
+   UNIQUEMENT dans un bloc @media ou [data-theme] disparaît dans les deux
+   autres états — et « système » est justement celui qu'on oublie de tester.
+   ────────────────────────────────────────────────────────────────────────── */
+:root {
+    --bg: #f4f5f8;
+    --bg-elevated: #ffffff;
+    --bg-sunken: #e6e8ef;
+    --fg: #14161d;
+    --fg-muted: #5a6072;
+    --border: #d3d7e2;
+    --border-strong: #a8aec1;
+    --accent: #5b21ff;
+    --accent-contrast: #ffffff;
+    --ring: #5b21ff;
+
+    /* Le quadrillage du papier millimétré. */
+    --grid: rgb(20 22 29 / 0.055);
+    --grid-strong: rgb(20 22 29 / 0.1);
+
+    /* ── Les couleurs du JEU ────────────────────────────────────────────────
+       Elles portent une règle, jamais un goût : le joueur doit pouvoir dire
+       en un coup d'œil ce qui porte, ce qui tue et ce qui ouvre. */
+    --solid: #232734;
+    --solid-edge: #5b21ff;
+    --hazard: #d81b60;
+    --goal: #3f8a00;
+    --goal-glow: rgb(63 138 0 / 0.22);
+    --orb: #b45309;
+    --player: #5b21ff;
+    --player-edge: #14161d;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+        --bg: #0b0d12;
+        --bg-elevated: #141824;
+        --bg-sunken: #07090d;
+        --fg: #e4e7f2;
+        --fg-muted: #8b93aa;
+        --border: #1e2331;
+        --border-strong: #363d51;
+        --accent: #9d7bff;
+        --accent-contrast: #0b0d12;
+        --ring: #9d7bff;
+
+        --grid: rgb(157 123 255 / 0.06);
+        --grid-strong: rgb(157 123 255 / 0.12);
+
+        --solid: #2b3247;
+        --solid-edge: #9d7bff;
+        --hazard: #ff3d7f;
+        --goal: #a3e635;
+        --goal-glow: rgb(163 230 53 / 0.2);
+        --orb: #fbbf24;
+        --player: #ffffff;
+        --player-edge: #9d7bff;
+    }
+}
+
+/* Sombre FORCÉ. Duplication volontaire : une règle @media ne s'applique pas
+   quand la machine est en clair, il faut une seconde source pour que le bouton
+   l'emporte dans les deux sens. */
+:root[data-theme='dark'] {
+    --bg: #0b0d12;
+    --bg-elevated: #141824;
+    --bg-sunken: #07090d;
+    --fg: #e4e7f2;
+    --fg-muted: #8b93aa;
+    --border: #1e2331;
+    --border-strong: #363d51;
+    --accent: #9d7bff;
+    --accent-contrast: #0b0d12;
+    --ring: #9d7bff;
+
+    --grid: rgb(157 123 255 / 0.06);
+    --grid-strong: rgb(157 123 255 / 0.12);
+
+    --solid: #2b3247;
+    --solid-edge: #9d7bff;
+    --hazard: #ff3d7f;
+    --goal: #a3e635;
+    --goal-glow: rgb(163 230 53 / 0.2);
+    --orb: #fbbf24;
+    --player: #ffffff;
+    --player-edge: #9d7bff;
+}
+
+@media (prefers-contrast: more) {
+    :root {
+        --fg-muted: #33384a;
+        --border: #b4bacb;
+        --border-strong: #7f8699;
+    }
+}
+
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+        --fg-muted: #c2c9db;
+        --border: #2c3346;
+        --border-strong: #4d566f;
+    }
+}
+
+@media (prefers-contrast: more) {
+    :root[data-theme='dark'] {
+        --fg-muted: #c2c9db;
+        --border: #2c3346;
+        --border-strong: #4d566f;
+    }
+}
+
+@theme inline {
+    --breakpoint-xs: 26rem;
+
+    --color-bg: var(--bg);
+    --color-bg-elevated: var(--bg-elevated);
+    --color-bg-sunken: var(--bg-sunken);
+    --color-fg: var(--fg);
+    --color-fg-muted: var(--fg-muted);
+    --color-border-subtle: var(--border);
+    --color-border-strong: var(--border-strong);
+    --color-accent: var(--accent);
+    --color-accent-contrast: var(--accent-contrast);
+    --color-goal: var(--goal);
+    --color-hazard: var(--hazard);
+    --color-orb: var(--orb);
+
+    /* Posées par next/font sur <html>. Le suffixe `-local` est obligatoire :
+       `--font-sans` est déjà un jeton Tailwind. */
+    --font-sans: var(--font-sans-local);
+    --font-mono: var(--font-mono-local);
+
+    /* Aucun rayon nulle part. C'est la règle de forme du site : le panneau est
+       arrondi, Azimut a des angles courts, Reflow est strictement orthogonal —
+       un box model n'a pas de coins ronds. */
+    --radius-none: 0px;
+}
+
+@layer base {
+    html {
+        color-scheme: light;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        html:not([data-theme='light']) {
+            color-scheme: dark;
+        }
+    }
+
+    html[data-theme='dark'] {
+        color-scheme: dark;
+    }
+
+    body {
+        /* Le fond doit être explicite : laissé transparent, la page emprunte
+           celui du navigateur et clignote au chargement d'un thème sombre.
+
+           Le quadrillage est la SIGNATURE du site — du papier millimétré, en
+           deux pas : un fin de 24 px, un fort de 120 px. En `background-image`,
+           donc sans un seul nœud de plus dans le document. */
+        background-color: var(--bg);
+        background-image:
+            linear-gradient(to right, var(--grid-strong) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--grid-strong) 1px, transparent 1px),
+            linear-gradient(to right, var(--grid) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+        background-size:
+            120px 120px,
+            120px 120px,
+            24px 24px,
+            24px 24px;
+        color: var(--fg);
+        font-family: var(--font-sans);
+        min-height: 100dvh;
+        text-rendering: optimizeLegibility;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-weight: 600;
+        letter-spacing: -0.025em;
+    }
+
+    /* Toute mesure du site est à chasse fixe : les cotes de la fenêtre, les
+       temps, les compteurs. C'est ce qui les fait lire comme des VALEURS et
+       non comme du texte — et elles ne sautillent pas quand elles changent. */
+    .numeric {
+        font-family: var(--font-mono);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.03em;
+    }
+
+    /* Micro-intitulés d'outil : petits, espacés, en capitales. */
+    .label {
+        font-family: var(--font-mono);
+        font-size: 0.66rem;
+        font-weight: 500;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    /* Le quadrillage de l'AIRE DE JEU.
+       Ce n'est pas de la décoration : sans repère, on ne juge pas une distance
+       de saut sur un fond uni, et la fenêtre paraît vide. Le pas est de 40 px,
+       plus large que celui des pages — il sert à mesurer un saut, pas à
+       habiller un fond. */
+    .playfield-grid {
+        background-image:
+            linear-gradient(to right, var(--grid-strong) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--grid-strong) 1px, transparent 1px),
+            linear-gradient(to right, var(--grid) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+        background-size:
+            200px 200px,
+            200px 200px,
+            40px 40px,
+            40px 40px;
+        /* Ancré en BAS À GAUCHE, comme le repère du jeu : le sol est le bas de
+           la fenêtre, et la grille doit rester fixe quand on redimensionne par
+           le bord haut. */
+        background-position: bottom left;
+    }
+
+    /* La cote : un nombre entre deux tirets, comme sur un plan. */
+    .dim::before,
+    .dim::after {
+        content: '';
+        display: inline-block;
+        width: 0.75rem;
+        height: 1px;
+        vertical-align: middle;
+        background: currentColor;
+        opacity: 0.5;
+    }
+
+    .dim::before {
+        margin-right: 0.4rem;
+    }
+
+    .dim::after {
+        margin-left: 0.4rem;
+    }
+
+    [id] {
+        scroll-margin-block-start: 5rem;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--ring);
+        outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
