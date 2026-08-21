@@ -11,6 +11,19 @@ updates:
     groups:
       mineures-et-correctifs:
         update-types: ['minor', 'patch']
+    # ⚠️ Ces deux majeures sont IGNORÉES, et ce n'est pas de la négligence :
+    # `eslint-config-next` embarque `typescript-eslint`, qui refuse de démarrer
+    # au-dessus de TypeScript 6 et n'est pas compatible ESLint 10. Les proposer
+    # produit une PR rouge par semaine, que personne ne peut fusionner — le
+    # blocage vient d'en haut, pas d'ici.
+    #
+    # À rouvrir quand `eslint-config-next` aura suivi : retirer ces deux lignes
+    # et relancer `npm run check`.
+    ignore:
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
+      - dependency-name: eslint
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'chore'
       include: scope
