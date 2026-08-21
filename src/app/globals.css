@@ -277,3 +277,49 @@
         }
     }
 }
+
+@layer components {
+    /*
+     * Une orbe RAMASSÉE se remplit.
+     *
+     * Jusqu'ici elle gardait exactement l'apparence d'une orbe intacte : seul
+     * le compteur du bandeau disait qu'elle était prise, et il faut le chercher
+     * des yeux en pleine course. Le contour vide veut dire « à prendre », le
+     * plein « c'est fait ».
+     */
+    .orb[data-taken] {
+        background: var(--orb);
+    }
+
+    /*
+     * L'éclat du ramassage, porté par un PSEUDO-ÉLÉMENT.
+     *
+     * ⚠️ Surtout pas sur l'orbe elle-même : la boucle de rendu lui réécrit son
+     * `transform` à chaque image pour la positionner, et écraserait
+     * l'animation. Le pseudo-élément a le sien, que personne ne touche.
+     */
+    .orb::after {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        border: 2px solid var(--orb);
+        border-radius: inherit;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .orb-pop::after {
+        animation: orb-pop 420ms ease-out;
+    }
+
+    @keyframes orb-pop {
+        from {
+            opacity: 0.9;
+            transform: scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: scale(2.2);
+        }
+    }
+}

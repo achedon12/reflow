@@ -190,6 +190,21 @@ export function Playfield({
     }, []);
 
     const totalOrbs = useMemo(() => orbCount(level), [level]);
+
+    // L'index d'un bloc n'est PAS son bit : les orbes sont mêlées aux autres
+    // blocs, et le bit compte les orbes seules. La table évite de recompter ce
+    // décalage à chaque image.
+    const orbBits = useMemo(() => {
+        const bits = new Map<number, number>();
+        let bit = 0;
+        level.blocks.forEach((block, index) => {
+            if (block.kind === 'orb') {
+                bits.set(index, bit);
+                bit += 1;
+            }
+        });
+        return bits;
+    }, [level]);
     const playable = ready && view.w >= MIN_PLAYFIELD_W && view.h >= MIN_PLAYFIELD_H;
 
     const respawn = useCallback(() => {
@@ -302,6 +317,10 @@ export function Playfield({
         const state = game.current;
         if (!state.player) respawn();
 
+        // Ce qui était déjà ramassé à l'image précédente. Sert à ne déclencher
+        // l'éclat qu'au MOMENT du ramassage, et pas à chaque image ensuite.
+        const wasTaken = new Array<boolean>(level.blocks.length).fill(false);
+
         const paint = () => {
             const player = state.player;
             if (!player) return;
@@ -322,6 +341,29 @@ export function Playfield({
                 element.style.width = `${rect.w}px`;
                 element.style.height = `${rect.h}px`;
                 element.style.transform = `translate3d(${rect.x + offset.x}px, ${rect.y + offset.y}px, 0)`;
+
+                if (block.kind === 'orb') {
+                    const bit = orbBits.get(index);
+                    const taken = bit !== undefined && (player.orbs & (1 << bit)) !== 0;
+                    if (taken !== wasTaken[index]) {
+                        wasTaken[index] = taken;
+                        if (taken) {
+                            element.dataset.taken = '';
+                            // Retirer, forcer un recalcul, remettre : sans quoi
+                            // le navigateur ne rejoue pas une animation dont la
+                            // classe est déjà là — après un retour en arrière,
+                            // la même orbe se reprend.
+                            element.classList.remove('orb-pop');
+                            void element.offsetWidth;
+                            element.classList.add('orb-pop');
+                        } else {
+                            // Retour en arrière ou réapparition : l'orbe
+                            // redevient à prendre.
+                            delete element.dataset.taken;
+                            element.classList.remove('orb-pop');
+                        }
+                    }
+                }
             }
 
             const avatar = playerRef.current;
@@ -433,7 +475,7 @@ export function Playfield({
 
         raf = requestAnimationFrame(frame);
         return () => cancelAnimationFrame(raf);
-    }, [dictionary, level, persisted, playable, respawn, totalOrbs]);
+    }, [dictionary, level, orbBits, persisted, playable, respawn, totalOrbs]);
 
     const copyShare = useCallback(() => {
         if (!shareUrl) return;
@@ -593,7 +635,7 @@ export function Playfield({
                                           ? 'bg-[var(--hazard)]'
                                           : block.kind === 'goal'
                                             ? 'border-2 border-[var(--goal)] bg-[var(--goal-glow)]'
-                                            : 'border-2 border-[var(--orb)]'
+                                            : 'orb border-2 border-[var(--orb)]'
                                 }`}
                             />
                         ))}
