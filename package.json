@@ -32,7 +32,7 @@
         "sharp": "^0.35.3",
         "tailwindcss": "^4",
         "tsx": "^4.20.3",
-        "typescript": "^5"
+        "typescript": "^7"
     },
     "allowScripts": {
         "unrs-resolver@1.12.2": true,
