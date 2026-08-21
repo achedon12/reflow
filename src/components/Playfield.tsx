@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { ArrowLeft, ArrowRight, Moon, RotateCcw, Sun, Undo2, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Lightbulb, Moon, RotateCcw, Sun, Undo2, X } from 'lucide-react';
 import {
     HUD_HEIGHT,
     MAX_CATCHUP,
@@ -15,10 +15,12 @@ import {
     STEP,
 } from '@/game/constants';
 import { orbCount, spawnState, step } from '@/game/engine';
+import { decisiveMechanic, hintCount, unlockedHints } from '@/game/hints';
 import { motionOffset, present, resolve } from '@/game/geometry';
 import type { Input, Level, PlayerState, Viewport } from '@/game/types';
 import type { Dictionary } from '@/i18n';
 import { format } from '@/i18n/format';
+import { loadProgress, recordHints } from '@/lib/progress';
 import {
     getResolvedTheme,
     getServerResolved,
@@ -113,6 +115,25 @@ export function Playfield({
     const [tries, setTries] = useState(1);
     const [copied, setCopied] = useState(false);
 
+    // L'énigme dont les indices sont MÉMORISÉS. Le mode infini n'en garde
+    // aucun : une partie engendrée ne se retrouve pas.
+    const persisted = session.kind === 'puzzle' ? level.id : null;
+
+    // Les indices : combien sont proposés, combien ont été lus, et le panneau
+    // est-il ouvert. `read` sert uniquement à signaler qu'un NOUVEL indice est
+    // arrivé — sans quoi le bouton s'allume une fois et ne dit plus rien.
+    //
+    // Semés à l'initialisation avec ce qui avait déjà été gagné : celui qui a
+    // abandonné hier devant une énigme est précisément celui à qui il ne faut
+    // pas réimposer l'attente. Lu ici et non dans un effet — cette aire de jeu
+    // n'existe qu'après un clic, elle n'est jamais rendue côté serveur, donc il
+    // n'y a aucune hydratation à désynchroniser.
+    const [unlocked, setUnlocked] = useState(() =>
+        persisted ? (loadProgress().hints[persisted] ?? 0) : 0,
+    );
+    const [read, setRead] = useState(unlocked);
+    const [hintOpen, setHintOpen] = useState(false);
+
     const playerRef = useRef<HTMLDivElement | null>(null);
     const blockRefs = useRef<(HTMLDivElement | null)[]>([]);
     const timeRef = useRef<HTMLSpanElement | null>(null);
@@ -130,6 +151,10 @@ export function Playfield({
         rewinding: false,
         deadFor: 0,
         finished: false,
+        /** Temps passé sur l'énigme, tentatives cumulées. Distinct de
+         *  `player.time`, qui repart de zéro à chaque mort. */
+        spent: 0,
+        unlocked,
     });
 
     const input = useRef<Input>({ left: false, right: false, jump: false, jumpPressed: false });
@@ -141,11 +166,17 @@ export function Playfield({
     const viewRef = useRef(view);
     const themeRef = useRef(theme);
     const winRef = useRef(onWin);
+    const pausedRef = useRef(false);
     useEffect(() => {
         viewRef.current = view;
         themeRef.current = theme;
         winRef.current = onWin;
+        // La lecture d'un indice met la partie EN PAUSE : lire pendant qu'on
+        // tombe serait une punition, et le compteur qui déclenche l'indice
+        // suivant ne doit pas tourner pendant qu'on lit le précédent.
+        pausedRef.current = hintOpen;
     });
+
 
     // Le défilement de la page derrière l'aire de jeu : la barre de défilement
     // reste visible et la molette fait bouger le document sous le personnage.
@@ -312,9 +343,23 @@ export function Playfield({
             const elapsed = Math.min((now - last) / 1000, MAX_CATCHUP);
             last = now;
 
-            if (!state.player || state.finished) {
+            if (!state.player || state.finished || pausedRef.current) {
                 paint();
                 return;
+            }
+
+            // Le temps qui décide d'un indice : celui passé SUR L'ÉNIGME, pas
+            // sur la tentative en cours. Il s'arrête tout seul quand l'onglet
+            // passe en arrière-plan, la boucle y étant gelée par le navigateur.
+            state.spent += elapsed;
+            const earned = Math.max(
+                state.unlocked,
+                unlockedHints(level, state.spent, state.tries - 1),
+            );
+            if (earned !== state.unlocked) {
+                state.unlocked = earned;
+                setUnlocked(earned);
+                if (persisted) recordHints(persisted, earned);
             }
 
             if (state.deadFor > 0) {
@@ -388,7 +433,7 @@ export function Playfield({
 
         raf = requestAnimationFrame(frame);
         return () => cancelAnimationFrame(raf);
-    }, [dictionary, level, playable, respawn, totalOrbs]);
+    }, [dictionary, level, persisted, playable, respawn, totalOrbs]);
 
     const copyShare = useCallback(() => {
         if (!shareUrl) return;
@@ -462,6 +507,31 @@ export function Playfield({
                     <span className="sr-only">{dictionary.mechanics.theme.name}</span>
                     <kbd className="numeric text-[0.65rem] text-fg-muted">T</kbd>
                 </button>
+
+                {/* Le bouton n'existe qu'une fois un indice gagné, et il ne
+                    s'ouvre JAMAIS tout seul : un panneau qui surgit sans qu'on
+                    l'ait demandé prend le joueur pour un incapable. Il
+                    s'allume, c'est tout. */}
+                {unlocked > 0 && (
+                    <button
+                        type="button"
+                        onClick={() => {
+                            setHintOpen(true);
+                            setRead(unlocked);
+                        }}
+                        className={`flex items-center gap-1.5 border px-2 py-1 text-xs transition-colors ${
+                            unlocked > read
+                                ? 'border-accent text-accent'
+                                : 'border-border-subtle text-fg-muted hover:border-border-strong hover:text-fg'
+                        }`}
+                    >
+                        <Lightbulb aria-hidden="true" className="size-3.5" />
+                        {dictionary.hints.button}
+                        <span className="numeric text-[0.65rem]">
+                            {unlocked}/{hintCount()}
+                        </span>
+                    </button>
+                )}
 
                 <p className="ml-3 hidden truncate text-xs text-fg md:block">{title}</p>
 
@@ -556,6 +626,63 @@ export function Playfield({
                             </p>
                         )}
                     </>
+                )}
+
+                {/* Annoncé aux lecteurs d'écran, qui ne voient pas un bouton
+                    changer de couleur. */}
+                <p aria-live="polite" className="sr-only">
+                    {unlocked > read ? dictionary.hints.available : ''}
+                </p>
+
+                {hintOpen && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-bg/85 px-6">
+                        <div className="w-full max-w-md border border-border-strong bg-bg-elevated p-5">
+                            <p className="label text-accent">
+                                {format(dictionary.hints.heading, { n: unlocked, total: hintCount() })}
+                            </p>
+
+                            <ol className="mt-4 flex flex-col gap-4">
+                                <li>
+                                    <p className="text-xs text-fg-muted">{dictionary.hints.step1}</p>
+                                    <p className="mt-1 text-sm text-fg">
+                                        {level.mechanics.map((key) => dictionary.mechanics[key].name).join(' · ')}
+                                    </p>
+                                </li>
+
+                                {unlocked >= 2 && (
+                                    <li>
+                                        <p className="text-xs text-fg-muted">{dictionary.hints.step2}</p>
+                                        <ul className="mt-1 flex flex-col gap-1.5">
+                                            {level.mechanics.map((key) => (
+                                                <li key={key} className="text-sm text-fg text-pretty">
+                                                    {dictionary.mechanics[key].body}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </li>
+                                )}
+
+                                {unlocked >= 3 && (
+                                    <li>
+                                        <p className="text-xs text-fg-muted">{dictionary.hints.step3}</p>
+                                        <p className="mt-1 border-l-2 border-accent pl-3 text-sm text-fg text-pretty">
+                                            {dictionary.hints.gestures[decisiveMechanic(level, view, theme)]}
+                                        </p>
+                                    </li>
+                                )}
+                            </ol>
+
+                            <p className="mt-4 text-xs text-fg-muted text-pretty">{dictionary.hints.promise}</p>
+
+                            <button
+                                type="button"
+                                onClick={() => setHintOpen(false)}
+                                className="mt-4 border border-border-strong px-3 py-1.5 text-sm text-fg transition-colors hover:bg-bg-sunken"
+                            >
+                                {dictionary.hints.close}
+                            </button>
+                        </div>
+                    </div>
                 )}
 
                 {won && (

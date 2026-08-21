@@ -106,6 +106,36 @@ export const de: Dictionary = {
         mediumPlural: 'Mittlere',
         hardPlural: 'Schwere',
     },
+    hints: {
+        button: 'Hinweis',
+        available: 'Ein Hinweis ist verfügbar',
+        heading: 'Hinweis {n} von {total}',
+        close: 'Schließen',
+        more: 'Noch ein Hinweis',
+        step1: 'Dieses Rätsel spielt mit:',
+        step2: 'Was das bedeutet:',
+        step3: 'Was zu versuchen ist:',
+        promise:
+            'Keiner dieser Hinweise verrät die Lösung: das Rätsel bleibt ganz.',
+        gestures: {
+            resize:
+                'Das Fenster ist der einzige Hebel. Bring es näher an die Größe oben rechts.',
+            edge:
+                'Nicht jeder Absatz hängt am selben Rand. Zieh an einer Seite und schau, welche sich bewegen.',
+            appear:
+                'Ein Stück des Weges fehlt. Verkleinere das Fenster deutlich und schau, was erscheint.',
+            motion:
+                'Warten ist eine Handlung. Spring nicht, sobald du kannst.',
+            theme:
+                'Wechsle das Thema mitten in der Partie — Taste T, oder die Schaltfläche in der Spielleiste.',
+            rewind:
+                'Halte R, um sechs Sekunden zurückzuspulen. Bei diesem Rätsel tut die Zurück-Schaltfläche dasselbe.',
+            orbs:
+                'Der Ausgang bleibt zu, solange eine Kugel fehlt. Sieh auf den Zähler oben rechts.',
+            crush:
+                'Verkleinern kann töten. Schau, wo du stehst, bevor du an einem Rand ziehst.',
+        },
+    },
     mechanics: {
         resize: {
             name: 'Größe ändern',
@@ -289,6 +319,10 @@ export const de: Dictionary = {
             {
                 title: 'Nichts wird woanders als bei dir gespeichert',
                 body: 'Dein Fortschritt und deine Bestzeiten liegen im lokalen Speicher deines Browsers. Kein Konto, keine Übertragung — und diesen Speicher zu leeren setzt alles zurück.',
+            },
+            {
+                title: 'Ein Hinweis, wenn du feststeckst',
+                body: 'Nach einer Weile, oder nach ein paar Toden, leuchtet in der Spielleiste eine Schaltfläche „Hinweis“ auf. Drei Stufen, von der vagesten zur konkretesten — und keine verrät die Lösung: sie benennen die beteiligte Mechanik und die Geste, die zu versuchen ist, nie wo zu springen ist oder bei welcher Größe.',
             },
         ],
         back: 'Spielen',

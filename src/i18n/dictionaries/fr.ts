@@ -106,6 +106,36 @@ export const fr = {
         mediumPlural: 'Moyennes',
         hardPlural: 'Difficiles',
     },
+    hints: {
+        button: 'Indice',
+        available: 'Un indice est disponible',
+        heading: 'Indice {n} sur {total}',
+        close: 'Fermer',
+        more: 'Un indice de plus',
+        step1: 'Cette énigme met en jeu :',
+        step2: 'Ce que ça veut dire :',
+        step3: 'Ce qu’il y a à essayer :',
+        promise:
+            'Aucun de ces indices ne donne la solution : l’énigme reste entière.',
+        gestures: {
+            resize:
+                'La fenêtre est le seul levier. Rapproche-la de la cote affichée en haut à droite.',
+            edge:
+                'Tous les paliers ne sont pas accrochés au même bord. Tire sur un côté, et regarde lesquels bougent.',
+            appear:
+                'Il manque un morceau du chemin. Rétrécis franchement la fenêtre, et regarde ce qui apparaît.',
+            motion:
+                'Attendre est une action. Ne saute pas dès que tu peux.',
+            theme:
+                'Change de thème en pleine partie — la touche T, ou le bouton dans la barre du jeu.',
+            rewind:
+                'Maintiens R pour rembobiner six secondes. Sur cette énigme, le bouton Précédent du navigateur fait la même chose.',
+            orbs:
+                'La sortie reste fermée tant qu’il reste une orbe. Regarde le compteur, en haut à droite.',
+            crush:
+                'Rétrécir peut tuer. Regarde où tu te trouves avant de tirer sur un bord.',
+        },
+    },
     mechanics: {
         resize: {
             name: 'Redimensionner',
@@ -505,6 +535,10 @@ export const fr = {
             {
                 title: 'Rien n’est enregistré ailleurs que chez vous',
                 body: 'Votre progression et vos meilleurs temps vivent dans le stockage local de votre navigateur. Aucun compte, aucun envoi, et vider ce stockage remet tout à zéro.',
+            },
+            {
+                title: 'Un indice si tu bloques',
+                body: 'Au bout d’un moment, ou de quelques morts, un bouton « Indice » s’allume dans la barre du jeu. Trois échelons, du plus vague au plus concret — et aucun ne donne la solution : ils nomment la mécanique en jeu et le geste à essayer, jamais où sauter ni à quelle taille.',
             },
         ],
         back: 'Jouer',

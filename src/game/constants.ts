@@ -88,3 +88,40 @@ export function maxRunForRise(rise: number): number {
     const t = (JUMP_VELOCITY + Math.sqrt(discriminant)) / GRAVITY;
     return MOVE_SPEED * t * 0.82;
 }
+
+/**
+ * Quand proposer un indice.
+ *
+ * DEUX signaux, et le premier atteint suffit : le temps passé sur l'énigme, et
+ * le nombre de morts. Ni l'un ni l'autre ne se suffit —
+ *
+ * - compter les morts seules raterait « Le suspendu » ou « La clairière », où
+ *   l'on reste bloqué sans mourir une seule fois : le chemin est simplement
+ *   hors d'atteinte ;
+ * - compter le temps seul allumerait l'indice sur un joueur qui explore
+ *   tranquillement une énigme qu'il est en train de résoudre.
+ *
+ * Les seuils montent avec la difficulté : trois minutes sur une énigme
+ * difficile, c'est normal ; sur la première, c'est qu'on ne voit pas.
+ *
+ * ⚠️ Le temps ne court PAS pendant la lecture d'un indice ni après la
+ * victoire, et il s'arrête tout seul quand l'onglet passe en arrière-plan —
+ * la boucle d'animation y est gelée par le navigateur.
+ */
+export const HINT_STEPS: Record<'easy' | 'medium' | 'hard', { seconds: number; deaths: number }[]> = {
+    easy: [
+        { seconds: 45, deaths: 5 },
+        { seconds: 100, deaths: 12 },
+        { seconds: 180, deaths: 22 },
+    ],
+    medium: [
+        { seconds: 75, deaths: 8 },
+        { seconds: 160, deaths: 18 },
+        { seconds: 280, deaths: 30 },
+    ],
+    hard: [
+        { seconds: 120, deaths: 12 },
+        { seconds: 250, deaths: 26 },
+        { seconds: 420, deaths: 45 },
+    ],
+};

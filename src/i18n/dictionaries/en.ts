@@ -106,6 +106,36 @@ export const en: Dictionary = {
         mediumPlural: 'Medium',
         hardPlural: 'Hard',
     },
+    hints: {
+        button: 'Hint',
+        available: 'A hint is available',
+        heading: 'Hint {n} of {total}',
+        close: 'Close',
+        more: 'One more hint',
+        step1: 'This puzzle plays on:',
+        step2: 'What that means:',
+        step3: 'What to try:',
+        promise:
+            'None of these hints gives the solution: the puzzle is still yours to solve.',
+        gestures: {
+            resize:
+                'The window is the only lever. Bring it closer to the size shown at the top right.',
+            edge:
+                'Not every platform is pinned to the same edge. Pull one side, and watch which ones move.',
+            appear:
+                'A piece of the path is missing. Shrink the window hard, and watch what appears.',
+            motion:
+                'Waiting is an action. Do not jump the moment you can.',
+            theme:
+                'Switch theme mid-run — the T key, or the button in the game bar.',
+            rewind:
+                'Hold R to rewind six seconds. On this puzzle the browser’s Back button does the same.',
+            orbs:
+                'The exit stays shut while one orb remains. Check the counter at the top right.',
+            crush:
+                'Shrinking can kill. Look at where you are standing before you pull an edge.',
+        },
+    },
     mechanics: {
         resize: {
             name: 'Resizing',
@@ -289,6 +319,10 @@ export const en: Dictionary = {
             {
                 title: 'Nothing is stored anywhere but here',
                 body: 'Your progress and your best times live in your browser’s local storage. No account, nothing sent, and clearing that storage resets everything.',
+            },
+            {
+                title: 'A hint if you get stuck',
+                body: 'After a while, or a few deaths, a “Hint” button lights up in the game bar. Three rungs, from vaguest to most concrete — and none of them gives the solution: they name the mechanic in play and the gesture to try, never where to jump or at what size.',
             },
         ],
         back: 'Play',

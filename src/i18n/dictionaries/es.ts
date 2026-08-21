@@ -106,6 +106,36 @@ export const es: Dictionary = {
         mediumPlural: 'Medias',
         hardPlural: 'Difíciles',
     },
+    hints: {
+        button: 'Pista',
+        available: 'Hay una pista disponible',
+        heading: 'Pista {n} de {total}',
+        close: 'Cerrar',
+        more: 'Una pista más',
+        step1: 'Este enigma pone en juego:',
+        step2: 'Lo que eso significa:',
+        step3: 'Lo que hay que probar:',
+        promise:
+            'Ninguna de estas pistas da la solución: el enigma sigue entero.',
+        gestures: {
+            resize:
+                'La ventana es la única palanca. Acércala a la cota que aparece arriba a la derecha.',
+            edge:
+                'No todos los rellanos están anclados al mismo borde. Tira de un lado y mira cuáles se mueven.',
+            appear:
+                'Falta un trozo del camino. Encoge la ventana con decisión y mira qué aparece.',
+            motion:
+                'Esperar es una acción. No saltes en cuanto puedas.',
+            theme:
+                'Cambia de tema en plena partida: la tecla T, o el botón de la barra del juego.',
+            rewind:
+                'Mantén R para rebobinar seis segundos. En este enigma el botón Atrás del navegador hace lo mismo.',
+            orbs:
+                'La salida sigue cerrada mientras quede un orbe. Mira el contador, arriba a la derecha.',
+            crush:
+                'Encoger puede matar. Fíjate en dónde estás antes de tirar de un borde.',
+        },
+    },
     mechanics: {
         resize: {
             name: 'Redimensionar',
@@ -289,6 +319,10 @@ export const es: Dictionary = {
             {
                 title: 'Nada se guarda fuera de tu equipo',
                 body: 'Tu progreso y tus mejores tiempos viven en el almacenamiento local de tu navegador. Sin cuenta, sin envíos, y vaciar ese almacenamiento lo pone todo a cero.',
+            },
+            {
+                title: 'Una pista si te atascas',
+                body: 'Al cabo de un rato, o de unas cuantas muertes, se enciende un botón «Pista» en la barra del juego. Tres escalones, del más vago al más concreto, y ninguno da la solución: nombran la mecánica en juego y el gesto que probar, nunca dónde saltar ni a qué tamaño.',
             },
         ],
         back: 'Jugar',

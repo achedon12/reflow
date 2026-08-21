@@ -138,6 +138,46 @@ solution trouvée », jamais « aucune solution n'existe ». Le compromis est le
 bon sens — un faux échec se corrige en élargissant le faisceau, un faux succès
 passerait inaperçu jusqu'au premier joueur bloqué.
 
+## L'aide, sans jamais la réponse
+
+Certaines énigmes se ratent **sans mourir une seule fois** : sur « Le suspendu »
+ou « La clairière », on reste devant un chemin hors d'atteinte, ou devant rien
+du tout. Compter les morts seules ne verrait pas ce blocage-là ; compter le
+temps seul allumerait une aide sur un joueur qui explore tranquillement. Le
+déclencheur est donc un **OU** entre les deux, avec des seuils qui montent avec
+la difficulté :
+
+| | 1ᵉʳ indice | 2ᵉ | 3ᵉ |
+|---|---|---|---|
+| Facile | 45 s ou 5 morts | 100 s ou 12 | 180 s ou 22 |
+| Moyenne | 75 s ou 8 | 160 s ou 18 | 280 s ou 30 |
+| Difficile | 120 s ou 12 | 250 s ou 26 | 420 s ou 45 |
+
+Trois échelons, et aucun ne donne la solution :
+
+1. les **mécaniques** mises en jeu, par leur nom seul ;
+2. ce que chacune **fait**, dans le texte qui les décrit déjà ailleurs ;
+3. le **geste** à essayer — « change de thème », « rétrécis franchement » —
+   jamais une position ni une valeur.
+
+Deux décisions comptent plus que les seuils :
+
+- **Le bouton s'allume, il ne s'ouvre pas.** Un panneau qui surgit sans qu'on
+  l'ait demandé prend le joueur pour un incapable.
+- **Aucun indice n'est écrit énigme par énigme.** Cinquante-quatre indices en
+  quatre langues seraient une dette de contenu qui vieillirait mal, et le
+  premier niveau retouché rendrait le sien faux sans que rien ne le signale.
+  Tout est dérivé des mécaniques déclarées par le niveau — et le troisième
+  échelon regarde ce qui **manque réellement à l'écran** au moment où on le
+  lit, parce qu'une simple liste de priorité se trompait : sur « L'épilogue »
+  elle conseillait le thème, alors qu'en fenêtre large c'est une travée absente
+  qui bloque.
+
+Le temps ne court ni pendant la lecture, ni après la victoire, et il s'arrête
+tout seul quand l'onglet passe en arrière-plan. Les échelons gagnés sont
+conservés d'une visite à l'autre : celui qui a abandonné hier est précisément
+celui à qui il ne faut pas réimposer l'attente.
+
 ## Les parties infinies
 
 Le générateur ne tire pas des plateformes au hasard en espérant que ça passe :

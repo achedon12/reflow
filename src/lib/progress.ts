@@ -19,15 +19,23 @@ export type Progress = {
     puzzles: Record<string, PuzzleRecord>;
     /** Le palier le plus profond atteint en mode infini. */
     endlessBest: number;
+    /**
+     * Le nombre d'indices déjà débloqués sur chaque énigme.
+     *
+     * Conservé d'une visite à l'autre exprès : celui qui a abandonné hier
+     * devant une énigme est précisément celui à qui il ne faut pas réimposer
+     * trois minutes d'attente avant de rouvrir l'indice qu'il avait gagné.
+     */
+    hints: Record<string, number>;
 };
 
-const EMPTY: Progress = { puzzles: {}, endlessBest: 0 };
+const EMPTY: Progress = { puzzles: {}, endlessBest: 0, hints: {} };
 
 function parse(raw: string | null): Progress {
-    if (!raw) return { ...EMPTY, puzzles: {} };
+    if (!raw) return { ...EMPTY, puzzles: {}, hints: {} };
     try {
         const value: unknown = JSON.parse(raw);
-        if (typeof value !== 'object' || value === null) return { ...EMPTY, puzzles: {} };
+        if (typeof value !== 'object' || value === null) return { ...EMPTY, puzzles: {}, hints: {} };
         const source = value as Partial<Record<keyof Progress, unknown>>;
         const puzzles: Record<string, PuzzleRecord> = {};
         if (typeof source.puzzles === 'object' && source.puzzles !== null) {
@@ -42,9 +50,16 @@ function parse(raw: string | null): Progress {
         const best = typeof source.endlessBest === 'number' && Number.isFinite(source.endlessBest)
             ? Math.max(0, Math.floor(source.endlessBest))
             : 0;
-        return { puzzles, endlessBest: best };
+        const hints: Record<string, number> = {};
+        if (typeof source.hints === 'object' && source.hints !== null) {
+            for (const [id, count] of Object.entries(source.hints as Record<string, unknown>)) {
+                if (typeof count !== 'number' || !Number.isFinite(count)) continue;
+                hints[id] = Math.max(0, Math.floor(count));
+            }
+        }
+        return { puzzles, endlessBest: best, hints };
     } catch {
-        return { ...EMPTY, puzzles: {} };
+        return { ...EMPTY, puzzles: {}, hints: {} };
     }
 }
 
@@ -60,7 +75,7 @@ const listeners = new Set<() => void>();
 
 /** L'instantané du rendu serveur. Le HTML est produit à la construction : il ne
  *  connaît aucune progression, et l'objet doit être le MÊME à chaque appel. */
-const SERVER_SNAPSHOT: Progress = { puzzles: {}, endlessBest: 0 };
+const SERVER_SNAPSHOT: Progress = { puzzles: {}, endlessBest: 0, hints: {} };
 
 export function subscribeProgress(listener: () => void): () => void {
     listeners.add(listener);
@@ -92,7 +107,7 @@ export function loadProgress(): Progress {
     } catch {
         // Stockage indisponible (navigation privée, cookies bloqués) : on joue
         // sans mémoire, ce qui reste parfaitement jouable.
-        return { ...EMPTY, puzzles: {} };
+        return { ...EMPTY, puzzles: {}, hints: {} };
     }
 }
 
@@ -105,7 +120,11 @@ export function saveProgress(progress: Progress): void {
     // ⚠️ Un objet NEUF, et pas celui qu'on vient d'écrire : React compare les
     // instantanés par identité, et muter celui qu'il tient en main ne
     // déclencherait aucun rendu.
-    invalidate({ puzzles: { ...progress.puzzles }, endlessBest: progress.endlessBest });
+    invalidate({
+        puzzles: { ...progress.puzzles },
+        endlessBest: progress.endlessBest,
+        hints: { ...progress.hints },
+    });
 }
 
 /** Enregistre une énigme terminée. Le meilleur temps l'emporte. */
@@ -117,6 +136,15 @@ export function recordPuzzle(id: string, time: number, tries: number): Progress 
         saveProgress(progress);
     }
     return progress;
+}
+
+/** Retient qu'un joueur a atteint ce palier d'indices. Jamais à la baisse. */
+export function recordHints(id: string, unlocked: number): void {
+    const progress = loadProgress();
+    if (unlocked > (progress.hints[id] ?? 0)) {
+        progress.hints[id] = unlocked;
+        saveProgress(progress);
+    }
 }
 
 export function recordEndless(depth: number): Progress {
