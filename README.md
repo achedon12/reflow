@@ -358,13 +358,25 @@ Ce qui est en place, et qu'il ne faut pas casser :
 de jeu par-dessus la page courante sans changer d'URL : les 432 pages restent
 du HTML lisible par un moteur, au lieu d'un canevas vide.
 
-Vérifier après un changement :
+Et surtout, `npm run seo` **ouvre les 432 pages produites** au lieu de relire
+`lib/seo.ts`. Une métadonnée juste dans le code mais absente du HTML — parce
+qu'une route l'oublie, parce qu'un `generateMetadata` ne s'exécute pas — ne se
+voit que là. Il refuse la construction sur une canonique manquante ou de
+travers, un `hreflang` qui pointe dans le vide, un titre ou une description en
+double, un `h1` absent ou en double, une image sans `alt`, un JSON-LD illisible,
+une page absente du plan du site — et il avertit sur ce qu'un résultat de
+recherche tronquerait.
 
-```bash
-npm run build
-grep -o '<link rel="alternate"[^>]*>' out/index.html
-grep -c '<url>' out/sitemap.xml    # 432
 ```
+Référencement — 432 pages produites
+
+432 URL au plan du site, 432 titres distincts.
+
+Rien à redire. 0 avertissement(s).
+```
+
+C'est ce contrôle qui a relevé 292 descriptions coupées par Google et 17 titres
+qui laissaient les deux tiers de leur ligne vides.
 
 ## Images et polices
 

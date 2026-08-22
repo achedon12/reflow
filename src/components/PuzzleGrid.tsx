@@ -51,7 +51,7 @@ export function PuzzleGrid({ locale, dictionary }: { locale: Locale; dictionary:
                                         </Link>
                                         {record && (
                                             <span
-                                                className="numeric flex shrink-0 items-center gap-1 text-[0.7rem] text-goal"
+                                                className="numeric flex shrink-0 items-center gap-1 text-[0.7rem] text-goal-ink"
                                                 title={dictionary.puzzlesPage.statusDone}
                                             >
                                                 <Check aria-hidden="true" className="size-3.5" />

@@ -40,6 +40,10 @@
     --hazard: #d81b60;
     --goal: #3f8a00;
     --goal-glow: rgb(63 138 0 / 0.22);
+    /* La version LISIBLE du vert de la sortie. Le vert du bloc passe le
+       contraste des éléments graphiques (3:1) mais pas celui du texte (4,5:1) :
+       « Terminée en 11,33 s » tombait à 3,97 sur fond clair. */
+    --goal-ink: #397d00;
     --orb: #b45309;
     --player: #5b21ff;
     --player-edge: #14161d;
@@ -74,6 +78,7 @@
         --hazard: #ff3d7f;
         --goal: #a3e635;
         --goal-glow: rgb(163 230 53 / 0.2);
+        --goal-ink: #a3e635;
         --orb: #fbbf24;
         --player: #ffffff;
         --player-edge: #9d7bff;
@@ -111,6 +116,7 @@
     --hazard: #ff3d7f;
     --goal: #a3e635;
     --goal-glow: rgb(163 230 53 / 0.2);
+    --goal-ink: #a3e635;
     --orb: #fbbf24;
     --player: #ffffff;
     --player-edge: #9d7bff;
@@ -161,6 +167,7 @@
     --color-accent: var(--accent);
     --color-accent-contrast: var(--accent-contrast);
     --color-goal: var(--goal);
+    --color-goal-ink: var(--goal-ink);
     --color-hazard: var(--hazard);
     --color-orb: var(--orb);
 
@@ -357,12 +364,31 @@
        doublent. Écrit ici plutôt qu'avec une variante utilitaire, dont la prise
        en charge dépend de la version de Tailwind — une poignée qui rétrécit en
        silence est invisible jusqu'au premier téléphone. */
+    /* Les poignées de l'écran de jeu.
+       Le trait reste fin — c'est une règle graduée, pas un bouton — mais la
+       ZONE SENSIBLE fait 24 px, la cible minimale de WCAG 2.2. Un
+       pseudo-élément débordant s'en charge : on gagne la cible sans épaissir
+       le trait ni décaler d'un pixel la mise en page. */
     .grip-h {
         height: 8px;
     }
 
     .grip-v {
         width: 8px;
+    }
+
+    .grip-h::after,
+    .grip-v::after {
+        content: '';
+        position: absolute;
+    }
+
+    .grip-h::after {
+        inset: -8px 0;
+    }
+
+    .grip-v::after {
+        inset: 0 -8px;
     }
 
     @media (pointer: coarse) {

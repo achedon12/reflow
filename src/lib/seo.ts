@@ -9,6 +9,23 @@ import { AUTHOR, GOOGLE_SITE_VERIFICATION, SITE_URL } from './site';
 
 const OG_LOCALES: Record<Locale, string> = { fr: 'fr_FR', en: 'en_US', es: 'es_ES', de: 'de_DE' };
 
+/**
+ * Ce qu'un résultat de recherche affiche AVANT de couper.
+ *
+ * Google rend une soixantaine de caractères de titre et cent cinquante-huit de
+ * description. Au-delà, la phrase est tronquée par une ellipse — et c'est
+ * souvent la moitié qui portait le sens.
+ */
+const MAX_TITLE = 65;
+const MAX_DESCRIPTION = 158;
+
+/** Colle la queue de phrase au résumé, mais seulement si elle tient. Un résumé
+ *  long se suffit ; le tronquer pour caser la marque serait un mauvais
+ *  échange. */
+function fit(head: string, whole: string): string {
+    return whole.length <= MAX_DESCRIPTION ? whole : head;
+}
+
 function alternates(key: RouteKey): Record<string, string> {
     const languages: Record<string, string> = {};
     for (const locale of LOCALES) languages[locale] = path(key, locale);
@@ -56,29 +73,39 @@ function base(locale: Locale, d: Dictionary): Metadata {
 /** La copie propre à chaque page. Une table plutôt qu'une cascade de ternaires :
  *  à six routes, la cascade cachait plus qu'elle ne montrait. */
 function copyFor(d: Dictionary, key: RouteKey): { titleTag: string; description: string } {
+    // « Règles — Reflow » tenait dans quinze caractères et laissait les deux
+    // tiers de la ligne de résultat vides. La signature comble la ligne — sauf
+    // quand le titre de la page se suffit déjà, auquel cas l'allonger la ferait
+    // couper.
+    const sign = (title: string) => {
+        // Un titre qui nomme déjà le jeu n'a pas besoin qu'on le renomme.
+        if (title.includes(d.meta.title)) return title;
+        const signed = `${title} — ${d.meta.tagline}`;
+        return signed.length <= MAX_TITLE ? signed : `${title} — ${d.meta.title}`;
+    };
     switch (key) {
         case 'home':
             return { titleTag: d.meta.titleTag, description: d.meta.description };
         case 'rules':
-            return { titleTag: `${d.rules.title} — ${d.meta.title}`, description: d.rules.metaDescription };
+            return { titleTag: sign(d.rules.title), description: d.rules.metaDescription };
         case 'mechanics':
             return {
-                titleTag: `${d.mechanicsPage.heading} — ${d.meta.title}`,
+                titleTag: sign(d.mechanicsPage.heading),
                 description: d.mechanicsPage.metaDescription,
             };
         case 'puzzles':
             return {
-                titleTag: `${d.puzzlesPage.heading} — ${d.meta.title}`,
+                titleTag: sign(d.puzzlesPage.heading),
                 description: d.puzzlesPage.metaDescription,
             };
         case 'endless':
-            return { titleTag: `${d.endless.title} — ${d.meta.title}`, description: d.endless.metaDescription };
+            return { titleTag: sign(d.endless.title), description: d.endless.metaDescription };
         case 'about':
-            return { titleTag: `${d.about.title} — ${d.meta.title}`, description: d.about.metaDescription };
+            return { titleTag: sign(d.about.title), description: d.about.metaDescription };
         case 'legal':
-            return { titleTag: `${d.legal.title} — ${d.meta.title}`, description: d.legal.metaDescription };
+            return { titleTag: sign(d.legal.title), description: d.legal.metaDescription };
         case 'privacy':
-            return { titleTag: `${d.privacy.title} — ${d.meta.title}`, description: d.privacy.metaDescription };
+            return { titleTag: sign(d.privacy.title), description: d.privacy.metaDescription };
     }
 }
 
@@ -122,10 +149,10 @@ export function buildPuzzleMetadata(locale: Locale, level: Level): Metadata {
     const common = base(locale, d);
 
     const titleTag = format(d.puzzlePage.metaTitle, { name: puzzle.name, tier: tier.toLowerCase() });
-    const description = format(d.puzzlePage.metaDescription, {
-        brief: puzzle.brief,
-        tier: tier.toLowerCase(),
-    });
+    const description = fit(
+        puzzle.brief,
+        format(d.puzzlePage.metaDescription, { brief: puzzle.brief, tier: tier.toLowerCase() }),
+    );
 
     return {
         ...common,

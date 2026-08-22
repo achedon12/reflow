@@ -3,9 +3,12 @@
 export const fr = {
     meta: {
         title: 'Reflow',
+        /** La signature qui suit le titre de chaque page. Sans elle, « Règles —
+         *  Reflow » laissait les deux tiers de la ligne de résultat vides. */
+        tagline: 'Reflow, le jeu joué dans la fenêtre',
         titleTag: 'Reflow — le jeu de plateforme dont le niveau est votre fenêtre',
         description:
-            'Un jeu de plateforme où le décor est la fenêtre du navigateur. Redimensionnez-la pour déplacer les plateformes, changez de thème pour en faire apparaître. 100 énigmes et des parties infinies, sans compte.',
+            'Un jeu de plateforme dont le décor est la fenêtre du navigateur : redimensionnez-la, faites-la pivoter. 100 énigmes, parties infinies, sans compte.',
         ogAlt: 'Reflow — un jeu de plateforme joué avec la fenêtre du navigateur',
         keywords:
             'jeu de plateforme navigateur, jeu redimensionner fenêtre, jeu web original, énigmes navigateur, jeu gratuit sans compte, puzzle platformer',
@@ -733,7 +736,7 @@ export const fr = {
         heading: 'Cent énigmes écrites à la main',
         lede: 'De la première marche aux enchaînements qui demandent de redimensionner en plein vol.',
         metaDescription:
-            'Les 100 énigmes de Reflow, classées par difficulté. Chacune met en jeu une mécanique du navigateur : les bords de la fenêtre, les apparitions, le thème, le mouvement, le rembobinage.',
+            'Les 100 énigmes de Reflow, classées par difficulté. Chacune met en jeu une mécanique du navigateur : les bords, le thème, la gravité, le mouvement.',
         done: '{done} sur {total} terminées',
         play: 'Jouer',
         statusDone: 'Terminée',
@@ -761,7 +764,7 @@ export const fr = {
         next: 'Énigme suivante',
         backToCatalogue: 'Toutes les énigmes',
         metaTitle: '{name} — énigme {tier} de Reflow',
-        metaDescription: '{brief} Une énigme {tier} de Reflow, le jeu de plateforme dont le niveau est la fenêtre du navigateur.',
+        metaDescription: '{brief} Une énigme {tier} de Reflow, le jeu joué dans la fenêtre.',
         breadcrumb: 'Énigmes',
     },
     endless: {
@@ -836,7 +839,7 @@ export const fr = {
         heading: 'Ce que Reflow détourne du navigateur',
         lede: 'Toutes prises à des interfaces que le navigateur expose déjà — et qu’aucun jeu n’utilise.',
         metaDescription:
-            'Les mécaniques de Reflow, et ce qu’elles empruntent au navigateur : la taille de la fenêtre, les bords, le thème clair ou sombre, le zoom, l’historique de navigation.',
+            'Les mécaniques de Reflow et ce qu’elles empruntent au navigateur : la taille de la fenêtre, ses bords, le thème, la gravité, l’historique.',
         intro: 'Un jeu de plateforme classique dessine son décor dans un canevas et se moque de la fenêtre qui l’entoure. Reflow fait le contraire : il n’a pas de décor à lui. Sa géométrie est une fonction de la taille de votre fenêtre, et tout ce que le navigateur laisse mesurer devient une commande.',
         outro: 'Une septième mécanique existe sur le papier — un même personnage traversant deux fenêtres côte à côte, synchronisées sans serveur. Elle attend une version suivante : elle dépend d’un bloqueur de fenêtres surgissantes, et une mécanique qui ne marche que chez la moitié des joueurs n’en est pas une.',
         back: 'Jouer',

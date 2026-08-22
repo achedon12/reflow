@@ -3,9 +3,12 @@ import type { Dictionary } from './fr';
 export const en: Dictionary = {
     meta: {
         title: 'Reflow',
+        /** La signature qui suit le titre de chaque page. Sans elle, « Règles —
+         *  Reflow » laissait les deux tiers de la ligne de résultat vides. */
+        tagline: 'Reflow, the game played in your window',
         titleTag: 'Reflow — the platformer whose level is your browser window',
         description:
-            'A platformer where the scenery is the browser window. Resize it to move the platforms, switch themes to make more appear. 100 puzzles and endless generated runs, no account needed.',
+            'A platformer whose scenery is the browser window: resize it, turn it a quarter. 100 puzzles, endless runs, no account needed.',
         ogAlt: 'Reflow — a platformer played with the browser window',
         keywords:
             'browser platformer, resize window game, original web game, browser puzzle game, free game no account, puzzle platformer',
@@ -544,7 +547,7 @@ export const en: Dictionary = {
         heading: 'One hundred hand-built puzzles',
         lede: 'From the first step to sequences that ask you to resize the window mid-flight.',
         metaDescription:
-            'The 100 puzzles of Reflow, sorted by difficulty. Each one plays on a browser mechanic: the edges of the window, appearances, the theme, motion, rewinding.',
+            'The 100 puzzles of Reflow, sorted by difficulty. Each plays on a browser mechanic: the edges, the theme, gravity, motion, rewinding.',
         done: '{done} of {total} finished',
         play: 'Play',
         statusDone: 'Finished',
@@ -572,7 +575,7 @@ export const en: Dictionary = {
         next: 'Next puzzle',
         backToCatalogue: 'All puzzles',
         metaTitle: '{name} — a {tier} Reflow puzzle',
-        metaDescription: '{brief} A {tier} puzzle from Reflow, the platformer whose level is the browser window.',
+        metaDescription: '{brief} A {tier} puzzle from Reflow, the game played in your window.',
         breadcrumb: 'Puzzles',
     },
     endless: {
@@ -647,7 +650,7 @@ export const en: Dictionary = {
         heading: 'What Reflow borrows from the browser',
         lede: 'All taken from interfaces the browser already exposes — and that no game uses.',
         metaDescription:
-            'The mechanics of Reflow and what they borrow from the browser: window size, edges, light or dark theme, zoom, navigation history.',
+            'The mechanics of Reflow and what they borrow from the browser: window size, edges, light or dark theme, gravity, browsing history.',
         intro: 'A regular platformer draws its scenery in a canvas and ignores the window around it. Reflow does the opposite: it has no scenery of its own. Its geometry is a function of the size of your window, and anything the browser lets you measure becomes a control.',
         outro: 'A seventh mechanic exists on paper — one character crossing two side-by-side windows, kept in sync without a server. It is waiting for a later version: it depends on a pop-up blocker, and a mechanic that only works for half the players is not a mechanic.',
         back: 'Play',

@@ -3,9 +3,12 @@ import type { Dictionary } from './fr';
 export const de: Dictionary = {
     meta: {
         title: 'Reflow',
+        /** La signature qui suit le titre de chaque page. Sans elle, « Règles —
+         *  Reflow » laissait les deux tiers de la ligne de résultat vides. */
+        tagline: 'Reflow, das Spiel im Browserfenster',
         titleTag: 'Reflow — das Jump-and-Run, dessen Level dein Fenster ist',
         description:
-            'Ein Jump-and-Run, dessen Kulisse das Browserfenster ist. Ändere seine Größe, um die Plattformen zu verschieben, wechsle das Thema, um weitere erscheinen zu lassen. 100 Rätsel und endlose Partien, ohne Konto.',
+            'Ein Jump-and-Run, dessen Kulisse das Browserfenster ist: Größe ändern, kippen. 100 Rätsel, endlose Partien, ohne Konto.',
         ogAlt: 'Reflow — ein Jump-and-Run, das mit dem Browserfenster gespielt wird',
         keywords:
             'Browser Jump and Run, Fenstergröße Spiel, originelles Webspiel, Browser Rätsel, kostenloses Spiel ohne Konto, Puzzle-Platformer',
@@ -544,7 +547,7 @@ export const de: Dictionary = {
         heading: 'Hundert handgebaute Rätsel',
         lede: 'Von der ersten Stufe bis zu Abfolgen, die verlangen, mitten im Flug die Fenstergröße zu ändern.',
         metaDescription:
-            'Die 100 Rätsel von Reflow, nach Schwierigkeit geordnet. Jedes spielt mit einer Browser-Mechanik: den Fensterrändern, den Erscheinungen, dem Thema, der Bewegung, dem Zurückspulen.',
+            'Die 100 Rätsel von Reflow, nach Schwierigkeit geordnet. Jedes nutzt eine Browser-Mechanik: Ränder, Thema, Schwerkraft, Bewegung.',
         done: '{done} von {total} gelöst',
         play: 'Spielen',
         statusDone: 'Gelöst',
@@ -572,7 +575,7 @@ export const de: Dictionary = {
         next: 'Nächstes Rätsel',
         backToCatalogue: 'Alle Rätsel',
         metaTitle: '{name} — {tier} Rätsel aus Reflow',
-        metaDescription: '{brief} Ein {tier} Rätsel aus Reflow, dem Jump-and-Run, dessen Level das Browserfenster ist.',
+        metaDescription: '{brief} Ein {tier} Rätsel aus Reflow, dem Spiel im Browserfenster.',
         breadcrumb: 'Rätsel',
     },
     endless: {
@@ -647,7 +650,7 @@ export const de: Dictionary = {
         heading: 'Was Reflow dem Browser abschaut',
         lede: 'Alle aus Schnittstellen, die der Browser längst bereitstellt — und die kein Spiel benutzt.',
         metaDescription:
-            'Die Mechaniken von Reflow und was sie dem Browser entnehmen: die Fenstergröße, die Ränder, das helle oder dunkle Thema, den Zoom, den Verlauf.',
+            'Die Mechaniken von Reflow und was sie dem Browser entlehnen: Fenstergröße, Ränder, helles oder dunkles Thema, Schwerkraft, Verlauf.',
         intro: 'Ein gewöhnliches Jump-and-Run zeichnet seine Kulisse in eine Leinwand und kümmert sich nicht um das Fenster darum herum. Reflow macht das Gegenteil: es hat keine eigene Kulisse. Seine Geometrie ist eine Funktion der Größe deines Fensters, und alles, was der Browser messen lässt, wird zur Steuerung.',
         outro: 'Eine siebte Mechanik gibt es auf dem Papier — eine Figur, die zwei nebeneinander stehende Fenster durchquert, ohne Server synchron gehalten. Sie wartet auf eine spätere Fassung: sie hängt von einem Pop-up-Blocker ab, und eine Mechanik, die nur bei der Hälfte der Spieler funktioniert, ist keine.',
         back: 'Spielen',

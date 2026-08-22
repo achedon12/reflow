@@ -77,7 +77,7 @@ export function EndlessView({ dictionary }: { dictionary: Dictionary }) {
                             defaultValue=""
                             placeholder={d.endless.seedPlaceholder}
                             maxLength={32}
-                            className="numeric w-56 border border-border-strong bg-bg-elevated px-3 py-2 text-sm text-fg outline-none focus-visible:border-accent"
+                            className="numeric w-56 border border-border-strong bg-bg-elevated px-3 py-2 text-sm text-fg focus-visible:border-accent"
                         />
                     </label>
                     <button

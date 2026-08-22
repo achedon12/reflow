@@ -21,7 +21,7 @@ export function ClearProgress({ dictionary }: { dictionary: Dictionary }) {
     const [state, setState] = useState<'idle' | 'confirm' | 'done'>('idle');
 
     if (state === 'done') {
-        return <p className="numeric text-sm text-goal">{dictionary.about.cleared}</p>;
+        return <p className="numeric text-sm text-goal-ink">{dictionary.about.cleared}</p>;
     }
 
     return (

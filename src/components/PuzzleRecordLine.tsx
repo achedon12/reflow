@@ -12,7 +12,7 @@ export function PuzzleRecordLine({ dictionary, puzzleId }: { dictionary: Diction
     if (!record) return null;
 
     return (
-        <span className="numeric text-sm text-goal">
+        <span className="numeric text-sm text-goal-ink">
             {format(dictionary.puzzlePage.statusDone, { time: record.time.toFixed(2) })}
         </span>
     );

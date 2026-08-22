@@ -3,9 +3,12 @@ import type { Dictionary } from './fr';
 export const es: Dictionary = {
     meta: {
         title: 'Reflow',
+        /** La signature qui suit le titre de chaque page. Sans elle, « Règles —
+         *  Reflow » laissait les deux tiers de la ligne de résultat vides. */
+        tagline: 'Reflow, el juego que se juega en tu ventana',
         titleTag: 'Reflow — el juego de plataformas cuyo nivel es tu ventana',
         description:
-            'Un juego de plataformas donde el escenario es la ventana del navegador. Redimensiónala para mover las plataformas, cambia de tema para hacer aparecer otras. 100 enigmas y partidas infinitas, sin cuenta.',
+            'Un juego de plataformas cuyo decorado es la ventana del navegador: redimensiónala, gírala. 100 enigmas, partidas infinitas, sin cuenta.',
         ogAlt: 'Reflow — un juego de plataformas jugado con la ventana del navegador',
         keywords:
             'juego de plataformas navegador, juego redimensionar ventana, juego web original, enigmas navegador, juego gratis sin cuenta, puzzle platformer',
@@ -544,7 +547,7 @@ export const es: Dictionary = {
         heading: 'Cien enigmas escritos a mano',
         lede: 'Desde el primer escalón hasta secuencias que exigen redimensionar en pleno vuelo.',
         metaDescription:
-            'Los 100 enigmas de Reflow, ordenados por dificultad. Cada uno pone en juego una mecánica del navegador: los bordes de la ventana, las apariciones, el tema, el movimiento, el rebobinado.',
+            'Los 100 enigmas de Reflow, por dificultad. Cada uno usa una mecánica del navegador: los bordes, el tema, la gravedad, el movimiento.',
         done: '{done} de {total} resueltos',
         play: 'Jugar',
         statusDone: 'Resuelto',
@@ -572,7 +575,7 @@ export const es: Dictionary = {
         next: 'Enigma siguiente',
         backToCatalogue: 'Todos los enigmas',
         metaTitle: '{name} — enigma {tier} de Reflow',
-        metaDescription: '{brief} Un enigma {tier} de Reflow, el juego de plataformas cuyo nivel es la ventana del navegador.',
+        metaDescription: '{brief} Un enigma {tier} de Reflow, el juego jugado en tu ventana.',
         breadcrumb: 'Enigmas',
     },
     endless: {
@@ -647,7 +650,7 @@ export const es: Dictionary = {
         heading: 'Lo que Reflow toma prestado del navegador',
         lede: 'Todas tomadas de interfaces que el navegador ya expone, y que ningún juego usa.',
         metaDescription:
-            'Las mecánicas de Reflow y lo que toman del navegador: el tamaño de la ventana, los bordes, el tema claro u oscuro, el zoom, el historial de navegación.',
+            'Las mecánicas de Reflow y lo que toman del navegador: el tamaño de la ventana, sus bordes, el tema, la gravedad, el historial.',
         intro: 'Un juego de plataformas clásico dibuja su escenario en un lienzo y se desentiende de la ventana que lo rodea. Reflow hace lo contrario: no tiene escenario propio. Su geometría es una función del tamaño de tu ventana, y todo lo que el navegador deja medir se convierte en un mando.',
         outro: 'Existe una séptima mecánica sobre el papel: un mismo personaje atravesando dos ventanas contiguas, sincronizadas sin servidor. Espera a una versión posterior: depende de un bloqueador de ventanas emergentes, y una mecánica que solo funciona para la mitad de los jugadores no es una mecánica.',
         back: 'Jugar',

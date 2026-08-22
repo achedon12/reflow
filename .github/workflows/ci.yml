@@ -43,6 +43,12 @@ jobs:
       - name: Vérifier que le quart de tour est obligatoire
         run: npm run pivot
 
+      # L'audit de référencement sur les fichiers RÉELLEMENT produits : titres,
+      # descriptions, canoniques, hreflang réciproques, JSON-LD, plan du site.
+      # Une métadonnée juste dans le code mais absente du HTML ne se voit que là.
+      - name: Auditer le référencement des 432 pages
+        run: npm run seo
+
       # Garde-fous sur ce que le référencement ne pardonne pas.
       - name: Vérifier les balises de référencement
         run: |

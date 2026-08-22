@@ -571,18 +571,20 @@ export function Playfield({
                 <button
                     type="button"
                     onClick={onClose}
+                    title={dictionary.game.close}
                     className="btn btn-slim"
                 >
                     <X aria-hidden="true" className="size-3.5" />
-                    <span className="hidden sm:inline">{dictionary.game.close}</span>
+                    <span className="sr-only sm:not-sr-only">{dictionary.game.close}</span>
                 </button>
                 <button
                     type="button"
                     onClick={restart}
+                    title={dictionary.game.restart}
                     className="btn btn-slim"
                 >
                     <RotateCcw aria-hidden="true" className="size-3.5" />
-                    <span className="hidden sm:inline">{dictionary.game.restart}</span>
+                    <span className="sr-only sm:not-sr-only">{dictionary.game.restart}</span>
                 </button>
                 <button
                     type="button"
@@ -595,10 +597,11 @@ export function Playfield({
                     onPointerLeave={() => {
                         game.current.rewinding = false;
                     }}
+                    title={dictionary.game.rewind}
                     className="btn btn-slim"
                 >
                     <Undo2 aria-hidden="true" className="size-3.5" />
-                    <span className="hidden sm:inline">{dictionary.game.rewind}</span>
+                    <span className="sr-only sm:not-sr-only">{dictionary.game.rewind}</span>
                 </button>
 
                 {/* La bascule de thème, DANS l'aire de jeu.
@@ -694,7 +697,7 @@ export function Playfield({
                             value={screen.w}
                             min={MIN_PLAYFIELD_W}
                             onChange={(event) => resize(Number(event.target.value) || screen.w, screen.h)}
-                            className="w-12 bg-transparent text-right text-fg outline-none focus-visible:text-accent"
+                            className="h-6 w-12 bg-transparent text-right text-fg focus-visible:text-accent"
                         />
                         <span aria-hidden="true" className="text-fg-muted">
                             ×
@@ -705,7 +708,7 @@ export function Playfield({
                             value={screen.h}
                             min={MIN_PLAYFIELD_H}
                             onChange={(event) => resize(screen.w, Number(event.target.value) || screen.h)}
-                            className="w-12 bg-transparent text-left text-fg outline-none focus-visible:text-accent"
+                            className="h-6 w-12 bg-transparent text-left text-fg focus-visible:text-accent"
                         />
                     </span>
                 </p>
@@ -801,12 +804,12 @@ export function Playfield({
                                 >
                                     {dictionary.game.touchAnyway}
                                 </button>
-                                <button
-                                    type="button"
-                                    onClick={onClose}
-                                    className="btn"
-                                >
-                                    <span className="hidden sm:inline">{dictionary.game.close}</span>
+                                {/* Pas d'icône ici : masquer l'intitulé sous 640 px
+                                    laissait un bouton VIDE — et ce panneau ne
+                                    s'affiche que sur écran tactile, donc
+                                    justement là où il était vide. */}
+                                <button type="button" onClick={onClose} className="btn">
+                                    {dictionary.game.close}
                                 </button>
                             </div>
                         </div>
@@ -867,7 +870,7 @@ export function Playfield({
                 {won && (
                     <div className="absolute inset-0 flex items-center justify-center bg-bg/85 px-6">
                         <div className="panel w-full max-w-sm bg-bg-elevated p-5">
-                            <p className="label text-goal">{dictionary.game.won}</p>
+                            <p className="label text-goal-ink">{dictionary.game.won}</p>
                             <p className="numeric mt-2 text-lg text-fg">
                                 {won.tries === 1
                                     ? format(dictionary.game.wonInOne, { time: won.time.toFixed(2) })
