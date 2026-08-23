@@ -46,7 +46,7 @@ export function AboutView({ locale }: { locale: Locale }) {
                 <h2 className="text-lg">{d.about.clearTitle}</h2>
                 <p className="mt-2 max-w-xl text-sm text-fg-muted text-pretty">{d.about.clearBody}</p>
                 <div className="mt-4">
-                    <ClearProgress dictionary={d} />
+                    <ClearProgress dictionary={d.about} />
                 </div>
             </section>
 

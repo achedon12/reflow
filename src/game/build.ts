@@ -188,7 +188,7 @@ const WORLD_EDGE: Record<Quarter, { left: Edge | VEdge; right: Edge | VEdge; top
 
 type Placed = Rect & { spec: StepSpec | null };
 
-function anchorOf(
+export function anchorOf(
     rect: Rect,
     reference: Viewport,
     edge: Edge,

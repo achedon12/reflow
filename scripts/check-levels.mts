@@ -1,11 +1,12 @@
+import { fileURLToPath } from 'node:url';
 import { LEVELS, PUZZLE_IDS } from '../src/data/levels.ts';
-import { generateLevel } from '../src/game/generator.ts';
 import { MAX_CRUMBLE, PLAYER_H, PLAYER_W } from '../src/game/constants.ts';
 import { overlaps, present, resolve } from '../src/game/geometry.ts';
-import { REDUCED_MOTION_FACTOR, slowMotion } from '../src/game/reduced-motion.ts';
-import { CANDIDATE_VIEWS, solve } from '../src/game/solver.ts';
-import type { Level, Theme, Viewport } from '../src/game/types.ts';
+import { REDUCED_MOTION_FACTOR } from '../src/game/reduced-motion.ts';
+import type { Viewport } from '../src/game/types.ts';
 import { fr } from '../src/i18n/dictionaries/fr.ts';
+import { fanOut } from './parallel.mts';
+import type { Job, Verdict } from './solve-worker.mts';
 
 /**
  * Le garde-fou du contenu.
@@ -121,73 +122,14 @@ for (const key of Object.keys(fr.puzzles)) {
 console.log(`  ${LEVELS.length} énigmes, ${failures === 0 ? 'forme conforme' : 'erreurs ci-dessus'}`);
 
 // ── Preuve de jouabilité ────────────────────────────────────────────────────
-console.log('\nJouabilité (le moteur rejoue chaque énigme)');
+//
+// Les trois sections qui suivent ne se lisent pas, elles JOUENT — et elles ne
+// dépendent pas les unes des autres. Elles partent donc en une seule file,
+// répartie sur les cœurs disponibles par `parallel.mts`. En série, ce contrôle
+// dépassait la demi-heure ; personne ne lance un contrôle d'une demi-heure.
+const WORKER = fileURLToPath(new URL('solve-worker.mts', import.meta.url));
 
-function views(level: Level): Viewport[] {
-    // La taille de conception d'abord : c'est celle qui doit marcher en
-    // général, et l'essayer en premier évite dix recherches inutiles.
-    return [level.reference, ...CANDIDATE_VIEWS.filter((view) => view.w !== level.reference.w || view.h !== level.reference.h)];
-}
-
-for (const level of LEVELS) {
-    const themes: Theme[] = level.blocks.some((block) => block.theme) ? ['dark', 'light'] : ['dark'];
-    let solved: { view: Viewport; seconds: number } | null = null;
-
-    for (const view of views(level)) {
-        for (const theme of themes) {
-            const attempt = solve(level, view, theme);
-            if (attempt.solved) {
-                solved = { view, seconds: attempt.seconds };
-                break;
-            }
-        }
-        if (solved) break;
-    }
-
-    if (solved) {
-        const size = `${solved.view.w}×${solved.view.h}`;
-        console.log(`  ✓ ${level.id.padEnd(13)} ${level.tier.padEnd(7)} ${size.padEnd(9)} ${solved.seconds.toFixed(1)} s`);
-    } else {
-        fail(`${level.id} : aucune solution trouvée, à aucune des ${views(level).length} tailles essayées`);
-    }
-}
-
-// ── Le mouvement réduit ─────────────────────────────────────────────────────
-// `prefers-reduced-motion` allonge la période des blocs mobiles. Rien ne dit
-// a priori qu'un niveau reste finissable une fois ralenti : un saut calé sur
-// une phase peut ne plus tomber au même endroit. On le rejoue donc.
-console.log('\nMouvement réduit (périodes ×' + REDUCED_MOTION_FACTOR + ')');
-
-const MOVING = LEVELS.filter((level) => level.blocks.some((block) => block.motion));
-for (const level of MOVING) {
-    const slowed = slowMotion(level);
-    const themes: Theme[] = level.blocks.some((block) => block.theme) ? ['dark', 'light'] : ['dark'];
-    let solved: Viewport | null = null;
-    for (const view of views(level)) {
-        for (const theme of themes) {
-            if (solve(slowed, view, theme).solved) {
-                solved = view;
-                break;
-            }
-        }
-        if (solved) break;
-    }
-    if (solved) {
-        console.log(`  ✓ ${level.id.padEnd(13)} ${`${solved.w}×${solved.h}`.padEnd(9)}`);
-    } else {
-        fail(`${level.id} : plus finissable une fois le mouvement ralenti`);
-    }
-}
-console.log(`  ${MOVING.length} énigmes à mouvement vérifiées`);
-
-// ── Les niveaux générés ─────────────────────────────────────────────────────
-// La génération construit le chemin plateforme par plateforme, donc elle est
-// finissable par construction. Ce contrôle en apporte la preuve sur un
-// échantillon : une erreur de portée passerait sinon inaperçue jusqu'à ce
-// qu'un joueur tombe sur la mauvaise graine.
-console.log('\nParties générées (échantillon)');
-
-const REFERENCE: Viewport = { w: 1000, h: 560 };
+const SEED_VIEW: Viewport = { w: 1000, h: 560 };
 const SAMPLES = [
     { seed: 1, depth: 1 },
     { seed: 7, depth: 2 },
@@ -198,17 +140,38 @@ const SAMPLES = [
     { seed: 8, depth: 15 },
 ];
 
-for (const sample of SAMPLES) {
-    const level = generateLevel({ seed: sample.seed, depth: sample.depth, reference: REFERENCE });
-    const attempt = solve(level, REFERENCE);
-    if (attempt.solved) {
-        console.log(
-            `  ✓ graine ${String(sample.seed).padEnd(6)} palier ${String(sample.depth).padEnd(3)} ${level.tier.padEnd(7)} ${attempt.seconds.toFixed(1)} s`,
-        );
-    } else {
-        fail(`graine ${sample.seed} palier ${sample.depth} : partie générée insoluble`);
+// `prefers-reduced-motion` allonge la période des blocs mobiles. Rien ne dit a
+// priori qu'un niveau reste finissable une fois ralenti : un saut calé sur une
+// phase peut ne plus tomber au même endroit. On le rejoue donc.
+const MOVING = LEVELS.filter((level) => level.blocks.some((block) => block.motion));
+
+const jobs: Job[] = [
+    ...LEVELS.map((level): Job => ({ kind: 'play', id: level.id })),
+    ...MOVING.map((level): Job => ({ kind: 'slow', id: level.id })),
+    ...SAMPLES.map((sample): Job => ({ ...sample, kind: 'seed', view: SEED_VIEW })),
+];
+
+// Les verdicts arrivent dans l'ordre où les fils finissent, pas celui de la
+// file : chaque ligne porte donc sa nature. Des titres de section mentiraient.
+const tag: Record<Job['kind'], string> = {
+    play: 'jeu',
+    slow: 'lent',
+    seed: 'graine',
+};
+
+console.log(`\n${jobs.length} preuves à mener sur ${LEVELS.length} énigmes — le moteur rejoue, il ne relit pas`);
+console.log(`  « lent » : périodes ×${REDUCED_MOTION_FACTOR}, comme sous \`prefers-reduced-motion\``);
+console.log('');
+
+await fanOut<Job, Verdict>(WORKER, jobs, (verdict, job) => {
+    if ('failed' in verdict) {
+        fail(`[${tag[job.kind]}] ${verdict.label} : ${verdict.failed}`);
+        return;
     }
-}
+    console.log(
+        `  ✓ ${`[${tag[job.kind]}]`.padEnd(8)} ${verdict.label.padEnd(20)} ${verdict.tier.padEnd(11)} ${verdict.view.padEnd(9)} ${verdict.seconds.toFixed(1)} s`,
+    );
+});
 
 console.log('');
 if (failures > 0) {

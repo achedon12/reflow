@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { display, mono } from '@/fonts';
-import { getDictionary } from '@/i18n';
+import { getGameStrings } from '@/i18n';
 import type { Locale } from '@/i18n/config';
 import { GameProvider } from './GameProvider';
 import { Matomo } from './Matomo';
@@ -14,7 +14,7 @@ export function SiteShell({ locale, children }: { locale: Locale; children: Reac
         <html lang={locale} className={`${display.variable} ${mono.variable}`} suppressHydrationWarning>
             <body className="flex min-h-dvh flex-col antialiased">
                 <ThemeScript />
-                <GameProvider locale={locale} dictionary={getDictionary(locale)}>
+                <GameProvider locale={locale} dictionary={getGameStrings(locale)}>
                     {children}
                 </GameProvider>
                 <Matomo />

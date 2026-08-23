@@ -10,14 +10,18 @@ import { puzzlePath } from '@/i18n/routes';
 import { PlayButton } from './PlayButton';
 import { useProgress } from './useProgress';
 
-const TIER_LABEL = (d: Dictionary) => ({
+/** Ce que la grille lit, et rien de plus : elle est sérialisée dans le HTML de
+ *  la page des énigmes, qui est déjà la plus lourde du site. */
+type GridStrings = Pick<Dictionary, 'mechanics' | 'puzzles' | 'puzzlesPage' | 'tiers'>;
+
+const TIER_LABEL = (d: GridStrings) => ({
     easy: d.tiers.easyPlural,
     medium: d.tiers.mediumPlural,
     hard: d.tiers.hardPlural,
     impossible: d.tiers.impossiblePlural,
 });
 
-export function PuzzleGrid({ locale, dictionary }: { locale: Locale; dictionary: Dictionary }) {
+export function PuzzleGrid({ locale, dictionary }: { locale: Locale; dictionary: GridStrings }) {
     const progress = useProgress();
     const labels = TIER_LABEL(dictionary);
 
@@ -89,12 +93,12 @@ export function PuzzleGrid({ locale, dictionary }: { locale: Locale; dictionary:
 }
 
 /** Le compteur « x sur y », qui ne peut se calculer que dans le navigateur. */
-export function PuzzleProgress({ dictionary, total }: { dictionary: Dictionary; total: number }) {
+export function PuzzleProgress({ dictionary, total }: { dictionary: Dictionary['puzzlesPage']; total: number }) {
     const progress = useProgress();
     const done = Object.keys(progress.puzzles).length;
     return (
         <span className="numeric text-sm text-fg-muted">
-            {format(dictionary.puzzlesPage.done, { done, total })}
+            {format(dictionary.done, { done, total })}
         </span>
     );
 }

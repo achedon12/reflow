@@ -90,7 +90,7 @@ export function SiteHeader({
                         puzzleId={puzzleId}
                         dictionary={dictionary}
                     />
-                    <ThemeToggle dictionary={dictionary} />
+                    <ThemeToggle dictionary={dictionary.header} />
                 </div>
             </div>
         </header>

@@ -14,10 +14,18 @@ export function PuzzlesView({ locale }: { locale: Locale }) {
             <header className="flex flex-col gap-3">
                 <h1 className="max-w-2xl text-3xl text-balance sm:text-4xl">{d.puzzlesPage.heading}</h1>
                 <p className="max-w-xl text-lg text-fg-muted text-pretty">{d.puzzlesPage.lede}</p>
-                <PuzzleProgress dictionary={d} total={LEVELS.length} />
+                <PuzzleProgress dictionary={d.puzzlesPage} total={LEVELS.length} />
             </header>
 
-            <PuzzleGrid locale={locale} dictionary={d} />
+            <PuzzleGrid
+                locale={locale}
+                dictionary={{
+                    mechanics: d.mechanics,
+                    puzzles: d.puzzles,
+                    puzzlesPage: d.puzzlesPage,
+                    tiers: d.tiers,
+                }}
+            />
 
             <section className="panel p-6">
                 <h2 className="text-lg">{d.puzzlesPage.endlessTitle}</h2>

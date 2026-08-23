@@ -2,14 +2,14 @@
 
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { LEVELS, levelById } from '@/data/levels';
-import { HUD_HEIGHT } from '@/game/constants';
 import { generateLevel } from '@/game/generator';
 import { prefersReducedMotion, slowMotion } from '@/game/reduced-motion';
 import { hashSeed } from '@/game/rng';
-import type { Level, Viewport } from '@/game/types';
-import type { Dictionary } from '@/i18n';
+import type { Level } from '@/game/types';
+import type { GameStrings } from '@/i18n';
 import type { Locale } from '@/i18n/config';
 import { format } from '@/i18n/format';
+import { startingScreen } from './useScreen';
 import { path } from '@/i18n/routes';
 import { recordEndless, recordPuzzle } from '@/lib/progress';
 import { Playfield } from './Playfield';
@@ -52,12 +52,6 @@ export function useGame(): GameApi {
  * Engendrer à la taille courante garantit qu'une partie est jouable dès la
  * première image. C'est ensuite au joueur de la déformer, s'il le veut.
  */
-function referenceViewport(): Viewport {
-    const w = Math.round(Math.max(640, window.innerWidth));
-    const h = Math.round(Math.max(420, window.innerHeight - HUD_HEIGHT));
-    return { w, h };
-}
-
 /** Une graine lisible tirée au hasard. Un mot se retient et se dicte ; un
  *  nombre à dix chiffres ne se partage qu'en copiant-collant. */
 function randomSeed(): string {
@@ -70,7 +64,7 @@ export function GameProvider({
     children,
 }: {
     locale: Locale;
-    dictionary: Dictionary;
+    dictionary: GameStrings;
     children: ReactNode;
 }) {
     const [session, setSession] = useState<Session | null>(null);
@@ -87,7 +81,7 @@ export function GameProvider({
         const generated = generateLevel({
             seed: hashSeed(label),
             depth,
-            reference: referenceViewport(),
+            reference: startingScreen(),
         });
         const level = prefersReducedMotion() ? slowMotion(generated) : generated;
         setSession({ kind: 'endless', level, depth, seed: label });
@@ -159,7 +153,7 @@ export function GameProvider({
                     title={
                         session.kind === 'endless'
                             ? `${format(dictionary.endless.depth, { depth: session.depth })} — ${session.seed}`
-                            : dictionary.puzzles[session.level.id as keyof Dictionary['puzzles']].name
+                            : dictionary.titles[session.level.id] ?? session.level.id
                     }
                 />
             )}

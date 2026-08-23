@@ -52,7 +52,8 @@ docker compose -p reflow -f docker-compose.dev.yml up -d --build
 Avant de pousser :
 
 ```bash
-npm run check              # typecheck + lint + build + les deux vérifications
+npm run check              # tout : typecheck, lint, build, et les quatre preuves
+npm run audit              # ce que chaque énigme EXIGE, et ce qui tient sur un téléphone
 npm run pivot charniere    # une énigme à tronçons à la fois, pendant qu’on l’écrit
 npm run draw charniere:1   # et la même, en image, dans l’orientation demandée
 ```
@@ -167,10 +168,12 @@ moment, une orbe demander un détour infaisable.
 D'où `npm run levels`, qui ne relit pas la géométrie mais **joue** :
 
 ```
-Jouabilité (le moteur rejoue chaque énigme)
-  ✓ seuil         easy    1000×560  3.1 s
-  ✓ lucarne       easy    820×560   2.6 s
-  ✓ etau          medium  900×560   2.6 s
+142 preuves à mener sur 100 énigmes — le moteur rejoue, il ne relit pas
+  « lent » : périodes ×2, comme sous `prefers-reduced-motion`
+
+  ✓ [jeu]    marche       easy    1000×560  1.1 s
+  ✓ [lent]   vertige      hard    640×420   3.7 s
+  ✓ [graine] graine 8     hard    1000×560  2.9 s
   …
 Toutes les énigmes sont finissables.
 ```
@@ -181,10 +184,39 @@ n'est donc pas « le niveau a l'air faisable » mais « voici une partie qui le
 termine ». Le contrôle tourne aussi en intégration continue : aucune énigme
 n'est publiée sans cette preuve.
 
+Ces cent quarante-deux preuves sont indépendantes : elles partent sur **un fils
+par cœur**, avec une file où chaque fils redemande du travail dès qu'il a fini.
+Le contrôle passe de trente-cinq minutes à trois — et un contrôle qu'on ne lance
+plus ne protège de rien. La répartition est dynamique et non fixe pour une
+raison mesurable : une énigme « impossible » coûte dix fois une facile, et un
+découpage en parts égales laissait la moitié des cœurs à attendre le dernier
+lot.
+
 C'est une recherche en faisceau, pas exhaustive : un échec signifie « aucune
 solution trouvée », jamais « aucune solution n'existe ». Le compromis est le
 bon sens — un faux échec se corrige en élargissant le faisceau, un faux succès
 passerait inaperçu jusqu'au premier joueur bloqué.
+
+## Ce que chaque énigme EXIGE
+
+`npm run levels` prouve qu'une énigme se termine. Il ne dit pas si elle demande
+quoi que ce soit au joueur — et une énigme qu'on traverse sans jamais toucher
+aux poignées laisse la mécanique fondatrice du jeu à l'état de décor.
+
+`npm run audit` le mesure, avec un critère vérifiable : **l'énigme se
+termine-t-elle déjà à la taille de départ, rotation interdite ?**
+
+```
+91 énigmes exigent un réglage, 9 s'en passent.
+  seuil (easy), marche (easy), enjambee (easy), navette (easy), lucarne (easy),
+  descente (easy), collecte (easy), detour (easy), couloir (easy)
+```
+
+Les neuf sont exactement les neuf premières : c'est le palier qui apprend à
+jouer, il n'a rien à exiger. Ailleurs, chaque exigence a été posée à la main
+puis re-mesurée — une condition de taille sur un palier ne suffit pas si le
+chemin se referme quand la fenêtre rétrécit, ce qui était le cas de neuf
+énigmes qu'on croyait exigeantes.
 
 ## Le palier « impossible »
 
@@ -268,6 +300,33 @@ construction, à la cote de référence affichée en jeu.
 
 La difficulté monte avec le palier, et la graine tient dans un lien :
 `?p=graine-palier`.
+
+**Et elles jouent le même jeu que les cent.** Les parties engendrées n'avaient
+longtemps que des plateformes nues et quelques mobiles : elles étaient le jeu en
+plus pauvre que les énigmes écrites à la main, ce qui est l'inverse de ce qu'on
+promet en disant « des parties à l'infini ». Elles portent maintenant les
+matières — glace, tapis, paliers friables, clignotants, rebond — et une partie
+profonde sur trois se termine par un **coude** : le serpentin s'arrête sur un
+palier carré, et la fin du chemin ne s'écrit plus dans le repère du monde mais
+dans celui du premier quart de tour. Vus d'aplomb, ces derniers paliers sont des
+piliers de quatorze pixels : on n'y tient pas.
+
+Rien de tout cela n'est garanti par construction, contrairement au serpentin :
+chaque matière est posée sous condition, chaque coude est essayé puis abandonné
+s'il ne tombe pas juste. C'est `npm run endless` qui prouve — une grille de
+graines par palier, rejouée par le moteur physique :
+
+```
+Parties engendrées — 240 graines sur 12 paliers
+
+60 easy, 60 medium, 120 hard — la plus longue : graine 7923658 palier 16 en 9,7 s
+
+Les 240 graines se terminent.
+```
+
+Ça ne prouve pas que les quatre milliards de graines se terminent. Mais une
+matière mal posée casse une graine sur trois, pas une sur mille : l'échantillon
+la trouve.
 
 ---
 
@@ -422,8 +481,11 @@ Voir `.env.example` pour la liste complète.
   à côte, synchronisées par `BroadcastChannel` et repérées par `screenX` /
   `screenY`. Elle dépend d'un bloqueur de fenêtres surgissantes, et une
   mécanique qui ne marche que chez la moitié des joueurs n'en est pas une.
-- **Un vrai mode tactile.** Les commandes à l'écran existent, mais un téléphone
-  ne se redimensionne pas : il faudrait rebâtir les énigmes sur l'orientation
-  et sur la barre d'URL qui se rétracte au défilement. C'est un second jeu.
+- **Les énigmes hors d'atteinte sur téléphone.** L'écran de jeu s'y règle très
+  bien — c'est un panneau dans une page, pas la fenêtre du navigateur — mais il
+  y plafonne à 358 px de large, alors que le vérificateur n'essaie que des
+  tailles à partir de 640. `npm run audit` mesure lesquelles se terminent
+  vraiment là-bas. Celles qui n'y arrivent pas demandent une reprise de leurs
+  ancrages, énigme par énigme.
 - **L'éditeur de niveaux**, avec le niveau encodé dans l'URL. C'est ce qui
   ferait passer le contenu de la main de l'auteur à celle des joueurs.

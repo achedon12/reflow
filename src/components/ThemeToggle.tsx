@@ -12,16 +12,16 @@ import { applyTheme, getServerTheme, getTheme, subscribeTheme, type Theme } from
 // état est deviné.
 const ORDER: Theme[] = ['system', 'light', 'dark'];
 
-export function ThemeToggle({ dictionary }: { dictionary: Dictionary }) {
+export function ThemeToggle({ dictionary }: { dictionary: Dictionary['header'] }) {
     const theme = useSyncExternalStore(subscribeTheme, getTheme, getServerTheme);
 
     const Icon = { system: Monitor, light: Sun, dark: Moon }[theme];
     const modeLabel = {
-        system: dictionary.header.themeSystem,
-        light: dictionary.header.themeLight,
-        dark: dictionary.header.themeDark,
+        system: dictionary.themeSystem,
+        light: dictionary.themeLight,
+        dark: dictionary.themeDark,
     }[theme];
-    const label = format(dictionary.header.themeToggle, { mode: modeLabel });
+    const label = format(dictionary.themeToggle, { mode: modeLabel });
 
     return (
         <button

@@ -67,6 +67,21 @@ function fit(screen: Screen, room: Viewport): Screen {
     };
 }
 
+/**
+ * La taille que l'écran de jeu prendra AU LANCEMENT.
+ *
+ * C'est pour elle qu'une partie engendrée doit être dessinée. Le générateur
+ * recevait la taille de la FENÊTRE — une partie tirée pour 1920 × 940 était
+ * ensuite jouée dans un écran de 880 × 520 : les ancrages écartaient tout, et
+ * l'on mourait à la première image, sur un niveau qui n'avait jamais existé.
+ *
+ * ⚠️ À n'appeler que dans le navigateur : elle mesure la fenêtre.
+ */
+export function startingScreen(): Viewport {
+    const { w, h } = fit({ ...START, quarter: 0 }, available());
+    return { w, h };
+}
+
 export function useScreen(): {
     screen: Screen;
     ref: React.RefObject<Screen>;

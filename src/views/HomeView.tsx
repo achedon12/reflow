@@ -35,7 +35,7 @@ export function HomeView({ locale }: { locale: Locale }) {
                     </Link>
                 </div>
 
-                <PuzzleProgress dictionary={d} total={LEVELS.length} />
+                <PuzzleProgress dictionary={d.puzzlesPage} total={LEVELS.length} />
             </section>
 
             {/* Le corps de texte : c'est lui qui décrit le jeu à un moteur de

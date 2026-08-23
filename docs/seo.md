@@ -75,17 +75,47 @@ pour un gain de mot-clé nul sur un nom inventé.
 - **Le jeton Search Console vide.** Une balise de vérification au contenu vide
   fait échouer la vérification au lieu de ne rien faire. Elle n'est donc émise
   que si la variable est renseignée.
+- **La queue de phrase de marque collée sans regarder.** La description d'une
+  énigme valait « résumé + une phrase sur le jeu » : jusqu'à 234 caractères,
+  quand Google en rend 158. **292 pages** étaient coupées en plein milieu. La
+  queue ne s'ajoute plus que si l'ensemble tient ; sinon le résumé se suffit.
+- **« Règles — Reflow ».** Quinze caractères sur une ligne de résultat qui en
+  accepte soixante, sur **17 pages**. Une signature courte les comble — sauf
+  quand le titre de la page se suffit déjà, auquel cas l'allonger le ferait
+  couper. Un titre trop court ne casse rien : il gâche simplement la seule
+  ligne qu'on ait pour convaincre.
 
 ## Vérifier
 
-L'intégration continue le fait à chaque poussée
-(`.github/workflows/ci.yml`), mais en local :
+```bash
+npm run build && npm run seo
+```
+
+`npm run seo` **ouvre les 432 pages produites** au lieu de relire `lib/seo.ts`.
+C'est la distinction qui compte : une métadonnée juste dans le code mais absente
+du HTML — parce qu'une route l'oublie, parce qu'un `generateMetadata` ne
+s'exécute pas — ne se voit que là.
+
+Il refuse la construction sur : une canonique absente, sans barre finale ou qui
+pointe ailleurs ; un `hreflang` manquant ou visant une page inexistante ; un
+titre ou une description en double ; un `h1` absent ou dédoublé ; une image sans
+`alt` ; un JSON-LD illisible ; une page absente du plan du site ou annoncée par
+lui sans exister. Il avertit sur ce qu'un résultat de recherche tronquerait.
+
+```
+Référencement — 432 pages produites
+
+432 URL au plan du site, 432 titres distincts.
+
+Rien à redire. 0 avertissement(s).
+```
+
+Il tourne à chaque poussée (`.github/workflows/ci.yml`). Le reste se contrôle à
+la main :
 
 ```bash
-npm run build
 grep -o '<link rel="alternate"[^>]*>' out/index.html      # 5 lignes
 grep -c '<url>' out/sitemap.xml                            # 432
-grep -o 'application/ld+json' out/enigmes/lucarne/index.html
 test ! -d out/404 && test -f out/404.html && echo "élagage ok"
 ```
 

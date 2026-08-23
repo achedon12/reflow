@@ -43,7 +43,7 @@ export function PuzzleView({ locale, level }: { locale: Locale; level: Level }) 
                 <p className="max-w-xl text-lg text-fg-muted text-pretty">{puzzle.brief}</p>
                 <div className="flex flex-wrap items-center gap-3">
                     <PlayButton puzzleId={level.id}>{d.puzzlePage.play}</PlayButton>
-                    <PuzzleRecordLine dictionary={d} puzzleId={level.id} />
+                    <PuzzleRecordLine dictionary={d.puzzlePage} puzzleId={level.id} />
                 </div>
             </header>
 

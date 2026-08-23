@@ -18,8 +18,8 @@ import { format } from '@/i18n/format';
  * dernier impose une frontière `Suspense` et fait basculer la page en rendu
  * client — pour un paramètre que `location.search` donne directement.
  */
-export function EndlessView({ dictionary }: { dictionary: Dictionary }) {
-    const d = dictionary;
+export function EndlessView({ dictionary }: { dictionary: Dictionary['endless'] }) {
+    const d = { endless: dictionary };
     const { startEndless } = useGame();
     const progress = useProgress();
     // Champ NON CONTRÔLÉ : sa valeur n'intéresse personne avant l'envoi du

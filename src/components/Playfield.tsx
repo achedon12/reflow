@@ -27,7 +27,7 @@ import { orbCount, spawnState, step } from '@/game/engine';
 import { decisiveMechanic, hintCount, unlockedHints } from '@/game/hints';
 import { playViewport, reframePlayer, solveBlocks } from '@/game/geometry';
 import type { Block, Input, Level, PlayerState, Quarter } from '@/game/types';
-import type { Dictionary } from '@/i18n';
+import type { GameStrings } from '@/i18n';
 import { format } from '@/i18n/format';
 import { loadProgress, recordHints } from '@/lib/progress';
 import { ScreenHandles } from './ScreenHandles';
@@ -70,7 +70,7 @@ type Session =
 
 export type PlayfieldProps = {
     session: Session;
-    dictionary: Dictionary;
+    dictionary: GameStrings;
     onClose: () => void;
     /** Omis quand il n'y a pas de suite — le bouton disparaît alors. */
     onNext?: () => void;

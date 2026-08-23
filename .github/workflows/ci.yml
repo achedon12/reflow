@@ -36,6 +36,12 @@ jobs:
       - name: Vérifier que les énigmes sont finissables
         run: npm run levels
 
+      # Les parties infinies n'existent pas encore à la construction : c'est le
+      # GÉNÉRATEUR qu'il faut prouver, pas ses sorties. Une grille de graines
+      # par palier, rejouée par le moteur.
+      - name: Vérifier que les parties engendrées se terminent
+        run: npm run endless
+
       # L'autre moitié de la preuve : les énigmes à tronçons se terminent-elles
       # SANS pivoter ? Si oui, la rotation n'y est qu'un décor et le niveau ment
       # sur ce qu'il demande. Le contrôle rejoue chacune sans la mécanique

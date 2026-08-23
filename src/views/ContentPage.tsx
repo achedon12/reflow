@@ -38,7 +38,7 @@ export function ContentPage({ locale, contentKey }: { locale: Locale; contentKey
             {contentKey === 'rules' && <RulesView locale={locale} />}
             {contentKey === 'mechanics' && <MechanicsView locale={locale} />}
             {contentKey === 'puzzles' && <PuzzlesView locale={locale} />}
-            {contentKey === 'endless' && <EndlessView dictionary={getDictionary(locale)} />}
+            {contentKey === 'endless' && <EndlessView dictionary={getDictionary(locale).endless} />}
             {contentKey === 'about' && <AboutView locale={locale} />}
             {(contentKey === 'legal' || contentKey === 'privacy') && (
                 <TextPageView locale={locale} page={contentKey} />

@@ -39,9 +39,6 @@ export const JUMP_BUFFER = 0.12;
 /** Relâcher la touche écourte le saut : c'est ce qui donne deux hauteurs. */
 export const JUMP_CUT = 0.4;
 
-/** Hauteur de la bande d'interface, retirée du haut de la fenêtre. */
-export const HUD_HEIGHT = 46;
-
 /** En dessous, la fenêtre n'a plus assez de place pour un niveau jouable. */
 export const MIN_PLAYFIELD_W = 320;
 export const MIN_PLAYFIELD_H = 240;

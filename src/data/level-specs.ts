@@ -395,7 +395,7 @@ export const SPECS: readonly LevelSpec[] = [
         steps: [
             { rise: 62, gap: 84, w: 130, vedge: 'top', surface: 'ice' },
             { rise: 48, gap: 80, w: 130, edge: 'right', surface: 'conveyor', speed: 110, when: { minH: 530 } },
-            { rise: 48, gap: 76, w: 150, edge: 'right' },
+            { rise: 48, gap: 76, w: 150, edge: 'right', when: { minH: 540 } },
         ],
         extras: [wall('left', 300, 70), wall('right', 326, 70), floorSpikes(420, 120)],
     },
@@ -598,7 +598,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: -60, gap: 66, w: 110, surface: 'ice' },
             { rise: -60, gap: 66, w: 110, motion: { dx: 30, dy: 0, period: 3.4 }, vedge: 'top', surface: 'conveyor', speed: 110 },
             { rise: -60, gap: 66, w: 110, edge: 'right', when: { maxW: 760 } },
-            { rise: -60, gap: 66, w: 140, edge: 'right' },
+            { rise: -60, gap: 66, w: 140, edge: 'right', when: { minW: 940 } },
         ],
         extras: [floorSpikes(300, 200), floorSpikesR(120, 160)],
     },
@@ -745,7 +745,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 62, gap: 66, w: 130, surface: 'ice' },
             { rise: 0, gap: 70, w: 130, vedge: 'top', surface: 'conveyor', speed: 110 },
             { rise: 0, gap: 70, w: 130, edge: 'right', when: { minW: 960 }, crumble: true },
-            { rise: 0, gap: 70, w: 140, edge: 'right' },
+            { rise: 0, gap: 70, w: 140, edge: 'right', when: { minH: 545 } },
         ],
         extras: [
             blade(398, 62, 2.0),
@@ -821,7 +821,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 0, gap: 92, w: 90, motion: { dx: 0, dy: 22, period: 3.0 }, surface: 'ice' },
             { rise: 0, gap: 92, w: 90, motion: { dx: 0, dy: 22, period: 3.0, phase: 0.5 }, vedge: 'top', surface: 'conveyor', speed: 110 },
             { rise: 0, gap: 92, w: 90, edge: 'right', motion: { dx: 0, dy: 22, period: 3.0, phase: 0.25 }, when: { minW: 960 }, crumble: true },
-            { rise: 0, gap: 92, w: 150, edge: 'right' },
+            { rise: 0, gap: 92, w: 150, edge: 'right', when: { minW: 940 } },
         ],
     },
     {
@@ -894,7 +894,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 40, gap: 54, w: 100, motion: { dx: 0, dy: 26, period: 2.4 }, surface: 'ice' },
             { rise: 40, gap: 54, w: 100, motion: { dx: 0, dy: 26, period: 2.4, phase: 0.33 }, vedge: 'top', surface: 'conveyor', speed: 110 },
             { rise: 40, gap: 54, w: 100, motion: { dx: 0, dy: 26, period: 2.4, phase: 0.66 }, edge: 'right', when: { minW: 960 }, crumble: true },
-            { rise: 40, gap: 66, w: 150, edge: 'right' },
+            { rise: 40, gap: 66, w: 150, edge: 'right', when: { minH: 545 } },
         ],
     },
     {
@@ -983,7 +983,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 42, gap: 58, w: 110, theme: 'dark', orb: true, surface: 'ice' },
             { rise: 42, gap: 54, w: 100, motion: { dx: 0, dy: 24, period: 3.0 }, vedge: 'top', surface: 'conveyor', speed: 110 },
             { rise: 42, gap: 58, w: 110, when: { maxW: 940 }, orb: true, edge: 'right', crumble: true },
-            { rise: 42, gap: 64, w: 130, edge: 'right' },
+            { rise: 42, gap: 64, w: 130, edge: 'right', when: { minH: 545 } },
         ],
         extras: [
             slab(anchored(0, 260, 1, -102, 110, 14), { theme: 'light' }),
@@ -1100,7 +1100,7 @@ export const SPECS: readonly LevelSpec[] = [
         steps: [
             { rise: 0, gap: 140, w: 120, assisted: true, vedge: 'top' },
             { rise: 0, gap: 140, w: 120, assisted: true, edge: 'right', when: { minW: 1060 } },
-            { rise: 0, gap: 120, w: 160, assisted: true, edge: 'right' },
+            { rise: 0, gap: 120, w: 160, assisted: true, edge: 'right', when: { minH: 545 } },
         ],
         extras: [
             windZone(180, 200, 200, 160, 760),
@@ -1214,7 +1214,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 34, gap: 56, w: 110, blink: { period: 2.4, duty: 0.6 } },
             { rise: 34, gap: 54, w: 100, motion: { dx: 0, dy: 22, period: 2.8 }, vedge: 'top' },
             { rise: 34, gap: 56, w: 110, blink: { period: 2.4, duty: 0.6, phase: 0.5 }, edge: 'right', when: { minW: 960 } },
-            { rise: 34, gap: 58, w: 150, edge: 'right' },
+            { rise: 34, gap: 58, w: 150, edge: 'right', when: { minW: 940 } },
         ],
     },
     {
@@ -1242,7 +1242,7 @@ export const SPECS: readonly LevelSpec[] = [
             { rise: 34, gap: 54, w: 100, crumble: true },
             { rise: 34, gap: 52, w: 96, motion: { dx: 0, dy: 20, period: 2.6 }, vedge: 'top' },
             { rise: 34, gap: 54, w: 100, crumble: true, edge: 'right', when: { minW: 960 } },
-            { rise: 34, gap: 58, w: 150, edge: 'right' },
+            { rise: 34, gap: 58, w: 150, edge: 'right', when: { minH: 545 } },
         ],
     },
     {

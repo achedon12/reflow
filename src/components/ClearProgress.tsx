@@ -17,11 +17,11 @@ import { clearProgress } from '@/lib/progress';
  * clic distrait — mais elle ne mérite pas non plus une fenêtre modale du
  * navigateur, qui bloquerait la page.
  */
-export function ClearProgress({ dictionary }: { dictionary: Dictionary }) {
+export function ClearProgress({ dictionary }: { dictionary: Dictionary['about'] }) {
     const [state, setState] = useState<'idle' | 'confirm' | 'done'>('idle');
 
     if (state === 'done') {
-        return <p className="numeric text-sm text-goal-ink">{dictionary.about.cleared}</p>;
+        return <p className="numeric text-sm text-goal-ink">{dictionary.cleared}</p>;
     }
 
     return (
@@ -38,7 +38,7 @@ export function ClearProgress({ dictionary }: { dictionary: Dictionary }) {
             className={`btn ${state === 'confirm' ? 'border-hazard text-hazard' : ''}`}
         >
             <Trash2 aria-hidden="true" className="size-4" />
-            {state === 'confirm' ? `${dictionary.about.clearButton} ?` : dictionary.about.clearButton}
+            {state === 'confirm' ? `${dictionary.clearButton} ?` : dictionary.clearButton}
         </button>
     );
 }
