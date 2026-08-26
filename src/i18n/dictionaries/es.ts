@@ -93,9 +93,9 @@ export const es: Dictionary = {
         controlRestart: 'Reiniciar',
         controlQuit: 'Salir',
         rewindArmed: 'El botón Atrás del navegador rebobina este enigma.',
-        tooSmall: 'Ventana demasiado pequeña',
+        tooSmall: 'Pantalla de juego demasiado pequeña',
         tooSmallBody:
-            'El área de juego baja de {w} × {h} píxeles: ya no cabe un nivel. Agranda la ventana.',
+            'La pantalla baja de {w} × {h} píxeles: ya no cabe un nivel. Tira de sus tiradores o escribe un tamaño en la barra.',
         touchTitle: 'Hace falta un teclado',
         touchBody:
             'Reflow se juega con teclado y con una ventana redimensionable. Un teléfono no tiene ni lo uno ni lo otro: el juego te espera en un ordenador.',
@@ -226,7 +226,7 @@ export const es: Dictionary = {
         },
         screen: {
             name: 'La pantalla interior',
-            body: 'El área de juego es una pantalla que tú ajustas: sus tiradores la redimensionan, su rotación cambia el sentido de la caída. La ventana del navegador sigue siendo su límite.',
+            body: 'El área de juego es una pantalla que tú ajustas: sus tiradores la redimensionan, su rotación cambia el sentido de la caída. Más grande que la ventana, se muestra reducida: el juego corre a su tamaño, solo lo miras desde más lejos.',
         },
     },
     puzzles: {

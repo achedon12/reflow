@@ -52,8 +52,9 @@ docker compose -p reflow -f docker-compose.dev.yml up -d --build
 Avant de pousser :
 
 ```bash
-npm run check              # tout : typecheck, lint, build, et les quatre preuves
-npm run audit              # ce que chaque énigme EXIGE, et ce qui tient sur un téléphone
+npm run check              # tout : typecheck, lint, build, et les cinq contrôles
+npm run audit              # ce que chaque énigme EXIGE du joueur
+npm run narrow             # à quelle réduction chacune se joue sur un téléphone
 npm run pivot charniere    # une énigme à tronçons à la fois, pendant qu’on l’écrit
 npm run draw charniere:1   # et la même, en image, dans l’orientation demandée
 ```
@@ -291,6 +292,29 @@ tout seul quand l'onglet passe en arrière-plan. Les échelons gagnés sont
 conservés d'une visite à l'autre : celui qui a abandonné hier est précisément
 celui à qui il ne faut pas réimposer l'attente.
 
+## L'écran de jeu peut être plus grand que la fenêtre
+
+Il s'affiche alors **réduit**, comme le plan de travail d'un logiciel de
+dessin : le jeu tourne à sa cote, on le regarde de plus loin. La physique, les
+ancrages et les cent énigmes ignorent tout de ce facteur — c'est un `scale` sur
+l'enveloppe, rien d'autre.
+
+Sans lui, **vingt-quatre énigmes sur cent étaient injouables au téléphone**, et
+pas par difficulté : l'écran y plafonne à 358 px de large, or « La marche » pose
+sa plateforme entre x = 290 et x = 470 sur une cote de 1000. La plateforme, et
+la sortie qu'elle porte, n'existaient tout simplement pas.
+
+⚠️ Pivoter ne réglait rien, contrairement à ce que l'intuition souffle. Les
+ancrages se résolvent contre **l'écran**, pas contre l'aire de jeu tournée :
+coucher un écran de 358 px de large donne un écran de 358 px de large, couché.
+Ce que la rotation fait maintenant, c'est de la LISIBILITÉ — un écran de
+1000 × 560 passe de 0,36 à 0,64 sur un téléphone, parce qu'il tient mieux dans
+la hauteur que dans la largeur.
+
+Les poignées et les touches tactiles restent **hors** de la réduction : réduites
+avec le reste, elles tomberaient à huit pixels sur un téléphone, soit exactement
+là où l'on ne joue qu'au doigt.
+
 ## Les parties infinies
 
 Le générateur ne tire pas des plateformes au hasard en espérant que ça passe :
@@ -481,11 +505,9 @@ Voir `.env.example` pour la liste complète.
   à côte, synchronisées par `BroadcastChannel` et repérées par `screenX` /
   `screenY`. Elle dépend d'un bloqueur de fenêtres surgissantes, et une
   mécanique qui ne marche que chez la moitié des joueurs n'en est pas une.
-- **Les énigmes hors d'atteinte sur téléphone.** L'écran de jeu s'y règle très
-  bien — c'est un panneau dans une page, pas la fenêtre du navigateur — mais il
-  y plafonne à 358 px de large, alors que le vérificateur n'essaie que des
-  tailles à partir de 640. `npm run audit` mesure lesquelles se terminent
-  vraiment là-bas. Celles qui n'y arrivent pas demandent une reprise de leurs
-  ancrages, énigme par énigme.
+- **La lisibilité au doigt.** Les cent énigmes se règlent et se terminent sur
+  un téléphone, mais la plus large s'y voit à 0,56 : un personnage de douze
+  pixels. `npm run narrow` surveille ce plancher. Descendre plus bas
+  demanderait des énigmes pensées pour l'étroit, pas des énigmes réduites.
 - **L'éditeur de niveaux**, avec le niveau encodé dans l'URL. C'est ce qui
   ferait passer le contenu de la main de l'auteur à celle des joueurs.

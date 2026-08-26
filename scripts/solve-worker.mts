@@ -25,10 +25,6 @@ export type Job =
     /** L'énigme se termine-t-elle à la taille de DÉPART, rotation interdite ?
      *  Si oui, elle n'oblige le joueur à rien : ni poignée, ni quart de tour. */
     | { kind: 'free'; id: string; view: Viewport }
-    /** Et sur un TÉLÉPHONE ? L'écran de jeu y est borné par la fenêtre : aucune
-     *  des tailles d'essai habituelles n'y tient. La rotation est forcée, parce
-     *  qu'elle est justement ce qui rend une fenêtre étroite jouable. */
-    | { kind: 'phone'; id: string; views: readonly Viewport[] }
     | { kind: 'seed'; seed: number; depth: number; view: Viewport };
 
 export type Verdict =
@@ -64,28 +60,6 @@ export function work(job: Job): Verdict {
         return attempt.solved
             ? { label, tier: level.tier, view: `${job.view.w}×${job.view.h}`, seconds: attempt.seconds }
             : { label, failed: 'partie engendrée insoluble' };
-    }
-
-    if (job.kind === 'phone') {
-        const spec = SPECS.find((candidate) => candidate.id === job.id);
-        if (!spec) return { label: job.id, failed: 'énigme inconnue' };
-        const mobile = buildLevel({
-            ...spec,
-            mechanics: spec.mechanics.includes('gravity') ? spec.mechanics : [...spec.mechanics, 'gravity'],
-        });
-        const themes: Theme[] = mobile.blocks.some((block) => block.theme) ? ['dark', 'light'] : ['dark'];
-        // Le joueur peut RÉDUIRE son écran de jeu autant qu'il veut, et le
-        // coucher : n'essayer qu'une taille reviendrait à mesurer un joueur qui
-        // ne touche à rien, alors que c'est tout le jeu.
-        for (const view of job.views) {
-            for (const theme of themes) {
-                const attempt = solve(mobile, view, theme);
-                if (attempt.solved) {
-                    return { label: spec.id, tier: spec.tier, view: `${view.w}×${view.h}`, seconds: attempt.seconds };
-                }
-            }
-        }
-        return { label: spec.id, failed: 'injouable sur téléphone' };
     }
 
     if (job.kind === 'free') {

@@ -93,9 +93,9 @@ export const en: Dictionary = {
         controlRestart: 'Restart',
         controlQuit: 'Quit',
         rewindArmed: 'The browser’s Back button rewinds this puzzle.',
-        tooSmall: 'Window too small',
+        tooSmall: 'Play screen too small',
         tooSmallBody:
-            'The playfield is below {w} × {h} pixels: there is no room left for a level. Make the window bigger.',
+            'The screen is below {w} × {h} pixels: there is no room left for a level. Drag its handles, or type a size in the bar.',
         touchTitle: 'A keyboard is required',
         touchBody:
             'Reflow is played with a keyboard and a resizable window. A phone has neither: the game will be waiting for you on a computer.',
@@ -226,7 +226,7 @@ export const en: Dictionary = {
         },
         screen: {
             name: 'The inner screen',
-            body: 'The playfield is a screen you set yourself: its handles resize it, its rotation changes which way you fall. The browser window remains its limit.',
+            body: 'The playfield is a screen you set yourself: its handles resize it, its rotation changes which way you fall. Larger than the window, it is shown scaled down — the game runs at its own size, you just watch it from further away.',
         },
     },
     puzzles: {

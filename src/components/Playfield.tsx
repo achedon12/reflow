@@ -99,7 +99,7 @@ export function Playfield({
     title,
 }: PlayfieldProps) {
     const level = session.level;
-    const { screen, ref: screenRef, resize, turn } = useScreen();
+    const { screen, ref: screenRef, resize, turn, zoom } = useScreen();
     const view = { w: screen.w, h: screen.h };
     const theme = useSyncExternalStore(subscribeTheme, getResolvedTheme, getServerResolved);
 
@@ -721,6 +721,26 @@ export function Playfield({
                 peut sortir du cadre quand l'écran change de taille, et il ne
                 doit alors pas déborder sur la page. */}
             <div className="relative shrink-0 pt-6 pl-7">
+                {/* LA RÉDUCTION D'AFFICHAGE.
+                    L'écran de jeu peut être plus grand que la fenêtre ; on le
+                    montre alors réduit, comme le plan de travail d'un logiciel
+                    de dessin. Le jeu tourne à sa cote — la physique, les
+                    ancrages et les cent énigmes ignorent tout de ce facteur.
+
+                    L'enveloppe porte la taille RÉDUITE pour que la page se
+                    dispose juste ; ce qu'elle contient garde la taille réelle
+                    et se rétrécit d'un `scale`. */}
+                <div
+                    className="relative"
+                    style={{
+                        width: playViewport(view, screen.quarter).w * zoom,
+                        height: playViewport(view, screen.quarter).h * zoom,
+                    }}
+                >
+                <div
+                    className="absolute top-0 left-0 origin-top-left"
+                    style={{ transform: zoom === 1 ? undefined : `scale(${zoom})` }}
+                >
                 <ScreenRuler
                     width={playViewport(view, screen.quarter).w}
                     height={playViewport(view, screen.quarter).h}
@@ -917,8 +937,19 @@ export function Playfield({
                     </div>
                 )}
 
+                </div>
+                </div>
+
+                {/* HORS de la réduction : les poignées et les touches
+                    tactiles doivent rester à taille de doigt quel que soit
+                    le facteur d'affichage. Réduites avec le reste, elles
+                    tomberaient à huit pixels sur un téléphone — soit
+                    exactement là où l'on ne joue qu'au doigt. Elles se
+                    posent donc sur l'enveloppe, qui a la taille RÉDUITE de
+                    l'écran, et se dessinent sans transformation. */}
                 <ScreenHandles
                     quarter={screen.quarter}
+                    zoom={zoom}
                     current={() => ({ w: screenRef.current.w, h: screenRef.current.h })}
                     onResize={resize}
                     label={dictionary.game.size}

@@ -45,11 +45,16 @@ const GAIN: Record<Side, { x: number; y: number }> = {
 
 export function ScreenHandles({
     quarter,
+    zoom,
     current,
     onResize,
     label,
 }: {
     quarter: Quarter;
+    /** Le facteur d'affichage. Sous 1, l'écran est montré réduit : un pixel
+     *  parcouru par le doigt vaut alors PLUS d'un pixel de jeu, et sans cette
+     *  division la poignée traîne loin derrière la main. */
+    zoom: number;
     current: () => { w: number; h: number };
     onResize: (w: number, h: number) => void;
     label: string;
@@ -76,8 +81,8 @@ export function ScreenHandles({
                         const gain = GAIN[start.side];
                         // Centré : tirer d'un côté fait grandir des DEUX, donc
                         // le double du déplacement du doigt.
-                        const dx = (event.clientX - start.x) * gain.x * 2;
-                        const dy = (event.clientY - start.y) * gain.y * 2;
+                        const dx = ((event.clientX - start.x) / zoom) * gain.x * 2;
+                        const dy = ((event.clientY - start.y) / zoom) * gain.y * 2;
                         const odd = quarter % 2 === 1;
                         onResize(start.w + (odd ? dy : dx), start.h + (odd ? dx : dy));
                     }}

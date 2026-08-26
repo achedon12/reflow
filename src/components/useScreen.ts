@@ -19,9 +19,16 @@ import type { Quarter, Viewport } from '@/game/types';
  * 2. Elle devient possible SUR TÉLÉPHONE. On ne redimensionne pas la fenêtre
  *    d'un navigateur mobile ; on redimensionne un panneau dans une page.
  *
- * ⚠️ La fenêtre reste la LIMITE : l'écran intérieur ne peut jamais la dépasser.
- * Une petite fenêtre reste une contrainte réelle, et c'est ce qui garde au jeu
- * son propos — le décor tient toujours dans ce que le navigateur accorde.
+ * ⚠️ IL PEUT ÊTRE PLUS GRAND QUE LA FENÊTRE. On l'affiche alors RÉDUIT, comme
+ * le plan de travail d'un logiciel de dessin : le jeu tourne à sa cote, seul
+ * l'affichage rétrécit.
+ *
+ * C'est ce qui manquait. Brider l'écran à la fenêtre rendait vingt-quatre
+ * énigmes sur cent injouables au téléphone — non par difficulté, mais parce
+ * qu'un palier ancré à 470 px du bord gauche n'existe tout simplement pas dans
+ * un écran de 358. Pivoter n'y changeait rien : les ancrages se résolvent
+ * contre l'écran, pas contre l'aire de jeu tournée, et coucher un écran étroit
+ * donne un écran étroit couché.
  */
 
 export type Screen = Viewport & { quarter: Quarter };
@@ -35,6 +42,10 @@ const START: Viewport = { w: 880, h: 520 };
 const CHROME_X = 32;
 const CHROME_Y = 96;
 
+/** Le plus grand écran réglable. Au-delà, plus aucune énigme n'y gagne, et le
+ *  facteur de réduction rendrait le jeu illisible. */
+const MAX_PLAYFIELD = 1800;
+
 function available(): Viewport {
     return {
         w: Math.max(MIN_PLAYFIELD_W, window.innerWidth - CHROME_X),
@@ -42,29 +53,26 @@ function available(): Viewport {
     };
 }
 
-/** Réduit un écran jusqu'à ce que son encombrement TOURNÉ tienne dans la place
- *  disponible. Un écran couché occupe la place de son autre dimension. */
-function fit(screen: Screen, room: Viewport): Screen {
-    let { w, h } = screen;
-    for (let guard = 0; guard < 40; guard += 1) {
-        const footprint = playViewport({ w, h }, screen.quarter);
-        const overW = footprint.w - room.w;
-        const overH = footprint.h - room.h;
-        if (overW <= 0 && overH <= 0) break;
-        if (overW > 0) {
-            if (screen.quarter % 2 === 0) w -= overW;
-            else h -= overW;
-        }
-        if (overH > 0) {
-            if (screen.quarter % 2 === 0) h -= overH;
-            else w -= overH;
-        }
-    }
+/** Borne un écran, SANS regarder la fenêtre : c'est le facteur d'affichage qui
+ *  s'occupe de le faire tenir. */
+function clamp(screen: Screen): Screen {
     return {
-        w: Math.max(MIN_PLAYFIELD_W, Math.round(w)),
-        h: Math.max(MIN_PLAYFIELD_H, Math.round(h)),
+        w: Math.min(MAX_PLAYFIELD, Math.max(MIN_PLAYFIELD_W, Math.round(screen.w))),
+        h: Math.min(MAX_PLAYFIELD, Math.max(MIN_PLAYFIELD_H, Math.round(screen.h))),
         quarter: screen.quarter,
     };
+}
+
+/**
+ * Combien de pixels d'écran pour un pixel de jeu.
+ *
+ * 1 tant que l'écran tient dans la fenêtre — c'est le cas ordinaire, et le jeu
+ * s'y affiche au pixel près. En dessous, l'aire est réduite pour tenir : la
+ * partie se joue à sa vraie cote, on la regarde simplement de plus loin.
+ */
+export function zoomFor(screen: Screen, room: Viewport): number {
+    const footprint = playViewport(screen, screen.quarter);
+    return Math.min(1, room.w / footprint.w, room.h / footprint.h);
 }
 
 /**
@@ -78,7 +86,7 @@ function fit(screen: Screen, room: Viewport): Screen {
  * ⚠️ À n'appeler que dans le navigateur : elle mesure la fenêtre.
  */
 export function startingScreen(): Viewport {
-    const { w, h } = fit({ ...START, quarter: 0 }, available());
+    const { w, h } = clamp({ ...START, quarter: 0 });
     return { w, h };
 }
 
@@ -88,6 +96,9 @@ export function useScreen(): {
     resize: (w: number, h: number) => void;
     turn: (delta: 1 | 3) => void;
     room: Viewport;
+    /** Le facteur d'affichage. Les poignées doivent en tenir compte : au doigt,
+     *  un pixel parcouru n'est plus un pixel de jeu. */
+    zoom: number;
 } {
     const [room, setRoom] = useState<Viewport>({ w: START.w, h: START.h });
     const [screen, setScreen] = useState<Screen>({ ...START, quarter: 0 });
@@ -103,9 +114,7 @@ export function useScreen(): {
 
     useEffect(() => {
         const measure = () => {
-            const next = available();
-            setRoom(next);
-            setScreen((current) => fit(current, next));
+            setRoom(available());
         };
         measure();
         window.addEventListener('resize', measure);
@@ -117,14 +126,12 @@ export function useScreen(): {
     }, []);
 
     const resize = useCallback((w: number, h: number) => {
-        setScreen((current) => fit({ ...current, w, h }, available()));
+        setScreen((current) => clamp({ ...current, w, h }));
     }, []);
 
     const turn = useCallback((delta: 1 | 3) => {
-        setScreen((current) =>
-            fit({ ...current, quarter: (((current.quarter + delta) % 4) as Quarter) }, available()),
-        );
+        setScreen((current) => clamp({ ...current, quarter: (((current.quarter + delta) % 4) as Quarter) }));
     }, []);
 
-    return { screen, ref, resize, turn, room };
+    return { screen, ref, resize, turn, room, zoom: zoomFor(screen, room) };
 }

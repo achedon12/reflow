@@ -30,6 +30,11 @@ jobs:
         env:
           NEXT_PUBLIC_SITE_URL: https://reflow.leoderoin.fr
 
+      # L'écran de jeu peut dépasser la fenêtre : il s'affiche alors réduit.
+      # Reste à vérifier qu'on y voit encore quelque chose sur un téléphone.
+      - name: Vérifier la lisibilité sur téléphone
+        run: npm run narrow
+
       # LE contrôle du projet : le moteur physique rejoue les cent énigmes et
       # prouve qu'elles sont finissables. Une énigme impossible ne
       # plante pas — elle est simplement injouable, et rien d'autre ne le dirait.

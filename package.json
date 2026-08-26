@@ -16,8 +16,9 @@
         "seo": "tsx scripts/audit-seo.mts",
         "endless": "tsx scripts/check-endless.mts",
         "audit": "tsx scripts/audit-levels.mts",
+        "narrow": "tsx scripts/check-narrow.mts",
         "draw": "tsx scripts/render-level.mts",
-        "check": "npm run typecheck && npm run lint && npm run build && npm run seo && npm run levels && npm run endless && npm run pivot"
+        "check": "npm run typecheck && npm run lint && npm run build && npm run seo && npm run narrow && npm run levels && npm run endless && npm run pivot"
     },
     "dependencies": {
         "lucide-react": "^1.33.0",

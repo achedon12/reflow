@@ -93,9 +93,9 @@ export const fr = {
         controlRestart: 'Recommencer',
         controlQuit: 'Quitter',
         rewindArmed: 'Le bouton Précédent du navigateur rembobine cette énigme.',
-        tooSmall: 'Fenêtre trop petite',
+        tooSmall: 'Écran de jeu trop petit',
         tooSmallBody:
-            'L’aire de jeu descend sous {w} × {h} pixels : il n’y a plus la place d’un niveau. Agrandissez la fenêtre.',
+            'L’écran descend sous {w} × {h} pixels : il n’y a plus la place d’un niveau. Tirez ses poignées, ou tapez une taille dans la barre.',
         touchTitle: 'Un clavier est nécessaire',
         touchBody:
             'Reflow se joue avec un clavier et une fenêtre redimensionnable. Sur un téléphone, ni l’un ni l’autre n’existe : le jeu vous attend sur un ordinateur.',
@@ -226,7 +226,7 @@ export const fr = {
         },
         screen: {
             name: 'L’écran intérieur',
-            body: 'L’aire de jeu est un écran que vous réglez vous-même : ses poignées la redimensionnent, sa rotation change le sens de la chute. La fenêtre du navigateur en reste la limite.',
+            body: 'L’aire de jeu est un écran que vous réglez vous-même : ses poignées le redimensionnent, sa rotation change le sens de la chute. Plus grand que la fenêtre, il s’affiche réduit — le jeu tourne à sa cote, on le regarde de plus loin.',
         },
     },
     puzzles: {

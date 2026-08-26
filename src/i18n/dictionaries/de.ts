@@ -93,9 +93,9 @@ export const de: Dictionary = {
         controlRestart: 'Neu starten',
         controlQuit: 'Verlassen',
         rewindArmed: 'Die Zurück-Schaltfläche des Browsers spult dieses Rätsel zurück.',
-        tooSmall: 'Fenster zu klein',
+        tooSmall: 'Spielbildschirm zu klein',
         tooSmallBody:
-            'Das Spielfeld fällt unter {w} × {h} Pixel: für ein Level ist kein Platz mehr. Vergrößere das Fenster.',
+            'Der Bildschirm fällt unter {w} × {h} Pixel: für ein Level ist kein Platz mehr. Zieh an seinen Griffen oder tippe eine Größe in die Leiste.',
         touchTitle: 'Eine Tastatur ist nötig',
         touchBody:
             'Reflow wird mit Tastatur und einem größenveränderbaren Fenster gespielt. Ein Telefon hat weder das eine noch das andere: das Spiel wartet auf einem Rechner auf dich.',
@@ -226,7 +226,7 @@ export const de: Dictionary = {
         },
         screen: {
             name: 'Der innere Bildschirm',
-            body: 'Das Spielfeld ist ein Bildschirm, den du selbst einstellst: seine Griffe verändern seine Größe, seine Drehung die Fallrichtung. Das Browserfenster bleibt seine Grenze.',
+            body: 'Das Spielfeld ist ein Bildschirm, den du selbst einstellst: seine Griffe ändern die Größe, seine Drehung die Fallrichtung. Größer als das Fenster, wird er verkleinert gezeigt — das Spiel läuft in seiner Größe, man sieht es nur aus der Ferne.',
         },
     },
     puzzles: {
