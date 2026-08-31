@@ -21,8 +21,8 @@
         "check": "npm run typecheck && npm run lint && npm run build && npm run seo && npm run narrow && npm run levels && npm run endless && npm run pivot"
     },
     "dependencies": {
-        "lucide-react": "^1.33.0",
-        "next": "16.3.1",
+        "lucide-react": "^1.35.0",
+        "next": "16.3.3",
         "react": "19.2.8",
         "react-dom": "19.2.8"
     },
@@ -34,8 +34,8 @@
         "@types/react": "^19",
         "@types/react-dom": "^19",
         "eslint": "^9",
-        "eslint-config-next": "16.3.1",
-        "sharp": "^0.35.3",
+        "eslint-config-next": "16.3.3",
+        "sharp": "^0.35.4",
         "tailwindcss": "^4",
         "tsx": "^4.20.3",
         "typescript": "^5"
