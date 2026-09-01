@@ -49,7 +49,7 @@ RUN sed "s|__MATOMO_HOST__|${NEXT_PUBLIC_MATOMO_URL}|g" nginx/default.conf.templ
 # `/docker-entrypoint.d/`, donc pas d'envsubst au démarrage. Sans effet ici :
 # la configuration est déjà figée dans l'image — mais y revenir casserait le
 # démarrage sans le moindre message.
-FROM nginxinc/nginx-unprivileged:1.30-alpine-slim AS runner
+FROM nginxinc/nginx-unprivileged:1.31-alpine-slim AS runner
 
 COPY --from=builder /app/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/security-headers.conf /etc/nginx/security-headers.conf
